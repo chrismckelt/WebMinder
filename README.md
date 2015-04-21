@@ -1,8 +1,6 @@
-#  Charon
+#  WebMinder
 
-### The HTTP request gatekeeper
-
-Manage HTTP Requests based on validation rules written with LINQ
+### A HTTP request gatekeeper based on LINQ validation rules
 
 ## Aggregate rules
 	// ip ruleset - disallow more than 20 requests per day from a logged 'failed'  request

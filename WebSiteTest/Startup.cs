@@ -1,9 +1,9 @@
-﻿using Charon.WebSiteTest;
+﻿using WebMinder.WebSiteTest;
 using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartup(typeof(Startup))]
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
     public partial class Startup
     {

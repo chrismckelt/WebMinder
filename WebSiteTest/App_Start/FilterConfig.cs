@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
     public class FilterConfig
     {

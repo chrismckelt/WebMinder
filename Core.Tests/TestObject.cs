@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Charon.Core.Tests
+namespace WebMinder.Core.Tests
 {
     public class TestObject : IRuleRequest
     {

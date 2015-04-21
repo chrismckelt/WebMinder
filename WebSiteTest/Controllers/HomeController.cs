@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Charon.WebSiteTest.Controllers
+namespace WebMinder.WebSiteTest.Controllers
 {
     public class HomeController : Controller
     {

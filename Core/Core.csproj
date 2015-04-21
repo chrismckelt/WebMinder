@@ -7,8 +7,8 @@
     <ProjectGuid>{6334221C-7CF7-4D2E-B930-F1C444B60435}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Charon.Core</RootNamespace>
-    <AssemblyName>Charon.Core</AssemblyName>
+    <RootNamespace>WebMinder.Core</RootNamespace>
+    <AssemblyName>WebMinder.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>a70d573a</NuGetPackageImportStamp>

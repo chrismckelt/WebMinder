@@ -1,7 +1,7 @@
 ﻿using System;
-using Charon.Core;
+using WebMinder.Core;
 
-namespace Charon.WebSiteTest.Rules
+namespace WebMinder.WebSiteTest.Rules
 {
     public class IpAddressAnalyser : IRuleRequest
     {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
     public class BundleConfig
     {

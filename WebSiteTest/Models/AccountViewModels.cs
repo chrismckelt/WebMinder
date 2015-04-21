@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Charon.WebSiteTest.Models
+namespace WebMinder.WebSiteTest.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

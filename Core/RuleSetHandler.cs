@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 
-namespace Charon.Core
+namespace WebMinder.Core
 {
     public class RequestAnalyserRuleSet<TRuleFor> : IRuleSetHandler<TRuleFor> where TRuleFor : IRuleRequest
     {
@@ -44,12 +44,10 @@ namespace Charon.Core
 
         private void VerifyMaximumCount()
         {
-            if (_items.Any())
+            if (!_items.Any()) return;
+            if (MaximumResultCount.HasValue && _items.Count() >= MaximumResultCount)
             {
-                if (MaximumResultCount.HasValue && _items.Count() >= MaximumResultCount)
-                {
-                    throw new HttpException(403, ErrorDescription);
-                }
+                throw new HttpException(403, ErrorDescription);
             }
         }
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{1DE3069F-4BE1-405E-8E70-52C009E3C45A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Charon.Core.Tests</RootNamespace>
-    <AssemblyName>Charon.Core.Tests</AssemblyName>
+    <RootNamespace>WebMinder.Core.Tests</RootNamespace>
+    <AssemblyName>WebMinder.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>3d5c0860</NuGetPackageImportStamp>

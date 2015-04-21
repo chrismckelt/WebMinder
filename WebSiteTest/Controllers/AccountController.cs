@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Charon.WebSiteTest.Models;
+using WebMinder.WebSiteTest.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
-namespace Charon.WebSiteTest.Controllers
+namespace WebMinder.WebSiteTest.Controllers
 {
     [Authorize]
     public class AccountController : Controller

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Charon.Core
+namespace WebMinder.Core
 {
     public sealed class RuleSetRunner
     {

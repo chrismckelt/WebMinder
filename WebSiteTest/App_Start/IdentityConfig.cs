@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Charon.WebSiteTest.Models;
+using WebMinder.WebSiteTest.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
     public class EmailService : IIdentityMessageService
     {

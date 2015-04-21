@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
     public class RouteConfig
     {

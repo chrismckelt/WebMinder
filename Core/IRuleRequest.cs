@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Charon.Core
+namespace WebMinder.Core
 {
     public interface IRuleRequest
     {

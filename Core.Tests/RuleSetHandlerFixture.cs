@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using FizzWare.NBuilder;
 using Xunit;
 
-namespace Charon.Core.Tests
+namespace WebMinder.Core.Tests
 {
     public class RuleSetHandlerFixture
     {
@@ -38,8 +39,7 @@ namespace Charon.Core.Tests
         {
             _ruleSetHandler.MaximumResultCount = 2;
             const int count = 3;
-            AddTestObjects(count);
-            Assert.Throws<HttpException>(() => _ruleSetHandler.Run(TestObject.Build()));
+            Assert.Throws<HttpException>(() =>  AddTestObjects(count));
         }
 
 

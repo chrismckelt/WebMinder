@@ -5,10 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Charon.Core;
-using Charon.WebSiteTest.Rules;
+using WebMinder.Core;
+using WebMinder.WebSiteTest.Rules;
 
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
 
     public class MvcApplication : HttpApplication

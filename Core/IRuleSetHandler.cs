@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Charon.Core
+namespace WebMinder.Core
 {
 
     public interface IRuleSetHandler<TRuleFor> where TRuleFor : IRuleRequest

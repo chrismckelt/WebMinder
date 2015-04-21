@@ -1,12 +1,12 @@
 ﻿using System;
-using Charon.WebSiteTest.Models;
+using WebMinder.WebSiteTest.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
-namespace Charon.WebSiteTest
+namespace WebMinder.WebSiteTest
 {
     public partial class Startup
     {
