@@ -1,0 +1,56 @@
+﻿@using System.Web.Mvc.Html
+@{
+    ViewBag.Title = "Home Page";
+}
+<div class="row">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Actions</a></li>
+            <li><a href="#tabs-2">Claims</a></li>
+            <li><a href="#tabs-3">About</a></li>
+        </ul>
+        <div id="tabs-1">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="list-group">
+                        @Html.ActionLink("Brute Force Test", "BruteForceTest", "Home", null, htmlAttributes: new { @class = "list-group-item", id = "HybridLink" })
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <h4>Claims</h4>
+                    <br/>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p>
+                            <dl class="dl-horizontal">
+                                @foreach (var claim in System.Security.Claims.ClaimsPrincipal.Current.Claims)
+                                {
+                                    <dt>@claim.Type</dt>
+                                    <dd>@claim.Value</dd>
+                                }
+                            </dl>
+                        </p>
+                    }
+                    else
+                    {
+                        <h3>
+                            Unauthenticated...
+                        </h3>
+                    }
+                </div>
+            </div>
+           
+        </div>
+        <div id="tabs-2">
+            <h3>
+                Grant flow description
+            </h3>
+        </div>
+        <div id="tabs-3">
+            <div id="SiteDescription"></div>
+        </div>
+    </div>
+    <br/>
+
+</div>
