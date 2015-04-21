@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>WebMinder</id>
+    <version>0.0.9</version>
+    <authors>Chris McKelt</authors>
+    <owners>Chris McKelt</owners>
+    <licenseUrl></licenseUrl>
+    <projectUrl>https://github.com/chrismckelt/WebMinder</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/chrismckelt/WebMinder/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A HTTP request gatekeeper based on LINQ validation rules</description>
+    <releaseNotes>First beta release.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>HTTP</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
