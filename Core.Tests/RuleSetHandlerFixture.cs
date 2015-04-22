@@ -13,7 +13,7 @@ namespace WebMinder.Core.Tests
         private IList<TestObject> _testObjects;
         private const string RuleSet = "Test Rule";
         const string ErrorDescription = "Error exception for logging";
-
+        private bool _addRequestToItemsCollection = true;
 
         public RuleSetHandlerFixture()
         {
@@ -30,7 +30,17 @@ namespace WebMinder.Core.Tests
             const int count = 3;
             AddTestObjects(count);
 
-            Assert.Equal(count, _testObjects.Count);
+            Assert.Equal(count, _ruleSetHandler.Items.Count());
+        }
+
+        [Fact]
+        public void ShouldNotAddToCollectionWhenDataResults()
+        {
+            const int count = 3;
+            _addRequestToItemsCollection = false;
+            AddTestObjects(count);
+
+            Assert.Equal(0, _ruleSetHandler.Items.Count());
         }
 
 
@@ -61,19 +71,46 @@ namespace WebMinder.Core.Tests
         {
             const int count = 10;
             AddTestObjects(count);
+            int max = _testObjects.Max(a => a.IntegerProperty);
+            _ruleSetHandler.AggregateFilter = (data,item) => data.Where(a => a.IntegerProperty == item.IntegerProperty && item.IntegerProperty == max);
+            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
+
+            Assert.DoesNotThrow(() => _ruleSetHandler.Run(TestObject.Build()));
+        }
+
+
+        [Fact]
+        public void ShouldThrowIfWhenAggregateFilterAppliedFails()
+        {
+            const int count = 10;
+            AddTestObjects(count);
             _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
 
             Assert.Throws<HttpException>(() => _ruleSetHandler.Run(TestObject.Build()));
         }
 
 
+        [Fact]
+        public void ShouldThrowCustomAction()
+        {
+            const int count = 10;
+            AddTestObjects(count);
+            _ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
+            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
+
+            Assert.Throws<DivideByZeroException>(() => _ruleSetHandler.Run(TestObject.Build()));
+        }
+
+
         private void AddTestObjects(int count)
         {
-            _testObjects = Builder<TestObject>.CreateListOfSize(count).Build();
+            _testObjects = Builder<TestObject>
+                .CreateListOfSize(count)
+                .Build();
 
             foreach (var to in _testObjects)
             {
-                _ruleSetHandler.Run(to);
+                _ruleSetHandler.Run(to, _addRequestToItemsCollection);
             }
         }
     }

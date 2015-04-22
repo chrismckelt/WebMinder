@@ -27,7 +27,7 @@ namespace WebMinder.WebSiteTest
             RuleSetHandler<IpAddressAnalyser> ipAnalyserRule = new RuleSetHandler<IpAddressAnalyser>(HttpApplicationStorage)
             {
                 AggregateRule = ip => ip.Count(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddDays(-1)) > 2,
-                Rule = xx=> xx.IpAddress.StartsWith("127")
+                AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress)
             };
 
 

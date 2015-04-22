@@ -16,9 +16,15 @@ namespace WebMinder.Core
 
         Expression<Func<T, bool>> Rule { get; set; }
 
+        T RuleRequest { get; }
+
+        Expression<Func<IEnumerable<T>,T, IEnumerable<T>>> AggregateFilter { get; set; }
+        
         Expression<Func<IEnumerable<T>, bool>> AggregateRule { get; set; }
 
-        Func<IList<IRuleRequest>> StorageMechanism { get; set; }
+        Func<IList<T>> StorageMechanism { get; set; }
+
+        Action InvalidAction { get; set; }
 
     }
 }

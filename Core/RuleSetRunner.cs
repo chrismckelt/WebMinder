@@ -22,13 +22,11 @@ namespace WebMinder.Core
             _rules = new ConcurrentDictionary<Type, object>();
         }
 
-        public void Run(IRuleRequest rr)
+        public void Run(IRuleRequest rr, bool addRequestToItemsCollection = true)
         {
-            foreach (var rule in _rules.Where(rule => rule.Key == rr.GetType()))
+            foreach (var action in _rules.Where(rule => rule.Key == rr.GetType()).Select(rule => rule.Value).OfType<IRuleRunner>())
             {
-                var action = rule.Value as IRuleRunner;
-                action.Run(rr);
-
+                action.Run(rr, addRequestToItemsCollection);
             }
         }
     }
