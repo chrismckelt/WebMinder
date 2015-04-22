@@ -18,12 +18,12 @@
 ## Simple rule
 
         // ip ruleset - disallow a specific IP
-var ipAnalyserRule = new RequestAnalyserRuleSet<IpAddressAnalyser>(HttpApplicationStorage)
-{
-    Rule = ip => ip.IpAddress == "Some IP we dont want (or could do a range query on it)",
-};
+        var ipAnalyserRule = new RequestAnalyserRuleSet<IpAddressAnalyser>(HttpApplicationStorage)
+        {
+            Rule = ip => ip.IpAddress == "Some IP we dont want (or could do a range query on it)",
+        };
 
-RuleSetRunner.Instance.AddRule(ipAnalyserRule);
+         RuleSetRunner.Instance.AddRule(ipAnalyserRule);
 
 
 ## Total Count
