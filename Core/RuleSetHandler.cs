@@ -14,10 +14,13 @@ namespace WebMinder.Core
         {
            // StorageMechanism = storageMechanism
             _items = new List<IRuleRequest>();
-            var storage = storageMechanism();
-            foreach (var stored in storage)
+            if (storageMechanism != null)
             {
-                _items.Add(stored);
+                var storage = storageMechanism() ?? new List<T>();
+                foreach (var stored in storage)
+                {
+                    _items.Add(stored);
+                }
             }
         }
 
