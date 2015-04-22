@@ -8,7 +8,6 @@ namespace WebMinder.Core
 {
     public class RequestAnalyserRuleSet<TRuleFor> : IRuleSetHandler<TRuleFor> where TRuleFor : IRuleRequest
     {
-
         private readonly IList<TRuleFor> _items;
 
         public RequestAnalyserRuleSet(Func<IList<TRuleFor>> storageMechanism = null)

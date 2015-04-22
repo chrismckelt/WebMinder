@@ -2,15 +2,15 @@
 <package >
   <metadata>
     <id>WebMinder</id>
-    <version>0.0.9</version>
+    <version>0.1.0</version>
     <authors>Chris McKelt</authors>
     <owners>Chris McKelt</owners>
-    <licenseUrl></licenseUrl>
+    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/chrismckelt/WebMinder</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/chrismckelt/WebMinder/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A HTTP request gatekeeper based on LINQ validation rules</description>
-    <releaseNotes>First beta release.</releaseNotes>
+    <releaseNotes>Fix generic constraints on rules.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>HTTP</tags>
     <dependencies>
