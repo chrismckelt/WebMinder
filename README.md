@@ -7,7 +7,7 @@
             RuleSetHandler<IpAddressAnalyser> ipAnalyserRule = new RuleSetHandler<IpAddressAnalyser>(HttpApplicationStorage)
             {
                 AggregateRule = ip => ip.Count(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddDays(-1)) > 2,
-                AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress)
+                AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress) // run time application for passed in IRequestRule
             };
 
 
@@ -33,3 +33,11 @@
 	rule.MaximumResultCount = 50;
 
 	RuleSetRunner.Instance.AddRule(ipAnalyserRule);
+
+## Decide what action to take when a rule is broken
+
+	ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
+	
+## Switch out the storage mechanism
+
+	ruleSetHandler = new RuleSetHandler<TestObject>(ThreadData.Storage);  

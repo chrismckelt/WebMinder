@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using FizzWare.NBuilder;
 using Xunit;
@@ -101,6 +103,18 @@ namespace WebMinder.Core.Tests
             Assert.Throws<DivideByZeroException>(() => _ruleSetHandler.Run(TestObject.Build()));
         }
 
+        [Fact]
+        public void ShouldHandleCustomStorage()
+        {
+            const int count = 10;
+            _ruleSetHandler = new RuleSetHandler<TestObject>(ThreadData.Storage);
+            AddTestObjects(count);
+            _ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
+            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
+
+            Assert.Throws<DivideByZeroException>(() => _ruleSetHandler.Run(TestObject.Build()));
+        }
+
 
         private void AddTestObjects(int count)
         {
@@ -111,6 +125,25 @@ namespace WebMinder.Core.Tests
             foreach (var to in _testObjects)
             {
                 _ruleSetHandler.Run(to, _addRequestToItemsCollection);
+            }
+        }
+
+        internal class ThreadData
+        {
+            [ThreadStaticAttribute] public static Func<IList<TestObject>> _threadCache;
+
+            public static Func<IList<TestObject>> Storage
+            {
+                get
+                {
+                    Debug.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                    return _threadCache;
+                }
+                set
+                {
+                    Debug.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                    _threadCache = value;
+                }
             }
         }
     }
