@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,33 +8,27 @@ namespace WebMinder.Core
     public sealed class RuleSetRunner
     {
         private static readonly Lazy<RuleSetRunner> Lazy = new Lazy<RuleSetRunner>(() => new RuleSetRunner());
-        private IList<object> _rules;
+        private IDictionary<Type, object> _rules;
 
-        public IEnumerable<IRuleSetHandler<IRuleRequest>> Rules
+        public void AddRule<T>(dynamic ruleSetObject) where T : IRuleRequest
         {
-            get
-            {
-                return _rules.Cast<IRuleSetHandler<IRuleRequest>>().AsEnumerable();
-            }
-        }
-
-        public void AddRule<T>(RequestAnalyserRuleSet<T> ruleSet) where T : IRuleRequest
-        {
-            _rules.Add((ruleSet));
+            _rules.Add(typeof(T),ruleSetObject);
         }
 
         public static RuleSetRunner Instance { get { return Lazy.Value; } }
 
         private RuleSetRunner()
         {
-            _rules = new List<object>();
+            _rules = new ConcurrentDictionary<Type, object>();
         }
 
         public void Run(IRuleRequest rr)
         {
-            foreach (var rule in Rules)
+            foreach (var rule in _rules.Where(rule => rule.Key == rr.GetType()))
             {
-                rule.Run(rr);
+                var action = rule.Value as IRuleRunner;
+                action.Run(rr);
+
             }
         }
     }

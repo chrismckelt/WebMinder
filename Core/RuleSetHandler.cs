@@ -6,31 +6,42 @@ using System.Web;
 
 namespace WebMinder.Core
 {
-    public class RequestAnalyserRuleSet<TRuleFor> : IRuleSetHandler<TRuleFor> where TRuleFor : IRuleRequest
+    public class RuleSetHandler<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
     {
-        private readonly IList<TRuleFor> _items;
+        private readonly IList<IRuleRequest> _items;
 
-        public RequestAnalyserRuleSet(Func<IList<TRuleFor>> storageMechanism = null)
+        public RuleSetHandler(Func<IList<T>> storageMechanism = null)
         {
-            StorageMechanism = storageMechanism;
-            _items = storageMechanism != null ? StorageMechanism() : new List<TRuleFor>();
+           // StorageMechanism = storageMechanism
+            _items = new List<IRuleRequest>();
+            var storage = storageMechanism();
+            foreach (var stored in storage)
+            {
+                _items.Add(stored);
+            }
         }
 
         public string RuleSetName { get; set; }
         public string ErrorDescription { get; set; }
+
+        public Type RuleType
+        {
+            get { return typeof (T); }
+        }
+
         public int? MaximumResultCount { get; set; }
 
-        public IEnumerable<TRuleFor> Items
+        public IEnumerable<IRuleRequest> Items
         {
             get { return _items; }
         }
 
-        public Expression<Func<TRuleFor, bool>> Rule { get; set; }
-        public Expression<Func<IEnumerable<TRuleFor>, bool>> AggregateRule { get; set; }
+        public Expression<Func<T, bool>> Rule { get; set; }
+        public Expression<Func<IEnumerable<T>, bool>> AggregateRule { get; set; }
 
-        public void Run(TRuleFor item)
+        public void Run(IRuleRequest item)
         {
-            _items.Add(item);
+            _items.Add((T)item);
 
             VerifyMaximumCount();
 
@@ -39,7 +50,7 @@ namespace WebMinder.Core
             VerifyAggregateRule();
         }
 
-        public Func<IList<TRuleFor>> StorageMechanism { get; set; }
+        public Func<IList<IRuleRequest>> StorageMechanism { get; set; }
 
         private void VerifyMaximumCount()
         {
@@ -56,6 +67,7 @@ namespace WebMinder.Core
             {
                 var invalid = _items
                     .AsQueryable()
+                    .Cast<T>()
                     .Where(Rule);
 
                 if (invalid.Any()) throw new HttpException(403, ErrorDescription);
@@ -66,11 +78,10 @@ namespace WebMinder.Core
         {
             if (AggregateRule != null)
             {
-                var invalid = AggregateRule.Compile().Invoke(_items);
+                var invalid = AggregateRule.Compile().Invoke(_items.Cast<T>());
 
                 if (invalid) throw new HttpException(403,ErrorDescription);
             }
         }
-
     }
 }

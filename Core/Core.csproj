@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IRuleRequest.cs" />
+    <Compile Include="IRuleRunner.cs" />
     <Compile Include="IRuleSetHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleSetHandler.cs" />

@@ -18,7 +18,7 @@ namespace WebMinder.Core.Tests
         public RuleSetHandlerFixture()
         {
 
-            _ruleSetHandler = new RequestAnalyserRuleSet<TestObject>();
+            _ruleSetHandler = new RuleSetHandler<TestObject>();
             _ruleSetHandler.RuleSetName = RuleSet;
             _ruleSetHandler.ErrorDescription = ErrorDescription;
 
