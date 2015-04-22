@@ -15,13 +15,15 @@
 	
 ## Simple rule
 
-	// ip ruleset - disallow a specific IP
-	var ipAnalyserRule = new RequestAnalyserRuleSet<IpAddressAnalyser>(HttpApplicationStorage)
-	{
-		Rule = ip => ip.IpAddress == "Some IP we dont want (or could do a range query on it)",
-	};
+        // ip ruleset - disallow more than 20 requests per day from a logged 'failed'  request
+            RuleSetHandler<IpAddressAnalyser> ipAnalyserRule = new RuleSetHandler<IpAddressAnalyser>(HttpApplicationStorage)
+            {
+                AggregateRule = ip => ip.Count(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddDays(-1)) > 2,
+                AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress)
+            };
 
-	RuleSetRunner.Instance.AddRule(ipAnalyserRule);
+
+            RuleSetRunner.Instance.AddRule<IpAddressAnalyser>(ipAnalyserRule);
 
 ## Total Count
 
