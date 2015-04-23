@@ -36,11 +36,11 @@
 
 ## Run the rule
 
-  RuleSetRunner.Instance.Run(new IpAddressAnalyser()
-  {
-     IpAddress = "127.0.0.1",
-     CreatedUtcDateTime = DateTime.UtcNow
-  });
+    RuleSetRunner.Instance.Run(new IpAddressAnalyser()
+    {
+      IpAddress = "127.0.0.1",
+      CreatedUtcDateTime = DateTime.UtcNow
+    });
 
 ## Decide what action to take when a rule is broken
 
