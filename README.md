@@ -34,6 +34,14 @@
 
     RuleSetRunner.Instance.AddRule(ipAnalyserRule);
 
+## Run the rule
+
+  RuleSetRunner.Instance.Run(new IpAddressAnalyser()
+  {
+     IpAddress = "127.0.0.1",
+     CreatedUtcDateTime = DateTime.UtcNow
+  });
+
 ## Decide what action to take when a rule is broken
 
 	ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
@@ -49,17 +57,17 @@
     {
 	    public static TimeSpan Duration = TimeSpan.FromDays(-1);
     	public const int MaxAttemptsWithinDuration = 5;
-    
+
 	    public BlockRepeatedAttemptsFromUnsuccesfulIpAddressesRule(Func<IList<IpAddressRequest>> storageMechanism = null)
 		    : base(storageMechanism)
 	    {
 		    RuleSetName = "Block IP Addresses with 5 or more unsuccessful tries over a 24 hour period";
-    
+
 		    ErrorDescription =
 			    "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
-    
+
 		    AggregateFilter = (data, item) => data.Where(x => x.IpAddress == item.IpAddress);
-    
+
 		    AggregateRule =
 			    data => (from x in data.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Ticks))
 				    let observableSet = data.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
@@ -73,8 +81,8 @@
 				    {
 					    IpAddress = x.IpAddress
 				    }).Any();
-    
-    
+
+
 		    InvalidAction = () =>
     		{
 			    var ex = new HttpException(403, ErrorDescription);
