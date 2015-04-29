@@ -89,5 +89,25 @@
                 var ex = new HttpException(403, string.Format("{0}  Bad IP Address: {1}", RuleSetName, RuleRequest.IpAddress));
                 throw ex;
             };
-        }
-    }
+            Log(WriteLog);
+         }
+
+         private void WriteLog(string catergory, string message)
+         {
+             switch (catergory)
+             {
+                 case "DEBUG":
+                     Logger.Debug(message);
+                     break;
+                 case "INFO":
+                     Logger.Info(message);
+                     break;
+                 case "WARNING":
+                     Logger.Warn(message);
+                     break;
+                 case "ERROR":
+                     Logger.Error(message);
+                     break;
+             }
+         }
+     }
