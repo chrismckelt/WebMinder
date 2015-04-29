@@ -8,26 +8,37 @@ namespace WebMinder.Core
     public sealed class RuleSetRunner
     {
         private static readonly Lazy<RuleSetRunner> Lazy = new Lazy<RuleSetRunner>(() => new RuleSetRunner());
-        private IDictionary<Type, object> _rules;
+        
+        public IDictionary<Type, object> Rules { get; private set; }
 
-        public void AddRule<T>(dynamic ruleSetObject) where T : IRuleRequest
+        public void AddRule<T>(object ruleSetObject)
         {
-            _rules.Add(typeof(T),ruleSetObject);
+            if (!Rules.ContainsKey(typeof(T)))
+                Rules.Add(typeof(T),ruleSetObject);
+        }
+
+        public IEnumerable<IRuleSetHandler<T>> GetRules<T>() where T : IRuleRequest,new()
+        {
+            var found = Rules.Where(x => x.Key == typeof(T));
+            
+            var result = found.Select(y => (IRuleSetHandler<T>)y.Value);
+            return result;
         }
 
         public static RuleSetRunner Instance { get { return Lazy.Value; } }
 
         private RuleSetRunner()
         {
-            _rules = new ConcurrentDictionary<Type, object>();
+            Rules = new ConcurrentDictionary<Type, object>();
         }
 
         public void Run(IRuleRequest rr, bool addRequestToItemsCollection = true)
         {
-            foreach (var action in _rules.Where(rule => rule.Key == rr.GetType()).Select(rule => rule.Value).OfType<IRuleRunner>())
+            foreach (var action in Rules.Where(rule => rule.Key == rr.GetType()).Select(rule => rule.Value).OfType<IRuleRunner>())
             {
                 action.Run(rr, addRequestToItemsCollection);
             }
         }
+
     }
 }

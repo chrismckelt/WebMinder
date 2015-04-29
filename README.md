@@ -53,41 +53,41 @@
 
 ## Encapsulate custom rules
 
-    public class BlockRepeatedAttemptsFromUnsuccesfulIpAddressesRule : RuleSetHandler<IpAddressRequest>
+    public class IpAddressBlockerRule :  RuleSetHandler<IpAddressRequest>
     {
-	    public static TimeSpan Duration = TimeSpan.FromDays(-1);
-    	public const int MaxAttemptsWithinDuration = 5;
+        public TimeSpan? Duration { get; set; }
+        public int? MaxAttemptsWithinDuration { get; set; }
 
-	    public BlockRepeatedAttemptsFromUnsuccesfulIpAddressesRule(Func<IList<IpAddressRequest>> storageMechanism = null)
-		    : base(storageMechanism)
-	    {
-		    RuleSetName = "Block IP Addresses with 5 or more unsuccessful tries over a 24 hour period";
+        public IpAddressBlockerRule()
+        {
+            RuleSetName = "Block IP Addresses with 5 or more unsuccessful tries over a 24 hour period";
 
-		    ErrorDescription =
-			    "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
+            ErrorDescription =
+            "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
 
-		    AggregateFilter = (data, item) => data.Where(x => x.IpAddress == item.IpAddress);
+            if (!Duration.HasValue) Duration = TimeSpan.FromDays(-1);
+            if (!MaxAttemptsWithinDuration.HasValue) MaxAttemptsWithinDuration = 5;
 
-		    AggregateRule =
-			    data => (from x in data.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Ticks))
-				    let observableSet = data.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
-    				{
-					    IpAddress = key,
-    					Total = c.ToList()
-				    })
-    				from y in observableSet
-				    where y.Total.Count > MaxAttemptsWithinDuration
-    				select new IpAddressRequest
-				    {
-					    IpAddress = x.IpAddress
-				    }).Any();
+            AggregateFilter = (data, item) => data.Where(x => x.IpAddress == item.IpAddress);
 
+            AggregateRule =
+                data => (from x in data.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Value.Ticks))
+                     let observableSet = data.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
+                     {
+                         IpAddress = key,
+                         Total = c.ToList()
+                     })
+                     from y in observableSet
+                     where y.Total.Count > MaxAttemptsWithinDuration
+                     select new IpAddressRequest
+                     {
+                         IpAddress = x.IpAddress
+                     }).Any();
 
-		    InvalidAction = () =>
-    		{
-			    var ex = new HttpException(403, ErrorDescription);
-    			NewRelic.Api.Agent.NewRelic.NoticeError(ex);
-			    throw ex;
-		    };
-	    }
+            InvalidAction = () =>
+            {
+                var ex = new HttpException(403, string.Format("{0}  Bad IP Address: {1}", RuleSetName, RuleRequest.IpAddress));
+                throw ex;
+            };
+        }
     }

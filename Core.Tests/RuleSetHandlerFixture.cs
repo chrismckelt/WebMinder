@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
+using System.Runtime.Caching;
 using System.Web;
 using FizzWare.NBuilder;
 using Xunit;
@@ -19,11 +18,10 @@ namespace WebMinder.Core.Tests
 
         public RuleSetHandlerFixture()
         {
-
+            MemoryCache.Default.Remove(typeof (TestObject).Name);
             _ruleSetHandler = new RuleSetHandler<TestObject>();
             _ruleSetHandler.RuleSetName = RuleSet;
             _ruleSetHandler.ErrorDescription = ErrorDescription;
-
         }
 
         [Fact]
@@ -91,7 +89,6 @@ namespace WebMinder.Core.Tests
             Assert.Throws<HttpException>(() => _ruleSetHandler.Run(TestObject.Build()));
         }
 
-
         [Fact]
         public void ShouldThrowCustomAction()
         {
@@ -103,18 +100,18 @@ namespace WebMinder.Core.Tests
             Assert.Throws<DivideByZeroException>(() => _ruleSetHandler.Run(TestObject.Build()));
         }
 
+        static IList<TestObject> _bucketOfTestObjects = new List<TestObject>(); 
+
         [Fact]
         public void ShouldHandleCustomStorage()
         {
             const int count = 10;
-            _ruleSetHandler = new RuleSetHandler<TestObject>(ThreadData.Storage);
+            _ruleSetHandler = new RuleSetHandler<TestObject>();
+            _ruleSetHandler.StorageMechanism = () => _bucketOfTestObjects;
             AddTestObjects(count);
-            _ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
-            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
-
-            Assert.Throws<DivideByZeroException>(() => _ruleSetHandler.Run(TestObject.Build()));
+            Assert.Equal(10, _bucketOfTestObjects.Count);
+            
         }
-
 
         private void AddTestObjects(int count)
         {
@@ -128,23 +125,5 @@ namespace WebMinder.Core.Tests
             }
         }
 
-        internal class ThreadData
-        {
-            [ThreadStaticAttribute] public static Func<IList<TestObject>> _threadCache;
-
-            public static Func<IList<TestObject>> Storage
-            {
-                get
-                {
-                    Debug.WriteLine(Thread.CurrentThread.ManagedThreadId);
-                    return _threadCache;
-                }
-                set
-                {
-                    Debug.WriteLine(Thread.CurrentThread.ManagedThreadId);
-                    _threadCache = value;
-                }
-            }
-        }
     }
 }

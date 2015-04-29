@@ -24,24 +24,18 @@ namespace WebMinder.WebSiteTest
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // ip ruleset - disallow more than 20 requests per day from a logged 'failed'  request
-            RuleSetHandler<IpAddressAnalyser> ipAnalyserRule = new RuleSetHandler<IpAddressAnalyser>(HttpApplicationStorage)
+            RuleSetHandler<IpAddressAnalyser> ipAnalyserRule = new RuleSetHandler<IpAddressAnalyser>()
             {
                 AggregateRule = ip => ip.Count(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddDays(-1)) > 2,
                 AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress)
             };
 
-
             RuleSetRunner.Instance.AddRule<IpAddressAnalyser>(ipAnalyserRule);
-        }
-
-        private IList<IpAddressAnalyser> HttpApplicationStorage()
-        {
-            var results = Application["IpAnalyserRuleSet"] as IList<IpAddressAnalyser>;
-            return results ?? new List<IpAddressAnalyser>();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+            var rule = RuleSetRunner.Instance.GetRules<IpAddressAnalyser>();
             RuleSetRunner.Instance.Run(new IpAddressAnalyser()
             {
                 IpAddress = "TODO - put ip address here",
