@@ -2,45 +2,65 @@
 
 ### A HTTP request gatekeeper based on LINQ validation rules
 
-## Aggregate rules
+## 2 In built rules (see wiki)
+
+    -- IpAddress blocker
+    -- URL Gateway circuit breaker
+
+## 3 rule set operators
+
+    -- AggregateRuleSetHandler
+    -- SimpleRuleSetHandler
+    -- MaximumCountRuleSetHandler
+
+## Optionally add items to the collection
+
+    RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule(){UpdateRuleCollectionOnSuccess = false});
+
+    UpdateRuleCollectionOnSuccess when true will add each given request to the request collection (default true)
+
+## AggregateRuleSetHandler
     // ip ruleset - disallow more than 20 requests per day from a logged 'failed'  request
-    RuleSetHandler<IpAddressAnalyser> ipAnalyserRule = new RuleSetHandler<IpAddressAnalyser>(HttpApplicationStorage)
+    RuleSetHandler<IpAddressRequest> rule = new RuleSetHandler<IpAddressRequest>()
     {
         AggregateRule = ip => ip.Count(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddDays(-1)) > 20,
         AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress) // run time application for passed in IRequestRule
     };
 
 
-    RuleSetRunner.Instance.AddRule<IpAddressAnalyser>(ipAnalyserRule);
+    RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
 
 
-
-## Simple rule
+## SimpleRuleSetHandler
 
     // ip ruleset - disallow a specific IP
-    var ipAnalyserRule = new RequestAnalyserRuleSet<IpAddressAnalyser>(HttpApplicationStorage)
+    var rule = new SimpleRuleSetHandler<IpAddress>()
     {
       Rule = ip => ip.IpAddress == "Some IP we dont want (or could do a range query on it)",
     };
 
-    RuleSetRunner.Instance.AddRule(ipAnalyserRule);
+    RuleSetRunner.Instance.AddRule(rule);
 
 
-## Total Count
+## MaximumCountRuleSetHandler (Total Count)
 
     // add items to this rule - once over 50 it will start rejecting requests
-    var rule = new RequestAnalyserRuleSet<IpAddressAnalyser>(HttpApplicationStorage);
+    var rule = new MaximumCountRuleSetHandler<IpAddress>();
     rule.MaximumResultCount = 50;
 
-    RuleSetRunner.Instance.AddRule(ipAnalyserRule);
+    RuleSetRunner.Instance.AddRule(rule);
 
 ## Run the rule
 
-    RuleSetRunner.Instance.Run(new IpAddressAnalyser()
+    // Run passing the request
+    RuleSetRunner.Instance.VerifyRule(new IpAddressBlockerRule()
     {
       IpAddress = "127.0.0.1",
       CreatedUtcDateTime = DateTime.UtcNow
     });
+
+    // or just run it - if currently is violation of rule custom invalid action will trigger
+    RuleSetRunner.Instance.VerifyRule();  
 
 ## Decide what action to take when a rule is broken
 
@@ -50,64 +70,35 @@
 
 	ruleSetHandler = new RuleSetHandler<TestObject>(ThreadData.Storage);  
 
-
 ## Encapsulate custom rules
 
-    public class IpAddressBlockerRule :  RuleSetHandler<IpAddressRequest>
+  see IpAddressBlockerRule.cs
+
+## Wire up to your own logger (log4net)
+    public IpAddressBlockerRule()
     {
-        public TimeSpan? Duration { get; set; }
-        public int? MaxAttemptsWithinDuration { get; set; }
+      WriteLog(MyCustomLogFunctionThatMapsToLog4Net);
+    }
 
-        public IpAddressBlockerRule()
+      public static void WriteLog(string category, string message)
+      {
+        switch (category)
         {
-            RuleSetName = "Block IP Addresses with 5 or more unsuccessful tries over a 24 hour period";
+          case "DEBUG":
+            WriteLog4NetEvent(message, Level.Debug);
+            break;
+          case "INFO":
+            WriteLog4NetEvent(message, Level.Info);
+            break;
+          case "WARNING":
+            WriteLog4NetEvent(message, Level.Warn);
+            break;
+          case "ERROR":
+            WriteLog4NetEvent(message, Level.Error);
+            break;
+          }
+    }
 
-            ErrorDescription =
-            "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
+####  Tests in RuleSetRunnerFixture.cs have more examples
 
-            if (!Duration.HasValue) Duration = TimeSpan.FromDays(-1);
-            if (!MaxAttemptsWithinDuration.HasValue) MaxAttemptsWithinDuration = 5;
-
-            AggregateFilter = (data, item) => data.Where(x => x.IpAddress == item.IpAddress);
-
-            AggregateRule =
-                data => (from x in data.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Value.Ticks))
-                     let observableSet = data.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
-                     {
-                         IpAddress = key,
-                         Total = c.ToList()
-                     })
-                     from y in observableSet
-                     where y.Total.Count > MaxAttemptsWithinDuration
-                     select new IpAddressRequest
-                     {
-                         IpAddress = x.IpAddress
-                     }).Any();
-
-            InvalidAction = () =>
-            {
-                var ex = new HttpException(403, string.Format("{0}  Bad IP Address: {1}", RuleSetName, RuleRequest.IpAddress));
-                throw ex;
-            };
-            Log(WriteLog);
-         }
-
-         private void WriteLog(string catergory, string message)
-         {
-             switch (catergory)
-             {
-                 case "DEBUG":
-                     Logger.Debug(message);
-                     break;
-                 case "INFO":
-                     Logger.Info(message);
-                     break;
-                 case "WARNING":
-                     Logger.Warn(message);
-                     break;
-                 case "ERROR":
-                     Logger.Error(message);
-                     break;
-             }
-         }
-     }
+more inbuilt rules to come... (PRs welcome)

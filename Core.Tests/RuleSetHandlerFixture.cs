@@ -18,7 +18,6 @@ namespace WebMinder.Core.Tests
         public RuleSetHandlerFixture()
         {
             MemoryCache.Default.Remove(typeof (TestObject).Name);
-           
         }
 
         [Fact]
