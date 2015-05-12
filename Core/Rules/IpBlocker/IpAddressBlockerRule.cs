@@ -12,7 +12,7 @@ namespace WebMinder.Core.Rules.IpBlocker
 
         public IpAddressBlockerRule()
         {
-            RuleSetName = "Block IP Addresses with 5 or more unsuccessful tries over a 24 hour period";
+            RuleSetName = "Block IP Addresses with more than 5 unsuccessful tries over a 24 hour period";
 
             ErrorDescription =
                 "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
