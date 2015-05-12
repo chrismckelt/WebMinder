@@ -2,6 +2,6 @@
 {
     public interface IRuleRunner
     {
-        void Run(IRuleRequest request,  bool addRequestToItemsCollection = true);
+        void VerifyRule(IRuleRequest request = null);
     }
 }

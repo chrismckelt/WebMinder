@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core
 {
@@ -32,11 +33,11 @@ namespace WebMinder.Core
             Rules = new ConcurrentDictionary<Type, object>();
         }
 
-        public void Run(IRuleRequest rr, bool addRequestToItemsCollection = true)
+        public void VerifyRule(IRuleRequest ruleRequest = null)
         {
-            foreach (var action in Rules.Where(rule => rule.Key == rr.GetType()).Select(rule => rule.Value).OfType<IRuleRunner>())
+            foreach (var action in Rules.Where(rule => rule.Key == ruleRequest.GetType()).Select(rule => rule.Value).OfType<IRuleRunner>())
             {
-                action.Run(rr, addRequestToItemsCollection);
+                action.VerifyRule(ruleRequest);
             }
         }
 

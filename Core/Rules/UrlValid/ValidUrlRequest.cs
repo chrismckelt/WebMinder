@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebMinder.Core.Rules
+namespace WebMinder.Core.Rules.UrlValid
 {
     public class ValidUrlRequest :IRuleRequest
     {

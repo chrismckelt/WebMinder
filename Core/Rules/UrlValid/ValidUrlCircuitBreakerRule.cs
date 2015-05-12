@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
+using WebMinder.Core.Handlers;
 
-namespace WebMinder.Core.Rules
+namespace WebMinder.Core.Rules.UrlValid
 {
     public enum ValidUrlCircuitBreakerStatus
     {
@@ -11,7 +12,7 @@ namespace WebMinder.Core.Rules
         HalfOpen
     }
 
-    public class ValidUrlCircuitBreakerRule : RuleSetHandler<ValidUrlRequest>
+    public class ValidUrlCircuitBreakerRule : AggregateRuleSetHandler<ValidUrlRequest>
     {
         public ValidUrlCircuitBreakerStatus Status { get; private set; }
         public TimeSpan? Duration { get; set; }
