@@ -31,7 +31,9 @@ namespace WebMinder.Core.Tests
         [Fact]
         public void ShouldGetRulesCountFromRuleSets()
         {
-            RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule());
+            var rule = new IpAddressBlockerRule();
+            rule.UseCacheStorage(Guid.NewGuid().ToString());
+            RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
             RuleSetRunner.Instance.VerifyRule(new IpAddressRequest(){IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow});
             RuleSetRunner.Instance.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow });
             RuleSetRunner.Instance.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow });
