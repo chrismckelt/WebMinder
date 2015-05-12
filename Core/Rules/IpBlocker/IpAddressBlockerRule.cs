@@ -22,18 +22,17 @@ namespace WebMinder.Core.Rules
             AggregateFilter = (data, item) => data.Where(x => x.IpAddress == item.IpAddress);
 
             AggregateRule =
-                data => (from x in data.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Value.Ticks))
-                         let observableSet = data.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
-                         {
-                             IpAddress = key,
-                             Total = c.ToList()
-                         })
-                         from y in observableSet
-                         where y.Total.Count > MaxAttemptsWithinDuration
-                         select new IpAddressRequest
-                         {
-                             IpAddress = x.IpAddress
-                         }).Any();
+               ipAddressRequests =>
+                   (from ipRequest in
+                        ipAddressRequests.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Value.Ticks))
+                    let totalHitsForIpAddress = ipAddressRequests.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
+                    {
+                        IpAddress = key,
+                        Total = c.ToList()
+                    })
+                    from targetIp in totalHitsForIpAddress
+                    where targetIp.Total.Count > MaxAttemptsWithinDuration
+                    select ipRequest).Any();
 
             InvalidAction = () =>
             {

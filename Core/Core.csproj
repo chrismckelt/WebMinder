@@ -48,10 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleSetHandler.cs" />
     <Compile Include="RuleSetRunner.cs" />
-    <Compile Include="Rules\ValidUrlCircuitBreakerRule.cs" />
-    <Compile Include="Rules\IpAddressBlockerRule.cs" />
-    <Compile Include="Rules\IpAddressRequest.cs" />
-    <Compile Include="Rules\ValidUrlRequest.cs" />
+    <Compile Include="Rules\UrlValid\ValidUrlCircuitBreakerRule.cs" />
+    <Compile Include="Rules\IpBlocker\IpAddressBlockerRule.cs" />
+    <Compile Include="Rules\IpBlocker\IpAddressRequest.cs" />
+    <Compile Include="Rules\UrlValid\ValidUrlRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
