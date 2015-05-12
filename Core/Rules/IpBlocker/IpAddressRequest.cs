@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebMinder.Core.Rules
+namespace WebMinder.Core.Rules.IpBlocker
 {
     public class IpAddressRequest : IRuleRequest
     {

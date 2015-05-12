@@ -42,14 +42,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\AggregateRuleSetHandler.cs" />
+    <Compile Include="Handlers\IAggregateRuleSetHandler.cs" />
+    <Compile Include="Handlers\IMaximumCountRuleSetHandler.cs" />
+    <Compile Include="Handlers\ISimpleRuleSetHandler.cs" />
+    <Compile Include="Handlers\MaximumCountRuleSetHandler.cs" />
+    <Compile Include="Handlers\SimpleRuleSetHandler.cs" />
+    <Compile Include="Handlers\RuleSetHandlerBase.cs" />
     <Compile Include="IRuleRequest.cs" />
     <Compile Include="IRuleRunner.cs" />
-    <Compile Include="IRuleSetHandler.cs" />
+    <Compile Include="Handlers\IRuleSetHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuleSetHandler.cs" />
     <Compile Include="RuleSetRunner.cs" />
-    <Compile Include="Rules\IpAddressBlockerRule.cs" />
-    <Compile Include="Rules\IpAddressRequest.cs" />
+    <Compile Include="Rules\UrlValid\ValidUrlCircuitBreakerRule.cs" />
+    <Compile Include="Rules\IpBlocker\IpAddressBlockerRule.cs" />
+    <Compile Include="Rules\IpBlocker\IpAddressRequest.cs" />
+    <Compile Include="Rules\UrlValid\ValidUrlRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

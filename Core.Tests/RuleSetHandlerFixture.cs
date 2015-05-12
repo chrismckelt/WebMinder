@@ -4,14 +4,13 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Web;
 using FizzWare.NBuilder;
+using WebMinder.Core.Handlers;
 using Xunit;
 
 namespace WebMinder.Core.Tests
 {
     public class RuleSetHandlerFixture
     {
-        private IRuleSetHandler<TestObject> _ruleSetHandler;
-        private IList<TestObject> _testObjects;
         private const string RuleSet = "Test Rule";
         const string ErrorDescription = "Error exception for logging";
         private bool _addRequestToItemsCollection = true;
@@ -19,37 +18,69 @@ namespace WebMinder.Core.Tests
         public RuleSetHandlerFixture()
         {
             MemoryCache.Default.Remove(typeof (TestObject).Name);
-            _ruleSetHandler = new RuleSetHandler<TestObject>();
-            _ruleSetHandler.RuleSetName = RuleSet;
-            _ruleSetHandler.ErrorDescription = ErrorDescription;
+           
         }
 
         [Fact]
         public void ShouldCollectDataResults()
         {
             const int count = 3;
-            AddTestObjects(count);
-
-            Assert.Equal(count, _ruleSetHandler.Items.Count());
+            var ruleSetHandler = new MaximumCountRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                MaximumResultCount = 999,
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            var stubs = AddTestObjects(count);
+            foreach (var st in stubs)
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
+            Assert.Equal(count, ruleSetHandler.Items.Count());
         }
 
         [Fact]
-        public void ShouldNotAddToCollectionWhenDataResults()
+        public void ShouldNotAddToCollectionWhenUpdateRuleCollectionOnSuccessSetToFalse()
         {
             const int count = 3;
             _addRequestToItemsCollection = false;
-            AddTestObjects(count);
+            var ruleSetHandler = new MaximumCountRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                MaximumResultCount = 2,
+                UpdateRuleCollectionOnSuccess = false
+            };
 
-            Assert.Equal(0, _ruleSetHandler.Items.Count());
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            var stubs =  AddTestObjects(count);
+            foreach (var st in stubs)
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
+
+            Assert.Equal(0, ruleSetHandler.Items.Count());
         }
 
 
         [Fact]
         public void ShouldThrowIfMaxCountExceeded()
         {
-            _ruleSetHandler.MaximumResultCount = 2;
+            var ruleSetHandler = new MaximumCountRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                MaximumResultCount = 3
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
             const int count = 3;
-            Assert.Throws<HttpException>(() =>  AddTestObjects(count));
+            var stubs = AddTestObjects(count);
+            foreach (var st in stubs.Skip(1))
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
+            Assert.Throws<HttpException>(() => ruleSetHandler.VerifyRule(stubs.First()));
         }
 
 
@@ -57,47 +88,89 @@ namespace WebMinder.Core.Tests
         public void ShouldThrowIfWhenRuleFails()
         {
             const int count = 3;
-            AddTestObjects(count);
-            const decimal bad = 2m;
-            _testObjects[0].DecimalProperty = bad;
-            _ruleSetHandler.Rule = testObject => testObject.DecimalProperty == bad;
+            var ruleSetHandler = new SimpleRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            var stubs = AddTestObjects(count);
+            foreach (var st in stubs)
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
 
-            Assert.Throws<HttpException>(() => _ruleSetHandler.Run(TestObject.Build()));
+            const decimal bad = 2m;
+            stubs[0].DecimalProperty = bad;
+            ruleSetHandler.Rule = testObject => testObject.DecimalProperty == bad;
+
+            Assert.Throws<HttpException>(() => ruleSetHandler.VerifyRule());
         }
 
 
         [Fact]
         public void ShouldThrowIfWhenAggregateRuleFails()
         {
-            const int count = 10;
-            AddTestObjects(count);
-            int max = _testObjects.Max(a => a.IntegerProperty);
-            _ruleSetHandler.AggregateFilter = (data,item) => data.Where(a => a.IntegerProperty == item.IntegerProperty && item.IntegerProperty == max);
-            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
+            const int count = 5;
+            var ruleSetHandler = new AggregateRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                AggregateRule = testObject => testObject.Any()
 
-            Assert.DoesNotThrow(() => _ruleSetHandler.Run(TestObject.Build()));
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            var stubs = AddTestObjects(count);
+            int max = stubs.Max(a => a.IntegerProperty);
+            ruleSetHandler.AggregateFilter = (data, item) => data.Where(a => a.IntegerProperty <= max); //runtime filter
+
+            foreach (var st in stubs)
+            {
+                Assert.Throws<HttpException>(() => ruleSetHandler.VerifyRule(st));
+            }
+
         }
 
 
         [Fact]
         public void ShouldThrowIfWhenAggregateFilterAppliedFails()
         {
-            const int count = 10;
-            AddTestObjects(count);
-            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
+            const int count = 5;
+            var ruleSetHandler = new AggregateRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                AggregateRule = testObject => testObject.Count() > 5
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            var stubs = AddTestObjects(count);
+            foreach (var st in stubs)
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
 
-            Assert.Throws<HttpException>(() => _ruleSetHandler.Run(TestObject.Build()));
+            Assert.Throws<HttpException>(() => ruleSetHandler.VerifyRule(TestObject.Build()));
         }
 
         [Fact]
         public void ShouldThrowCustomAction()
         {
-            const int count = 10;
-            AddTestObjects(count);
-            _ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
-            _ruleSetHandler.AggregateRule = testObject => testObject.Count() > 5;
+            const int count = 5;
+            var ruleSetHandler = new MaximumCountRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                MaximumResultCount = 5,
+                InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); },
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            var stubs = AddTestObjects(count);
+            foreach (var st in stubs.Skip(1))
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
 
-            Assert.Throws<DivideByZeroException>(() => _ruleSetHandler.Run(TestObject.Build()));
+            Assert.Throws<DivideByZeroException>(() => ruleSetHandler.VerifyRule(TestObject.Build()));
         }
 
         static IList<TestObject> _bucketOfTestObjects = new List<TestObject>(); 
@@ -106,23 +179,32 @@ namespace WebMinder.Core.Tests
         public void ShouldHandleCustomStorage()
         {
             const int count = 10;
-            _ruleSetHandler = new RuleSetHandler<TestObject>();
-            _ruleSetHandler.StorageMechanism = () => _bucketOfTestObjects;
+            _bucketOfTestObjects = AddTestObjects(count);
+            
+            var ruleSetHandler = new SimpleRuleSetHandler<TestObject>
+            {
+                RuleSetName = RuleSet,
+                ErrorDescription = ErrorDescription,
+                Rule = testObject => testObject.IntegerProperty==444,
+            };
+            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+
+            foreach (var st in _bucketOfTestObjects)
+            {
+                ruleSetHandler.VerifyRule(st);
+            }
+
+            ruleSetHandler.StorageMechanism = () => _bucketOfTestObjects;
             AddTestObjects(count);
             Assert.Equal(10, _bucketOfTestObjects.Count);
             
         }
 
-        private void AddTestObjects(int count)
+        private IList<TestObject> AddTestObjects(int count)
         {
-            _testObjects = Builder<TestObject>
+            return Builder<TestObject>
                 .CreateListOfSize(count)
                 .Build();
-
-            foreach (var to in _testObjects)
-            {
-                _ruleSetHandler.Run(to, _addRequestToItemsCollection);
-            }
         }
 
     }

@@ -6,6 +6,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using WebMinder.Core;
 using WebMinder.Core.Rules;
+using WebMinder.Core.Rules.IpBlocker;
 
 namespace TestWebSite
 {
@@ -30,7 +31,7 @@ namespace TestWebSite
                 IpAddress = ipaddress,
                 CreatedUtcDateTime = DateTime.UtcNow
             };
-            RuleSetRunner.Instance.Run(spamIpAddressCheck);
+            RuleSetRunner.Instance.VerifyRule(spamIpAddressCheck);
 
             var msg = GetMessage(ipaddress);
             Response.Write(msg);

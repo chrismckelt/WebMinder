@@ -5,9 +5,14 @@ using System.Linq.Expressions;
 using System.Runtime.Caching;
 using System.Web;
 
-namespace WebMinder.Core
+namespace WebMinder.Core.Handlers
 {
-    public class RuleSetHandler<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
+    public class RuleSetHandler<T> : 
+        IRuleSetHandler<T>, 
+        IAggregateRuleSetHandler<T>, 
+        IMaximumCountRuleSetHandler<T>,
+        ISimpleRuleSetHandler<T>
+        where T : IRuleRequest, new()
     {
         private T _ruleRequest;
         private Func<IList<T>> _storageMechanism;
