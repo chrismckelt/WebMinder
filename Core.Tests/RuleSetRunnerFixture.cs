@@ -21,7 +21,7 @@ namespace WebMinder.Core.Tests
         [Fact]
         public void ShouldGetRulesFromRuleSets()
         {
-            RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule());
+            RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule(){UpdateRuleCollectionOnSuccess = false});
 
             var rules = RuleSetRunner.Instance.GetRules<IpAddressRequest>();
             Assert.Equal(1, rules.Count());
