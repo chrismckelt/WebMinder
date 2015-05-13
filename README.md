@@ -36,7 +36,7 @@ When asked it will verify each rule set is valid , triggering your custom action
 
 ## Out of the box defaults
 
-    -- Stores items in a concurrent dictionary in the runtime memory cache (can back onto SQL/Cache/File see StorageMechanism)
+    -- StorageMechanism - items in a concurrent dictionary in the runtime memory cache (can back onto SQL/Cache/File)
     -- HttpException 403 thrown by default with RuleSet Error Description
 
 ## Optionally add items to the collection
