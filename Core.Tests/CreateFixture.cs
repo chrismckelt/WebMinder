@@ -20,7 +20,7 @@ namespace WebMinder.Core.Tests
 
             Assert.Equal(rulesetname, rule.Rule.RuleSetName);
 
-            Assert.Equal(rulesetname, rule.Rule.RuleSetName);
+            Assert.Equal(rulesetdesc, rule.Rule.ErrorDescription);
         }
     }
 }
