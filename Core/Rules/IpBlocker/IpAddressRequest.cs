@@ -6,5 +6,7 @@ namespace WebMinder.Core.Rules.IpBlocker
     {
         public string IpAddress { get; set; }
         public DateTime CreatedUtcDateTime { get; set; }
+
+        public bool IsBadRequest { get; set; }
     }
 }

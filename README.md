@@ -4,7 +4,14 @@
 
 ## 2 In built rules (see wiki)
 
-    -- IpAddress blocker
+    -- IpAddress blocker (sample)
+
+    var rule = new IpAddressBlockerRule<IpAddressRequest>()
+    {
+        Duration = Duration = TimeSpan.FromDays(-1),
+        MaxAttemptsWithinDuration = 5
+    };
+
     -- URL Gateway circuit breaker
 
 ## 3 rule set operators
@@ -21,7 +28,7 @@
 
 ## AggregateRuleSetHandler
     // ip ruleset - disallow more than 20 requests per day from a logged 'failed'  request
-    RuleSetHandler<IpAddressRequest> rule = new RuleSetHandler<IpAddressRequest>()
+    var rule = new RuleSetHandler<IpAddressRequest>()
     {
         AggregateRule = ip => ip.Count(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddDays(-1)) > 20,
         AggregateFilter = (data, item) => data.Where(collectionItem => collectionItem.IpAddress == item.IpAddress) // run time application for passed in IRequestRule

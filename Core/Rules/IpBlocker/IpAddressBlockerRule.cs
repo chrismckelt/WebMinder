@@ -12,12 +12,14 @@ namespace WebMinder.Core.Rules.IpBlocker
 
         public IpAddressBlockerRule()
         {
-            RuleSetName = "Block IP Addresses with more than 5 unsuccessful tries over a 24 hour period";
+            SetDefaults();
+
+            RuleSetName = string.Format("Block IP Addresses with more than {0} unsuccessful tries over a {1} hour period", MaxAttemptsWithinDuration, Duration.GetValueOrDefault());
 
             ErrorDescription =
                 "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
 
-            AggregateFilter = (data, item) => data.Where(x => x.IpAddress == item.IpAddress);
+            AggregateFilter = (requestCollection, request) => requestCollection.Where(x => x.IpAddress == request.IpAddress && request.IsBadRequest) ;
 
             AggregateRule =
                ipAddressRequests =>
@@ -38,7 +40,7 @@ namespace WebMinder.Core.Rules.IpBlocker
                 throw ex;
             };
 
-            SetDefaults();
+            
         }
 
         private void SetDefaults()
