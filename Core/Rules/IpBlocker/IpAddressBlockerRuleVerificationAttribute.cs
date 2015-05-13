@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using WebMinder.Core.Runners;
 
 namespace WebMinder.Core.Rules.IpBlocker
 {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebMinder.Core.Rules;
+using WebMinder.Core.Runners;
 
 namespace WebMinder.Core.Handlers
 {
@@ -24,8 +26,6 @@ namespace WebMinder.Core.Handlers
         void AddExistingItems(IEnumerable<T> existingItems);
 
         void Log(Action<string, string> logger);
-
-        void VerifyRule(IRuleRequest request = null);
 
         bool UpdateRuleCollectionOnSuccess { get; set; }
     }

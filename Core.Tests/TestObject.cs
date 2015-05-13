@@ -1,4 +1,5 @@
 ﻿using System;
+using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Tests
 {

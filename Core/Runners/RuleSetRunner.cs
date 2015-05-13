@@ -3,8 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using WebMinder.Core.Handlers;
+using WebMinder.Core.Rules;
 
-namespace WebMinder.Core
+namespace WebMinder.Core.Runners
 {
     public sealed class RuleSetRunner
     {

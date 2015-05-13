@@ -1,3 +1,5 @@
+using WebMinder.Core.Rules;
+
 namespace WebMinder.Core.Handlers
 {
     public interface IMaximumCountRuleSetHandler<T> : IRuleSetHandler<T> where T : IRuleRequest, new()

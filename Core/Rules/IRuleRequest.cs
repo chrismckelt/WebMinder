@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebMinder.Core
+namespace WebMinder.Core.Rules
 {
     public interface IRuleRequest
     {

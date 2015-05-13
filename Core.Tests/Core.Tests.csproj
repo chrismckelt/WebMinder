@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestUtilityFixture.cs" />
+    <Compile Include="CreateForFixture.cs" />
     <Compile Include="RuleSetHandlerFixture.cs" />
     <Compile Include="RuleSetRunnerFixture.cs" />
     <Compile Include="TestObject.cs" />

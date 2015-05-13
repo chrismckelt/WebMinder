@@ -2,6 +2,7 @@
 using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules.IpBlocker;
+using WebMinder.Core.Runners;
 using Xunit;
 
 namespace WebMinder.Core.Tests

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Handlers
 {

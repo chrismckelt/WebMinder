@@ -1,4 +1,6 @@
-﻿namespace WebMinder.Core
+﻿using WebMinder.Core.Rules;
+
+namespace WebMinder.Core.Runners
 {
     public interface IRuleRunner
     {
