@@ -1,6 +1,9 @@
 #  WebMinder
 
-### A HTTP request gatekeeper based on LINQ validation rules
+WebMinder contains a collection of RuleSets with each having its own collection of IRuleRequest objects.
+
+When asked it will verify each rule set is valid , triggering your custom action when a policy fails.
+
 
 ## Fluent interface to build rules
 
@@ -27,9 +30,14 @@
 
 ## 3 rule set operators
 
-    -- AggregateRuleSetHandler
-    -- SimpleRuleSetHandler
-    -- MaximumCountRuleSetHandler
+    -- AggregateRuleSetHandler - using run time arguments, filter the collection & run a predicate to find invalid items
+    -- SimpleRuleSetHandler - run a predicate over the collection to determine if its valid
+    -- MaximumCountRuleSetHandler - once the rule set hits this number it will trigger
+
+## Out of the box defaults
+
+    -- Stores items in a concurrent dictionary in the runtime memory cache (can back onto SQL/Cache/File see StorageMechanism)
+    -- HttpException 403 thrown by default with RuleSet Error Description
 
 ## Optionally add items to the collection
 
