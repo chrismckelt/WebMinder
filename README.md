@@ -12,6 +12,8 @@
         MaxAttemptsWithinDuration = 5
     };
 
+    Verifiy rule by a method attribute [IpAddressBlockerRuleVerification] or running the rule explicity
+
     -- URL Gateway circuit breaker
 
 ## 3 rule set operators
