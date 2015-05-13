@@ -4,7 +4,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests
 {
-    public class CreateForFixture
+    public class CreateFixture
     {
         [Fact]
         public void CreatesRuleSaysWhatItDoes()
@@ -12,8 +12,8 @@ namespace WebMinder.Core.Tests
             const string rulesetname = "abcd";
             const string rulesetdesc = "xyz";
 
-            var rule = CreateRule<IpAddressBlockerRule, IpAddressRequest>
-                .For()
+            var rule = Create<IpAddressBlockerRule, IpAddressRequest>
+                .RuleSet()
                 .With(y => y.RuleSetName = rulesetname)
                 .With(x => x.ErrorDescription = rulesetdesc)
                 .Build();

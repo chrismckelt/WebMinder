@@ -54,7 +54,7 @@
     <Compile Include="Handlers\IRuleSetHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestUtility.cs" />
-    <Compile Include="Runners\CreateRule.cs" />
+    <Compile Include="Runners\Create.cs" />
     <Compile Include="Runners\RuleSetRunner.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRuleVerificationAttribute.cs" />
     <Compile Include="Rules\UrlValid\ValidUrlCircuitBreakerRule.cs" />
