@@ -17,4 +17,6 @@ if "%nuget%" == "" (
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild WebMinder.sln /p:Configuration="Release" /p:OutputPath=build /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=diag /nr:false
 
 mkdir Build
+mddir lib
+mkdir Build\lib
 %nuget% pack "WebMinder.nuspec" -NoPackageAnalysis -verbosity detailed -o Build -Version %version% -p Configuration="Release"
