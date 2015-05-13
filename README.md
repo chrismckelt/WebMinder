@@ -2,6 +2,15 @@
 
 ### A HTTP request gatekeeper based on LINQ validation rules
 
+## Fluent interface to build rules
+
+
+        var rule = Create<IpAddressBlockerRule, IpAddressRequest>
+            .RuleSet()
+            .With(y => y.RuleSetName = "Spambots")
+            .With(x => x.ErrorDescription = "Deny IP addresses that are spamming us")
+            .Build();
+
 ## 2 In built rules (see wiki)
 
     -- IpAddress blocker (sample)
