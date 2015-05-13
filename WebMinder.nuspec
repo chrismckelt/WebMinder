@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>WebMinder</id>
-        <version>1.1.0.19</version>
+        <version>1.1.0.24</version>
         <title>WebMinder</title>
         <authors>Chris McKelt</authors>
         <owners>Chris McKelt</owners>
@@ -19,6 +19,6 @@ When asked it will verify each rule set is valid , triggering your custom action
         <tags>HTTP firewall SPAM Rules</tags>
     </metadata>
     <files>
-       	<file src="core\obj\release\WebMinder.Core.dll" />
+        <file src="lib\WebMinder.Core.dll" target="lib\WebMinder.Core.dll" />
     </files>
 </package>
