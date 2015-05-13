@@ -19,6 +19,6 @@ When asked it will verify each rule set is valid , triggering your custom action
         <tags>HTTP firewall SPAM Rules</tags>
     </metadata>
     <files>
-       	<file src="core\obj\release\WebMinder.Core.dll" target="build" />
+       	<file src="core\obj\release\WebMinder.Core.dll" />
     </files>
 </package>
