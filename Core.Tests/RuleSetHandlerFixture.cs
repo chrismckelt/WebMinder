@@ -30,7 +30,7 @@ namespace WebMinder.Core.Tests
                 ErrorDescription = ErrorDescription,
                 MaximumResultCount = 999,
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            
             var stubs = AddTestObjects(count);
             foreach (var st in stubs)
             {

@@ -59,9 +59,7 @@ namespace WebMinder.Core.Handlers
 
             if (InvalidAction == null)
             {
-                if (!StorageMechanism().Contains(RuleRequest))
-                    StorageMechanism().Add(RuleRequest);
-
+                if (RuleRequest != null) StorageMechanism().Add((T)RuleRequest);
                 InvalidAction = () => { throw new HttpException(403, ErrorDescription); };
             }
 
@@ -102,9 +100,7 @@ namespace WebMinder.Core.Handlers
         protected void RecordRequest(IRuleRequest request)
         {
             if (UpdateRuleCollectionOnSuccess)
-            {
-                StorageMechanism().Add((T) request);
-            }
+                StorageMechanism().Add((T)request);
         }
 
         public virtual void VerifyRule(IRuleRequest request = null)

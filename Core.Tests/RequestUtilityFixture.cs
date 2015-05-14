@@ -3,10 +3,9 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
 using NSubstitute;
-using WebMinder.Core;
 using Xunit;
 
-namespace Boomer.Web.Tests.Utilities
+namespace WebMinder.Core.Tests
 {
     public class RequestUtilityFixture
     {

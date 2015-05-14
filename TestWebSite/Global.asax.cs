@@ -32,8 +32,20 @@ namespace TestWebSite
                 IpAddress = ipaddress,
                 CreatedUtcDateTime = DateTime.UtcNow
             };
-            RuleSetRunner.Instance.VerifyRule(spamIpAddressCheck);
 
+            int total =
+             RuleSetRunner.Instance.GetRules<IpAddressRequest>()
+                 .Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
+
+            if (total < 2)
+            {
+                RuleSetRunner.Instance.VerifyRule(spamIpAddressCheck);
+            }
+            else
+            {
+                spamIpAddressCheck.IsBadRequest = true;
+                RuleSetRunner.Instance.VerifyRule(spamIpAddressCheck);
+            }
             var msg = GetMessage(ipaddress);
             Response.Write(msg);
         }
