@@ -55,6 +55,7 @@ namespace WebMinder.Core.Handlers
 
             if (InvalidAction == null)
             {
+                RecordRequest(RuleRequest);
                 InvalidAction = () => { throw new HttpException(403, ErrorDescription); };
             }
 
@@ -101,8 +102,8 @@ namespace WebMinder.Core.Handlers
         {
            if (UpdateRuleCollectionOnSuccess)
            {
-               if (!StorageMechanism().Contains((T)request))
-                   StorageMechanism().Add((T)request);
+               if (!_storageMechanism().Contains((T)request))
+                   _storageMechanism().Add((T)request);
            }
         }
 

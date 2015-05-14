@@ -35,9 +35,9 @@ namespace WebMinder.Core.Tests
             var rule = new IpAddressBlockerRule();
             rule.UseCacheStorage(Guid.NewGuid().ToString());
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
-            RuleSetRunner.Instance.VerifyRule(new IpAddressRequest(){IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow});
-            RuleSetRunner.Instance.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow });
-            RuleSetRunner.Instance.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow });
+            RuleSetRunner.Instance.VerifyRule(new IpAddressRequest(){IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true});
+            RuleSetRunner.Instance.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
+            RuleSetRunner.Instance.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
             var rules = RuleSetRunner.Instance.GetRules<IpAddressRequest>();
             Assert.Equal(3, rules.Sum(x=>x.Items.Count()));
 
