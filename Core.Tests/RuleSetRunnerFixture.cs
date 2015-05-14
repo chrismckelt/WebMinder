@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Caching;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Runners;
@@ -63,8 +64,9 @@ namespace WebMinder.Core.Tests
         [Fact]
         public void ShouldGetRulesCountFromRuleSets()
         {
+            
             var rule = new IpAddressBlockerRule();
-            rule.UseCacheStorage(Guid.NewGuid().ToString());
+            MemoryCache.Default.Remove(rule.RuleSetName);
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
            
             rule.VerifyRule(new IpAddressRequest() {Id=Guid.NewGuid(), IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
