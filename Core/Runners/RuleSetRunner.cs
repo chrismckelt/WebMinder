@@ -22,8 +22,8 @@ namespace WebMinder.Core.Runners
         public IEnumerable<IRuleSetHandler<T>> GetRules<T>() where T : IRuleRequest,new()
         {
             var found = Rules.Where(x => x.Key == typeof(T));
-            
-            var result = found.Select(y => (IRuleSetHandler<T>)y.Value);
+
+            var result = found.Select(y => y.Value).Cast<IRuleSetHandler<T>>();
             return result;
         }
 

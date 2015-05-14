@@ -18,9 +18,12 @@ namespace TestWebSite
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);     
 
-            RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule());
+            var ruleBuilder = Create<IpAddressBlockerRule, IpAddressRequest>.RuleSet().Build();
+
+            RuleSetRunner.Instance.AddRule<IpAddressRequest>(ruleBuilder.Rule);
+
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
