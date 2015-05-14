@@ -11,25 +11,27 @@ Sample uses include:
 ## Fluent interface to build rules
 
 
-        var rule = Create<IpAddressBlockerRule, IpAddressRequest>
-            .RuleSet()
-            .With(y => y.RuleSetName = "Spambots")
-            .With(x => x.ErrorDescription = "Deny IP addresses that are spamming us")
-            .Build();
-
-## 2 In built rules (see wiki)
+            var rule = Create<IpAddressBlockerRule, IpAddressRequest>
+                .On<IpAddressRequest>(request => request.IpAddress ="127.0.0.1")
+                .With(y => y.RuleSetName = "NO SPAM")
+                .With(x => x.ErrorDescription = "DDOS rejected")
+                .Build();
+				
+## In built rules (see wiki)
 
     -- IpAddress blocker (sample)
 
-    var rule = new IpAddressBlockerRule<IpAddressRequest>()
-    {
-        Duration = Duration = TimeSpan.FromDays(-1),
-        MaxAttemptsWithinDuration = 5
-    };
+		var rule = new IpAddressBlockerRule<IpAddressRequest>()
+		{
+			Duration = Duration = TimeSpan.FromDays(-1),
+			MaxAttemptsWithinDuration = 5
+		};
 
-    Verifiy rule by a method attribute [IpAddressBlockerRuleVerification] or running the rule explicity
+		Verify rule by a method attribute [IpAddressBlockerRuleVerification] or running the rule explicity
 
-    -- URL Gateway circuit breaker
+    -- Redirect to secure urls
+	
+	-- Url is up (200)
 
 ## 3 rule set operators
 

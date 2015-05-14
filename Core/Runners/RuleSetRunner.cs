@@ -23,7 +23,9 @@ namespace WebMinder.Core.Runners
         {
             var found = Rules.Where(x => x.Key == typeof(T));
 
-            var result = found.Select(y => y.Value).Cast<IRuleSetHandler<T>>();
+            var result = found.Where(y => y.Value is IRuleSetHandler<T>)
+                .Select(z=>z.Value)
+                .Cast<IRuleSetHandler<T>>();
             return result;
         }
 
@@ -36,11 +38,25 @@ namespace WebMinder.Core.Runners
 
         public void VerifyRule(IRuleRequest ruleRequest = null)
         {
-            foreach (var action in Rules.Where(rule => rule.Key == ruleRequest.GetType()).Select(rule => rule.Value).OfType<IRuleRunner>())
+            foreach (var action in RulesInContainer(ruleRequest))
             {
                 action.VerifyRule(ruleRequest);
             }
         }
 
+        private IEnumerable<IRuleRunner> RulesInContainer(IRuleRequest ruleRequest)
+        {
+            return Rules.Where(rule => ruleRequest != null && rule.Key == ruleRequest.GetType())
+                .Select(rule => rule.Value)
+                .OfType<IRuleRunner>();
+        }
+
+        public static void VerifyAllRules()
+        {
+            Instance.Rules
+                .Select(r=>r.Value as IRuleRunner)
+                .ToList()
+                .ForEach(rule => rule.VerifyRule());
+        }
     }
 }

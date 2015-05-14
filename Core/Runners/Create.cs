@@ -9,15 +9,18 @@ namespace WebMinder.Core.Runners
         where TRuleRequest : IRuleRequest, new()
     {
         private static TRuleSetHandler _rule;
+        private static IRuleRequest _request;
 
         public TRuleSetHandler Rule
         {
             get { return _rule; }
         }
 
-        public static Create<TRuleSetHandler, TRuleRequest> RuleSet() // where TRuleRequest : IRuleRequest, new()
+        public static Create<TRuleSetHandler, TRuleRequest> On<T>(Action<T> setter = null) where T : IRuleRequest, new()
         {
             _rule = Activator.CreateInstance<TRuleSetHandler>();
+            _request = Activator.CreateInstance<T>();
+            if (setter != null) setter((T)_request);
             return AppendRule();
         }
 

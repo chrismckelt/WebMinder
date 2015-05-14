@@ -30,21 +30,52 @@ namespace WebMinder.Core.Tests
         }
 
         [Fact]
+        public void ShouldVerifyAllRules()
+        {
+            int count = 0;
+            var rule1 = new MaximumCountRuleSetHandler<TestObject>()
+            {
+                MaximumResultCount = 0,
+                InvalidAction = () => count++
+            };
+            
+            var rule2 = new MaximumCountRuleSetHandler<IpAddressRequest>()
+            {
+                MaximumResultCount = 0,
+                InvalidAction = () => count++,
+             
+            };
+
+            rule1.UseCacheStorage(Guid.NewGuid().ToString());
+            rule2.UseCacheStorage(Guid.NewGuid().ToString());
+            RuleSetRunner.Instance.AddRule<MaximumCountRuleSetHandler<TestObject>>(rule1);
+            RuleSetRunner.Instance.AddRule<MaximumCountRuleSetHandler<IpAddressRequest>>(rule2);
+
+            rule1.VerifyRule(new TestObject());
+            rule2.VerifyRule(new IpAddressRequest());
+
+            RuleSetRunner.VerifyAllRules();
+            Assert.Equal(4,count);  // rule will auto trigger once each time it hits the rule - then again once run
+            
+
+        }
+
+        [Fact]
         public void ShouldGetRulesCountFromRuleSets()
         {
             var rule = new IpAddressBlockerRule();
             rule.UseCacheStorage(Guid.NewGuid().ToString());
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
            
-            rule.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
+            rule.VerifyRule(new IpAddressRequest() {Id=Guid.NewGuid(), IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
             Assert.Equal(1, rule.Items.Count());
-            
-            rule.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
+
+            rule.VerifyRule(new IpAddressRequest() { Id = Guid.NewGuid(), IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
             Assert.Equal(2, rule.Items.Count());
-             
-            rule.VerifyRule(new IpAddressRequest() { IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
+
+            rule.VerifyRule(new IpAddressRequest() { Id = Guid.NewGuid(), IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
             var rules = RuleSetRunner.Instance.GetRules<IpAddressRequest>();
-            Assert.Equal(3, rules.Sum(x=>x.Items.Count()));
+            Assert.Equal(3, rules.First().Items.Count());
 
         }
     }

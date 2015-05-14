@@ -13,7 +13,7 @@ namespace WebMinder.Core.Tests
             const string rulesetdesc = "xyz";
 
             var rule = Create<IpAddressBlockerRule, IpAddressRequest>
-                .RuleSet()
+                .On<IpAddressRequest>(request => request.IpAddress ="127.0.0.1")
                 .With(y => y.RuleSetName = rulesetname)
                 .With(x => x.ErrorDescription = rulesetdesc)
                 .Build();

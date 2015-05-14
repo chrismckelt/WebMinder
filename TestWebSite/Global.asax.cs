@@ -7,6 +7,7 @@ using System.Web.Routing;
 using WebMinder.Core;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
+using WebMinder.Core.Rules.UrlIsValid;
 using WebMinder.Core.Runners;
 
 namespace TestWebSite
@@ -18,11 +19,16 @@ namespace TestWebSite
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);     
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var ruleBuilder = Create<IpAddressBlockerRule, IpAddressRequest>.RuleSet().Build();
+            var ruleBuilder = Create<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>().Build();
+
+            var urlValid = Create<UrlIsValidRule, UrlRequest>
+                .On<UrlRequest>(url=>url.Url = "http://www.google.com")
+                .Build();
 
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(ruleBuilder.Rule);
+            RuleSetRunner.Instance.AddRule<UrlIsValidRule>(urlValid.Rule);
 
         }
 

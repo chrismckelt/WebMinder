@@ -38,7 +38,7 @@ namespace WebMinder.Core.Handlers
             {
                 filtered = StorageMechanism().Cast<T>();
             }
-
+  
             var invalid = AggregateRule.Compile().Invoke(filtered);
             if (invalid)
             {

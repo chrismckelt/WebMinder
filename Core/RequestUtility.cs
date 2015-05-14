@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace WebMinder.Core
@@ -58,6 +60,25 @@ namespace WebMinder.Core
 
             var isLinkLocalAddress = octets[0] == 169 && octets[1] == 254;
             return isLinkLocalAddress;
+        }
+
+        public static async Task<bool> UrlIsValid(string url, Action<string, string> logger)
+        {
+            try
+            {
+                var client = new HttpClient();
+                await client.GetAsync(url).ContinueWith((requestTask) =>
+                {
+                    HttpResponseMessage response = requestTask.Result;
+                    response.EnsureSuccessStatusCode();
+                });
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

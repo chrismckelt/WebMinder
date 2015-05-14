@@ -9,6 +9,7 @@ namespace WebMinder.Core.Tests
         public string StringProperty { get; set; }
         public decimal DecimalProperty { get; set; }
 
+        public Guid Id { get; set; }
         public DateTime CreatedUtcDateTime { get; set; }
 
         public static TestObject Build()
