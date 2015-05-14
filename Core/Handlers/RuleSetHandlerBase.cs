@@ -50,18 +50,19 @@ namespace WebMinder.Core.Handlers
 
         protected RuleSetHandlerBase()
         {
+            if (_logger == null)
+            {
+                _logger = (a, b) => Console.WriteLine(a + " :: " + b);
+            }
             RuleSetName = RuleType.Name + " ruleset";
             ErrorDescription = RuleType.Name + " was invalid";
 
             if (InvalidAction == null)
             {
-                RecordRequest(RuleRequest);
-                InvalidAction = () => { throw new HttpException(403, ErrorDescription); };
-            }
+                if (!StorageMechanism().Contains(RuleRequest))
+                    StorageMechanism().Add(RuleRequest);
 
-            if (_logger == null)
-            {
-                _logger = (a, b) => Console.WriteLine(a + " :: " + b);
+                InvalidAction = () => { throw new HttpException(403, ErrorDescription); };
             }
 
             UpdateRuleCollectionOnSuccess = true;
@@ -100,20 +101,18 @@ namespace WebMinder.Core.Handlers
 
         protected void RecordRequest(IRuleRequest request)
         {
-           if (UpdateRuleCollectionOnSuccess)
-           {
-               if (!_storageMechanism().Contains((T)request))
-                   _storageMechanism().Add((T)request);
-           }
+            if (UpdateRuleCollectionOnSuccess)
+            {
+                StorageMechanism().Add((T) request);
+            }
         }
 
-        public virtual void VerifyRule(IRuleRequest request = null) 
+        public virtual void VerifyRule(IRuleRequest request = null)
         {
-            _ruleRequest = (T)request;
+            _ruleRequest = (T) request;
             RecordRequest(request);
         }
 
-        public bool UpdateRuleCollectionOnSuccess {get;set;}
-
+        public bool UpdateRuleCollectionOnSuccess { get; set; }
     }
 }
