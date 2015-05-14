@@ -1,10 +1,13 @@
 #  WebMinder
 
-WebMinder contains a collection of RuleSets with each having its own collection of IRuleRequest objects.
+Define a custom rule set to record HTTP requests and invoke a LINQ rule to determine whether the request is valid.
 
-When asked it will verify each rule set is valid , triggering your custom action when a policy fails.
+Sample uses include:
 
-
+- Automatically block requests from a specific IP address when a count threshold has exceeded a time duration (DDOS)
+- Dynamically add IP requests to a black list & block future requests from that IP (URL vector attack)
+- Ensure request is secure SSL
+ 
 ## Fluent interface to build rules
 
 
