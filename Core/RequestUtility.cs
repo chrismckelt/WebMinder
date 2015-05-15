@@ -75,8 +75,9 @@ namespace WebMinder.Core
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger("WARN", "URL invalid :" + url + "  exception: " + ex.ToString());
                 return false;
             }
         }
