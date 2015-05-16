@@ -6,7 +6,7 @@ Sample uses include:
 
 - Automatically block requests from a specific IP address when a count threshold has exceeded a time duration (DDOS)
 - Dynamically add IP requests to a black list & block future requests from that IP (URL vector attack)
-- Ensure request is secure SSL
+- Ensure request is over SSL
  
 ## Fluent interface to build rules
 
