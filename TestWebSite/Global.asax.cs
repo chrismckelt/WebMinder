@@ -30,6 +30,9 @@ namespace TestWebSite
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(ruleBuilder.Rule);
             RuleSetRunner.Instance.AddRule<UrlIsValidRule>(urlValid.Rule);
 
+            SiteRules<Create<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>();
+
+
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
