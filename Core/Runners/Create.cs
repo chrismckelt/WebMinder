@@ -38,7 +38,6 @@ namespace WebMinder.Core.Runners
 
         public Create<TRuleSetHandler, TRuleRequest> Build()
         {
-            RuleSetRunner.Instance.AddRule<TRuleSetHandler>(_rule);
             return AppendRule();
         }
 
