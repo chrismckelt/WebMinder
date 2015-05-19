@@ -20,12 +20,12 @@ namespace WebMinder.Core.Handlers
             base.VerifyRule(request);
             if (!StorageMechanism().Any())
             {
-                _logger("INFO", string.Format("Cache empty for {0}", RuleSetName));
+                Logger("INFO", string.Format("Cache empty for {0}", RuleSetName));
                 return;
             }
             if (AggregateRule == null)
             {
-                _logger("ERROR", string.Format("Aggregate rule for {0} is empty", RuleSetName));
+                Logger("ERROR", string.Format("Aggregate rule for {0} is empty", RuleSetName));
                 return;
             }
 
@@ -42,7 +42,7 @@ namespace WebMinder.Core.Handlers
             var invalid = AggregateRule.Compile().Invoke(filtered);
             if (invalid)
             {
-                _logger("WARN", string.Format("RULE FAILEDe for {0} ", RuleSetName));
+                Logger("WARN", string.Format("RULE FAILEDe for {0} ", RuleSetName));
                 InvalidAction();
             }
         }

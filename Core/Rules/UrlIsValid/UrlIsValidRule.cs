@@ -23,7 +23,7 @@ namespace WebMinder.Core.Rules.UrlIsValid
 
         private async Task<bool> CheckUrl()
         {
-            return await RequestUtility.UrlIsValid(RuleRequest.Url, this._logger); ;//TOOD async all the way through the request
+            return await RequestUtility.UrlIsValid(RuleRequest.Url, this.Logger); ;//TOOD async all the way through the request
         }
     }
 }

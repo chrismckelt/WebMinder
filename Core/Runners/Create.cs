@@ -4,6 +4,7 @@ using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Runners
 {
+
     public class Create<TRuleSetHandler, TRuleRequest>
         where TRuleSetHandler : IRuleSetHandler<TRuleRequest>
         where TRuleRequest : IRuleRequest, new()

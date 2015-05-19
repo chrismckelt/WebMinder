@@ -27,12 +27,11 @@ namespace WebMinder.Core.Handlers
 
                 if (invalid.Any())
                 {
-                    _logger("WARN", "Rule Failed SimpleRuleSetHandler");
+                    Logger("WARN", "Rule Failed SimpleRuleSetHandler");
                     InvalidAction();
                 }
             }
         }
-
-       
+      
     }
 }

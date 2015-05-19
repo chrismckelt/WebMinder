@@ -2,7 +2,7 @@
 using WebMinder.Core.Runners;
 using Xunit;
 
-namespace WebMinder.Core.Tests
+namespace WebMinder.Core.Tests.Runners
 {
     public class CreateFixture
     {

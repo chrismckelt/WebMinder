@@ -13,7 +13,7 @@ namespace WebMinder.Core.Handlers
         protected T _ruleRequest;
         protected Func<IList<T>> _storageMechanism;
 
-        protected Action<string, string> _logger;
+        protected Action<string, string> Logger;
         public string RuleSetName { get; set; }
         public string ErrorDescription { get; set; }
 
@@ -40,7 +40,7 @@ namespace WebMinder.Core.Handlers
             {
                 if (_storageMechanism == null)
                 {
-                    _logger("WARNING", "No storage mechanism specified. Default to Cache storage");
+                    Logger("WARNING", "No storage mechanism specified. Default to Cache storage");
                     UseCacheStorage();
                 }
                 return _storageMechanism;
@@ -50,9 +50,9 @@ namespace WebMinder.Core.Handlers
 
         protected RuleSetHandlerBase()
         {
-            if (_logger == null)
+            if (Logger == null)
             {
-                _logger = (a, b) => Console.WriteLine(a + " :: " + b);
+                Logger = (a, b) => Console.WriteLine(a + " :: " + b);
             }
             RuleSetName = RuleType.Name + " ruleset";
             ErrorDescription = RuleType.Name + " was invalid";
@@ -86,14 +86,14 @@ namespace WebMinder.Core.Handlers
             var enumerable = existingItems as T[] ?? existingItems.ToArray();
             if (existingItems != null && enumerable.Any())
             {
-                _logger("DEBUG", "AddExistingItems: " + enumerable.Count());
+                Logger("DEBUG", "AddExistingItems: " + enumerable.Count());
                 enumerable.ToList().ForEach(StorageMechanism().Add);
             }
         }
 
         public void Log(Action<string, string> logger)
         {
-            _logger = logger;
+            Logger = logger;
         }
 
         protected void RecordRequest(IRuleRequest request)

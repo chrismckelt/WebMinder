@@ -20,7 +20,7 @@ namespace WebMinder.Core.Handlers
             if (!StorageMechanism().Any()) return;
             if (MaximumResultCount.HasValue && StorageMechanism().Count() >= MaximumResultCount)
             {
-                _logger("WARN", "Rule Failed VerifyMaximumCount");
+                Logger("WARN", "Rule Failed VerifyMaximumCount");
                 InvalidAction();
             }
         }

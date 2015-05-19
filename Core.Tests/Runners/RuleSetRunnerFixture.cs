@@ -6,7 +6,7 @@ using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Runners;
 using Xunit;
 
-namespace WebMinder.Core.Tests
+namespace WebMinder.Core.Tests.Runners
 {
     public class RuleSetRunnerFixture
     {
