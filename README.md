@@ -16,7 +16,12 @@ Sample uses include:
                 .With(y => y.RuleSetName = "NO SPAM")
                 .With(x => x.ErrorDescription = "DDOS rejected")
                 .Build();
-				
+	// add the rule to your IOC container & inject & invoke on demand
+	// or use an attribute to verfiy the rule on a web api request
+	// or run it per request via global.asax - Application_BeginRequest 
+	// or add the in built module to your web.config file
+	
+	
 ## In built rules (see wiki)
 
     -- IpAddress blocker (sample)
