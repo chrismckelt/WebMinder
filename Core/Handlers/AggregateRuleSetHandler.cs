@@ -7,7 +7,8 @@ using WebMinder.Core.Rules;
 namespace WebMinder.Core.Handlers
 {
     public class AggregateRuleSetHandler<T> : RuleSetHandlerBase<T>,
-        IAggregateRuleSetHandler<T>
+        IAggregateRuleSetHandler<T>,
+        IRuleSetHandler<T>
         where T : IRuleRequest, new()
     {
 

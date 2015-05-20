@@ -53,13 +53,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\SiteRulesFixture.cs" />
     <Compile Include="Handlers\MaximumCountRuleSetHandlerFixture.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandlerFixture.cs" />
     <Compile Include="Handlers\HandlerFixtureBase.cs" />
     <Compile Include="Handlers\SimpleRuleSetHandlerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestUtilityFixture.cs" />
-    <Compile Include="Runners\CreateFixture.cs" />
+    <Compile Include="Builders\CreateFixture.cs" />
     <Compile Include="Runners\RuleSetRunnerFixture.cs" />
     <Compile Include="TestObject.cs" />
   </ItemGroup>

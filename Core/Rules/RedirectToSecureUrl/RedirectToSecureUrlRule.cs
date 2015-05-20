@@ -3,9 +3,9 @@ using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core.Rules.RedirectToSecureUrl
 {
-    public class SecureUrlRule : SimpleRuleSetHandler<UrlRequest>
+    public class RedirectToSecureUrl : SimpleRuleSetHandler<UrlRequest>
     {
-        public SecureUrlRule()
+        public RedirectToSecureUrl()
         {
             RuleSetName = "HTTP redirct to HTTPS";
             ErrorDescription = "Non secure request redirected to HTTPS";

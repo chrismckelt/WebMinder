@@ -1,8 +1,8 @@
-﻿using WebMinder.Core.Rules.IpBlocker;
-using WebMinder.Core.Runners;
+﻿using WebMinder.Core.Builders;
+using WebMinder.Core.Rules.IpBlocker;
 using Xunit;
 
-namespace WebMinder.Core.Tests.Runners
+namespace WebMinder.Core.Tests.Builders
 {
     public class CreateFixture
     {

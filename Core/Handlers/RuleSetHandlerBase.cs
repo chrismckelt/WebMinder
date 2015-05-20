@@ -8,7 +8,7 @@ using WebMinder.Core.Runners;
 
 namespace WebMinder.Core.Handlers
 {
-    public abstract class RuleSetHandlerBase<T> : IRuleRunner where T : IRuleRequest, new()
+    public abstract class RuleSetHandlerBase<T> : IRuleSetHandler<T>, IRuleRunner where T : IRuleRequest, new()
     {
         protected T _ruleRequest;
         protected Func<IList<T>> _storageMechanism;

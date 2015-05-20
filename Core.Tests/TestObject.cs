@@ -3,14 +3,11 @@ using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Tests
 {
-    public class TestObject : IRuleRequest
+    public class TestObject : RuleRequest
     {
         public int IntegerProperty { get; set; }
         public string StringProperty { get; set; }
         public decimal DecimalProperty { get; set; }
-
-        public Guid Id { get; set; }
-        public DateTime CreatedUtcDateTime { get; set; }
 
         public static TestObject Build()
         {

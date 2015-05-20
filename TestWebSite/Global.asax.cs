@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WebMinder.Core;
+using WebMinder.Core.Builders;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.UrlIsValid;
@@ -29,10 +30,6 @@ namespace TestWebSite
 
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(ruleBuilder.Rule);
             RuleSetRunner.Instance.AddRule<UrlIsValidRule>(urlValid.Rule);
-
-            SiteRules<Create<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>();
-
-
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)

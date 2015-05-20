@@ -5,7 +5,7 @@ using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core.Rules.IpBlocker
 {
-    public class IpAddressBlockerRule : AggregateRuleSetHandler<IpAddressRequest>
+    public class IpAddressBlockerRule : AggregateRuleSetHandler<IpAddressRequest>, IRuleSetHandler<IpAddressRequest>
     {
         public TimeSpan? Duration { get; set; }
         public int? MaxAttemptsWithinDuration { get; set; }
