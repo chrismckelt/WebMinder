@@ -22,21 +22,20 @@ namespace WebMinder.Core.Tests.Builders
 
 
             var siteRules = RuleMinder.Create()
-              //  .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
-               //     new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
+                .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
+                    new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
                 .AddRule<CreateRule<IpAddressBlockerRule, IpAddressRequest>, IpAddressBlockerRule, IpAddressRequest>(() =>
-                   rule1.Rule) // custom code built rule to block a specific IP.  
-                //.AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
-                //    CreateRule<UrlIsValidRule, UrlRequest>  // on the fly
-                //        .On<UrlRequest>()
-                //        .With(x => x.Rule = request => request.Url == "http://www.example.com")
-                //        .Build().Rule);
+                   rule1) // custom code built rule to block a specific IP.  
+                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
+                    CreateRule<UrlIsValidRule, UrlRequest>  // on the fly
+                        .On<UrlRequest>()
+                        .With(x => x.Rule = request => request.Url == "http://www.example.com")
+                       .Build());
                 
-            ;
  
             Assert.Equal(3, siteRules.MindedRules.Count);
             
-          //  siteRules.MindedRules.ToList().ForEach(ruleSet=>ruleSet.VerifyRule());
+            siteRules.MindedRules.ToList().ForEach(ruleSet=> { if (ruleSet != null) ruleSet.VerifyRule(); });
         }
     }
 }

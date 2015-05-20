@@ -9,18 +9,18 @@ namespace WebMinder.Core.Builders
     {
 
 
-        public static RuleMinder AddRule<TCreate, TRuleSetHandler, TRuleRequest>(this RuleMinder ruleMinder, Func<TRuleSetHandler> setter)
+        public static RuleMinder AddRule<TCreate, TRuleSetHandler, TRuleRequest>(this RuleMinder ruleMinder, Func<CreateRule<TRuleSetHandler, TRuleRequest>> setter)
             where TCreate : CreateRule<TRuleSetHandler, TRuleRequest>, new()
             where TRuleSetHandler : class, IRuleSetHandler<TRuleRequest>, new()
             where TRuleRequest : class,IRuleRequest, new()
         {
 
             var createdRule = setter();
-
-            if (createdRule != null)
+            var rule = createdRule.Build();
+            if (rule != null)
             {
-                 Debug.WriteLine(createdRule.GetType().Name);
-             //   ruleMinder.Add(createdRule); 
+                Debug.WriteLine(createdRule.GetType().Name);
+               ruleMinder.Add(rule.Rule); 
             }
             
             return ruleMinder;
