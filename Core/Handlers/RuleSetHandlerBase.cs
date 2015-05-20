@@ -4,11 +4,10 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Web;
 using WebMinder.Core.Rules;
-using WebMinder.Core.Runners;
 
 namespace WebMinder.Core.Handlers
 {
-    public abstract class RuleSetHandlerBase<T> : IRuleSetHandler<T>, IRuleRunner where T : IRuleRequest, new()
+    public class RuleSetHandlerBase<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
     {
         protected T _ruleRequest;
         protected Func<IList<T>> _storageMechanism;

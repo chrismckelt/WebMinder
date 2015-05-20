@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\RuleMinder.cs" />
+    <Compile Include="Builders\RuleMinderExtensions.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandler.cs" />
     <Compile Include="Handlers\IAggregateRuleSetHandler.cs" />
     <Compile Include="Handlers\IMaximumCountRuleSetHandler.cs" />
@@ -50,6 +52,8 @@
     <Compile Include="Handlers\MaximumCountRuleSetHandler.cs" />
     <Compile Include="Handlers\SimpleRuleSetHandler.cs" />
     <Compile Include="Handlers\RuleSetHandlerBase.cs" />
+    <Compile Include="RuleSets\IpBlockerRuleSet.cs" />
+    <Compile Include="RuleSets\RedirectToSecureUrlRuleSet.cs" />
     <Compile Include="Rules\IRuleRequest.cs" />
     <Compile Include="Rules\RedirectToSecureUrl\RedirectToSecureUrlRule.cs" />
     <Compile Include="Rules\RuleRequest.cs" />
@@ -58,13 +62,12 @@
     <Compile Include="Handlers\IRuleSetHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestUtility.cs" />
-    <Compile Include="Builders\Create.cs" />
+    <Compile Include="Builders\CreateRule.cs" />
     <Compile Include="Runners\RuleSetRunner.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRuleVerificationAttribute.cs" />
     <Compile Include="Rules\UrlIsValid\UrlIsValidRule.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRule.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressRequest.cs" />
-    <Compile Include="Builders\SiteRules.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

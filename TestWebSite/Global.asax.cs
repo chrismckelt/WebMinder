@@ -22,9 +22,9 @@ namespace TestWebSite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var ruleBuilder = Create<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>().Build();
+            var ruleBuilder = CreateRule<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>().Build();
 
-            var urlValid = Create<UrlIsValidRule, UrlRequest>
+            var urlValid = CreateRule<UrlIsValidRule, UrlRequest>
                 .On<UrlRequest>(url=>url.Url = "http://www.google.com")
                 .Build();
 

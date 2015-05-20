@@ -4,8 +4,8 @@ using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Builders
 {
-    public class Create<TRuleSetHandler, TRuleRequest>
-        where TRuleSetHandler : IRuleSetHandler<TRuleRequest>
+    public class CreateRule<TRuleSetHandler, TRuleRequest>
+        where TRuleSetHandler :  IRuleSetHandler<TRuleRequest>, new()
         where TRuleRequest : IRuleRequest, new()
     {
         private static TRuleSetHandler _rule;
@@ -16,7 +16,7 @@ namespace WebMinder.Core.Builders
             get { return _rule; }
         }
 
-        public static Create<TRuleSetHandler, TRuleRequest> On<T>(Action<T> setter = null) where T : IRuleRequest, new()
+        public static CreateRule<TRuleSetHandler, TRuleRequest> On<T>(Action<T> setter = null) where T : IRuleRequest, new()
         {
             _rule = Activator.CreateInstance<TRuleSetHandler>();
             _request = Activator.CreateInstance<T>();
@@ -29,20 +29,20 @@ namespace WebMinder.Core.Builders
             _rule = rule;
         }
 
-        public Create<TRuleSetHandler, TRuleRequest> With(Action<TRuleSetHandler> setter)
+        public CreateRule<TRuleSetHandler, TRuleRequest> With(Action<TRuleSetHandler> setter)
         {
             setter(_rule);
             return AppendRule();
         }
 
-        public Create<TRuleSetHandler, TRuleRequest> Build()
+        public CreateRule<TRuleSetHandler, TRuleRequest> Build()
         {
             return AppendRule();
         }
 
-        public static Create<TRuleSetHandler, TRuleRequest> AppendRule()
+        public static CreateRule<TRuleSetHandler, TRuleRequest> AppendRule()
         {
-            var result = new Create<TRuleSetHandler, TRuleRequest>();
+            var result = new CreateRule<TRuleSetHandler, TRuleRequest>();
             result.SetRule(_rule);
             return result;
         }
