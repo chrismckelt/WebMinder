@@ -19,12 +19,16 @@ namespace WebMinder.Core.Tests.Builders
                 .Build();
 
             var rum = RuleMinder.Create()
-                .WithRule(() => rule1) // custom rule
-                .And<Create<RedirectToSecureUrl, UrlRequest>, RedirectToSecureUrl, UrlRequest>() // generic out of the box rule
-                .And<Create<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>() // another generic rule
+             .And<Create<IpAddressBlockerRule, IpAddressRequest>, IpAddressBlockerRule, IpAddressRequest>(() => rule1)
+             .And<Create<RedirectToSecureUrl, UrlRequest>, RedirectToSecureUrl, UrlRequest>()
+             .And<Create<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>() 
+
+              //  .And<Create<RedirectToSecureUrl, UrlRequest>, RedirectToSecureUrl, UrlRequest>() // generic out of the box rule
+              //  .And<Create<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>() // another generic rule
                 ;
 
-            rum.RuleSets.ForEach(x=>x.Rule.VerifyRule());
+            Assert.Equal(1, rum.MindedRules.Count);
+            
 
         }
     }
