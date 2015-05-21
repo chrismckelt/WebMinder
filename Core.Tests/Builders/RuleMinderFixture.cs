@@ -20,7 +20,7 @@ namespace WebMinder.Core.Tests.Builders
 
             siteMinder.VerifyAllRules();  // global.asax  run via Application_BeginRequest 
 
-            Assert.NotEqual(0, siteMinder.Rules.Count);
+            Assert.Equal(2, siteMinder.Rules.Count);
 
            
         }
