@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
@@ -11,16 +13,17 @@ namespace WebMinder.Core.Builders
     public static class RuleMinderExtensions
     {
         public static RuleMinder AddRule<TCreate, TRuleSetHandler, TRuleRequest>(this RuleMinder ruleMinder,
-            Func<CreateRule<TRuleSetHandler, TRuleRequest>> setter)
+            Func<CreateRule<TRuleSetHandler, TRuleRequest>, CreateRule<TRuleSetHandler, TRuleRequest>> setter)
             where TCreate : CreateRule<TRuleSetHandler, TRuleRequest>, new()
             where TRuleSetHandler : class, IRuleSetHandler<TRuleRequest>, new()
             where TRuleRequest : class, IRuleRequest, new()
         {
-            var createdRule = setter();
-            var rule = createdRule;
-            if (rule == null) return ruleMinder;
+            var act = Activator.CreateInstance<TCreate>();
+            var createdRule = setter.Invoke(act);
+           
+            if (createdRule == null) throw new EvaluateException("function to create a ruleset evaluated to null");
             Trace.WriteLine(createdRule.GetType().Name);
-            ruleMinder.Add(rule.Rule);
+            ruleMinder.AddRule(typeof(TRuleRequest), createdRule);
             return ruleMinder;
         }
 
@@ -30,7 +33,7 @@ namespace WebMinder.Core.Builders
                 .On<UrlRequest>()
                 .Build();
 
-            return ruleMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() => ruleSet); // predefined rule redirect all http traffic to https
+            return ruleMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(x => ruleSet); // predefined rule redirect all http traffic to https
         }
 
         public static RuleMinder WithNoSpam(this RuleMinder ruleMinder, int? maxAttemptsWithinDuration = null,
@@ -39,10 +42,10 @@ namespace WebMinder.Core.Builders
             var ruleSet = CreateRule<IpAddressBlockerRule, IpAddressRequest>
                 .On<IpAddressRequest>()
                 .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
-                .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromHours(-1)))
+                .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))
                 .Build();
 
-            return ruleMinder.AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(() => ruleSet);
+            return ruleMinder.AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(x => ruleSet);
         }
     }
 }

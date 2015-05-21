@@ -24,7 +24,7 @@ namespace WebMinder.Core.Rules.IpBlocker
             AggregateRule =
                ipAddressRequests =>
                    (from ipRequest in
-                        ipAddressRequests.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(Duration.Value.Ticks))
+                        ipAddressRequests.Where(a => a.CreatedUtcDateTime >= DateTime.UtcNow.AddTicks(GetTicks()))
                     let totalHitsForIpAddress = ipAddressRequests.GroupBy(b => b.IpAddress, b => b.IpAddress, (key, c) => new
                     {
                         IpAddress = key,
@@ -41,6 +41,13 @@ namespace WebMinder.Core.Rules.IpBlocker
             };
 
             
+        }
+
+        private long GetTicks()
+        {
+            var ticks = Duration.GetValueOrDefault().Ticks;
+            if (ticks > 0) return ticks*-1;
+            return ticks;
         }
 
         private void SetDefaults()

@@ -27,7 +27,6 @@ namespace TestWebSite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-
             var urlValid = CreateRule<UrlIsValidRule, UrlRequest>
             .On<UrlRequest>(url => url.Url = "http://www.google.com")
             .Build();
@@ -35,7 +34,7 @@ namespace TestWebSite
             SiteMinder = RuleMinder.Create()
                 .WithSslEnabled()
                 .WithNoSpam(5, TimeSpan.FromHours(1))
-                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
+                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(x =>
                     urlValid);
            
         }
@@ -50,18 +49,19 @@ namespace TestWebSite
             var spamIpAddressCheck = new IpAddressRequest
             {
                 IpAddress = ipaddress,
-                CreatedUtcDateTime = DateTime.UtcNow
+                CreatedUtcDateTime = DateTime.UtcNow,
             };
 
             var total = SiteMinder.GetRules<IpAddressRequest>().Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
 
-            if (total < 2)
+            if (total > 2) // just for this demo start logging bad ips after 2 refreshes
             {
+                spamIpAddressCheck.IsBadRequest = true;
                 SiteMinder.VerifyRule(spamIpAddressCheck);
             }
             else
             {
-                spamIpAddressCheck.IsBadRequest = true;
+                
                 SiteMinder.VerifyRule(spamIpAddressCheck);
             }
             var msg = GetMessage(ipaddress);
@@ -78,7 +78,7 @@ namespace TestWebSite
         private static string GetMessage(string ipaddress)
         {
             var total =
-                RuleSetRunner.Instance.GetRules<IpAddressRequest>()
+                SiteMinder.GetRules<IpAddressRequest>()
                     .Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
 
             var msg = string.Format("<h1>Website hit by IP {0} a total of {1} </h1>", ipaddress, total);

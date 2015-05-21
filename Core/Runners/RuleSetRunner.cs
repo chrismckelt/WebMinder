@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 
@@ -17,6 +19,12 @@ namespace WebMinder.Core.Runners
         {
             if (!Rules.ContainsKey(typeof(T)))
                 Rules.Add(typeof(T),ruleSetObject);
+        }
+
+        public void AddRule(Type ruleRequestType,object ruleSetObject)
+        {
+            if (!Rules.ContainsKey(ruleRequestType))
+                Rules.Add(ruleRequestType, ruleSetObject);
         }
 
         public IEnumerable<IRuleSetHandler<T>> GetRules<T>() where T : IRuleRequest,new()
@@ -44,9 +52,14 @@ namespace WebMinder.Core.Runners
 
         protected IEnumerable<IRuleRunner> RulesInContainer(IRuleRequest ruleRequest)
         {
-            return Rules.Where(rule => ruleRequest != null && rule.Key == ruleRequest.GetType() || rule.Key.IsAssignableFrom(ruleRequest.GetType()))
-                .Select(rule => rule.Value)
-                .OfType<IRuleRunner>();
+            var  found = Rules.Where(x => x.Key == ruleRequest.GetType());
+
+            var result = found
+                .Select(z => z.Value)
+                .Cast<IRuleRunner>();
+
+            return result;
+
         }
 
         public void VerifyAllRules()

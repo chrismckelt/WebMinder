@@ -14,11 +14,6 @@ namespace WebMinder.Core.Builders
             return minder;
         }
 
-        public void Add(object minded)
-        {
-            Rules.Add(minded.GetType(),minded);
-        }
-
         public RuleMinder WithRule<TRuleSetHandler2, TRuleRequest2>(Func<CreateRule<TRuleSetHandler2, TRuleRequest2>> setter)
             where TRuleSetHandler2 : class,IRuleSetHandler<TRuleRequest2>, new()
             where TRuleRequest2 :  IRuleRequest,new()
@@ -26,7 +21,7 @@ namespace WebMinder.Core.Builders
             var evaulated = setter().Rule as IRuleRunner;
             if (evaulated != null)
             {
-                Rules.Add(typeof(TRuleSetHandler2), evaulated);
+                Rules.Add(typeof(TRuleRequest2), evaulated);
             }
             return this;
         }
