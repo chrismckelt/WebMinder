@@ -55,7 +55,7 @@ namespace WebMinder.Core.Tests.Runners
             rule1.VerifyRule(new TestObject());
             rule2.VerifyRule(new IpAddressRequest());
 
-            RuleSetRunner.VerifyAllRules();
+            RuleSetRunner.Instance.VerifyAllRules();
             Assert.Equal(4,count);  // rule will auto trigger once each time it hits the rule - then again once run
             
 

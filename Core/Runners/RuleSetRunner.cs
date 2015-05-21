@@ -7,9 +7,9 @@ using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Runners
 {
-    public sealed class RuleSetRunner
+    public class RuleSetRunner
     {
-        private static readonly Lazy<RuleSetRunner> Lazy = new Lazy<RuleSetRunner>(() => new RuleSetRunner());
+        protected static readonly Lazy<RuleSetRunner> Lazy = new Lazy<RuleSetRunner>(() => new RuleSetRunner());
         
         public IDictionary<Type, object> Rules { get; private set; }
 
@@ -29,9 +29,7 @@ namespace WebMinder.Core.Runners
             return result;
         }
 
-        public static RuleSetRunner Instance { get { return Lazy.Value; } }
-
-        private RuleSetRunner()
+        public RuleSetRunner()
         {
             Rules = new ConcurrentDictionary<Type, object>();
         }
@@ -44,19 +42,21 @@ namespace WebMinder.Core.Runners
             }
         }
 
-        private IEnumerable<IRuleRunner> RulesInContainer(IRuleRequest ruleRequest)
+        protected IEnumerable<IRuleRunner> RulesInContainer(IRuleRequest ruleRequest)
         {
-            return Rules.Where(rule => ruleRequest != null && rule.Key == ruleRequest.GetType())
+            return Rules.Where(rule => ruleRequest != null && rule.Key == ruleRequest.GetType() || rule.Key.IsAssignableFrom(ruleRequest.GetType()))
                 .Select(rule => rule.Value)
                 .OfType<IRuleRunner>();
         }
 
-        public static void VerifyAllRules()
+        public void VerifyAllRules()
         {
             Instance.Rules
                 .Select(r=>r.Value as IRuleRunner)
                 .ToList()
                 .ForEach(rule => rule.VerifyRule());
         }
+
+        public static RuleSetRunner Instance { get { return Lazy.Value; } }
     }
 }

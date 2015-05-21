@@ -1,10 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using WebMinder.Core.Builders;
 using WebMinder.Core.Rules;
-using WebMinder.Core.Rules.IpBlocker;
-using WebMinder.Core.Rules.RedirectToSecureUrl;
 using WebMinder.Core.Rules.UrlIsValid;
-using WebMinder.Core.RuleSets;
 using Xunit;
 
 namespace WebMinder.Core.Tests.Builders
@@ -14,29 +11,20 @@ namespace WebMinder.Core.Tests.Builders
         [Fact]
         public void SiteRulesBuilderWillCollectAllRulesAndRunOnVerify()
         {
-            var rule1 = CreateRule<IpAddressBlockerRule, IpAddressRequest>
-                .On<IpAddressRequest>()
-                .With(a => a.AggregateRule = (requests => requests.Any(ip => ip.IpAddress == "111.111.111.111")))
-                .Build();
 
             // Fluent builder to add many custom or inbuilt rules in  global.asax application_onstart
             var siteMinder = RuleMinder.Create()
-                .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
-                    new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
-                .AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(() =>
-                    new IpBlockerRuleSet()) // predefined rule that blocks on ip rules (more than 500 requests in 1 minute should be blocked)
-                .AddRule<CreateRule<IpAddressBlockerRule, IpAddressRequest>, IpAddressBlockerRule, IpAddressRequest>(
-                    () => rule1) // custom code built rule to block a specific IP.  
+                .WithSslEnabled()// predefined rule redirect all http traffic to https
+                .WithNoSpam(maxAttemptsWithinDuration:100, withinDuration:TimeSpan.FromHours(1))
                 .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
                     CreateRule<UrlIsValidRule, UrlRequest> // on the fly
                         .On<UrlRequest>()
                         .With(x => x.Rule = request => request.Url == "http://www.example.com")
                         .Build());
 
-
             siteMinder.VerifyAllRules();  // global.asax  run via Application_BeginRequest 
 
-            Assert.Equal(4, siteMinder.MindedRules.Count);
+            Assert.Equal(3, siteMinder.Rules.Count);
 
            
         }

@@ -4,17 +4,22 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using WebGrease.Css.Extensions;
 using WebMinder.Core;
 using WebMinder.Core.Builders;
+using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.UrlIsValid;
+using WebMinder.Core.RuleSets;
 using WebMinder.Core.Runners;
 
 namespace TestWebSite
 {
     public class MvcApplication : HttpApplication
     {
+        public static RuleMinder SiteMinder;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -22,38 +27,42 @@ namespace TestWebSite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var ruleBuilder = CreateRule<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>().Build();
 
             var urlValid = CreateRule<UrlIsValidRule, UrlRequest>
-                .On<UrlRequest>(url=>url.Url = "http://www.google.com")
-                .Build();
+            .On<UrlRequest>(url => url.Url = "http://www.google.com")
+            .Build();
 
-            RuleSetRunner.Instance.AddRule<IpAddressRequest>(ruleBuilder.Rule);
-            RuleSetRunner.Instance.AddRule<UrlIsValidRule>(urlValid.Rule);
+            SiteMinder = RuleMinder.Create()
+                .WithSslEnabled()
+                .WithNoSpam(5, TimeSpan.FromHours(1))
+                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
+                    urlValid);
+           
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+
+            SiteMinder.VerifyAllRules();
+          
             var ipaddress = GetIpAddress();
 
-            var spamIpAddressCheck = new IpAddressRequest()
+            var spamIpAddressCheck = new IpAddressRequest
             {
                 IpAddress = ipaddress,
                 CreatedUtcDateTime = DateTime.UtcNow
             };
 
-            int total =
-             RuleSetRunner.Instance.GetRules<IpAddressRequest>()
-                 .Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
+            var total = SiteMinder.GetRules<IpAddressRequest>().Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
 
             if (total < 2)
             {
-                RuleSetRunner.Instance.VerifyRule(spamIpAddressCheck);
+                SiteMinder.VerifyRule(spamIpAddressCheck);
             }
             else
             {
                 spamIpAddressCheck.IsBadRequest = true;
-                RuleSetRunner.Instance.VerifyRule(spamIpAddressCheck);
+                SiteMinder.VerifyRule(spamIpAddressCheck);
             }
             var msg = GetMessage(ipaddress);
             Response.Write(msg);
@@ -62,23 +71,23 @@ namespace TestWebSite
         private static string GetIpAddress()
         {
             var wrapper = new HttpRequestWrapper(HttpContext.Current.Request);
-            string ipaddress = RequestUtility.GetClientIpAddress(wrapper);
+            var ipaddress = RequestUtility.GetClientIpAddress(wrapper);
             return ipaddress;
         }
 
         private static string GetMessage(string ipaddress)
         {
-            int total =
+            var total =
                 RuleSetRunner.Instance.GetRules<IpAddressRequest>()
                     .Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
 
-            string msg = string.Format("<h1>Website hit by IP {0} a total of {1} </h1>", ipaddress, total);
+            var msg = string.Format("<h1>Website hit by IP {0} a total of {1} </h1>", ipaddress, total);
             return msg;
         }
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            Exception exception = Server.GetLastError();
+            var exception = Server.GetLastError();
 
             var httpEx = exception as HttpException;
             Response.Write("<h1>");
