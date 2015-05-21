@@ -4,7 +4,7 @@ using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core.Rules.UrlIsValid
 {
-    public class UrlIsValidRule : SimpleRuleSetHandler<UrlRequest>
+    public class UrlIsValidRule : SingleRuleSetHandler<UrlRequest>
     {
         public UrlIsValidRule()
         {

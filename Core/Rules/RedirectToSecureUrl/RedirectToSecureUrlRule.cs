@@ -3,7 +3,7 @@ using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core.Rules.RedirectToSecureUrl
 {
-    public class RedirectToSecureUrl : SimpleRuleSetHandler<UrlRequest>
+    public class RedirectToSecureUrl : SingleRuleSetHandler<UrlRequest>
     {
         public RedirectToSecureUrl()
         {

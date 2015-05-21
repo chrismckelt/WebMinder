@@ -6,10 +6,8 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Handlers
 {
-    public class SimpleRuleSetHandlerFixture : HandlerFixtureBase
+    public class SingleRuleSetHandlerFixture : HandlerFixtureBase
     {
-                
-
         static IList<TestObject> _bucketOfTestObjects = new List<TestObject>(); 
 
         [Fact]
@@ -18,7 +16,7 @@ namespace WebMinder.Core.Tests.Handlers
             const int count = 10;
             _bucketOfTestObjects = AddTestObjects(count);
             
-            var ruleSetHandler = new SimpleRuleSetHandler<TestObject>
+            var ruleSetHandler = new SingleRuleSetHandler<TestObject>
             {
                 RuleSetName = RuleSet,
                 ErrorDescription = ErrorDescription,
@@ -41,7 +39,7 @@ namespace WebMinder.Core.Tests.Handlers
         public void ShouldThrowIfWhenRuleFails()
         {
             const int count = 3;
-            var ruleSetHandler = new SimpleRuleSetHandler<TestObject>
+            var ruleSetHandler = new SingleRuleSetHandler<TestObject>
             {
                 RuleSetName = RuleSet,
                 ErrorDescription = ErrorDescription

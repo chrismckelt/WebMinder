@@ -5,9 +5,9 @@ using WebMinder.Core.Rules;
 
 namespace WebMinder.Core.Handlers
 {
-    public class SimpleRuleSetHandler<T> :
+    public class SingleRuleSetHandler<T> :
         RuleSetHandlerBase<T>,
-        ISimpleRuleSetHandler<T>
+        ISingleRuleSetHandler<T>
         where T : IRuleRequest, new()
     {
 
@@ -25,11 +25,8 @@ namespace WebMinder.Core.Handlers
                     .Cast<T>()
                     .Where(Rule);
 
-                if (invalid.Any())
-                {
-                    Logger("WARN", "Rule Failed SimpleRuleSetHandler");
-                    InvalidAction();
-                }
+                if (!invalid.Any()) return;
+                FailRule();
             }
         }
       

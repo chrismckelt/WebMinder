@@ -31,5 +31,10 @@ namespace WebMinder.Core.Builders
             if (evaulated != null) MindedRules.Add(evaulated);
             return this;
         }
+
+        public void VerifyAllRules()
+        {
+            MindedRules.ToList().ForEach(ruleSet => ruleSet.VerifyRule());
+        }
     }
 }

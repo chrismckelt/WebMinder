@@ -40,7 +40,7 @@ namespace WebMinder.Core.Builders
             return AppendRule();
         }
 
-        public static CreateRule<TRuleSetHandler, TRuleRequest> AppendRule()
+        private static CreateRule<TRuleSetHandler, TRuleRequest> AppendRule()
         {
             var result = new CreateRule<TRuleSetHandler, TRuleRequest>();
             result.SetRule(_rule);

@@ -98,7 +98,7 @@ namespace WebMinder.Core.Handlers
         protected void RecordRequest(IRuleRequest request)
         {
             if (!UpdateRuleCollectionOnSuccess) return;
-            var item = (T)request;
+            var item = (T) request;
             if (!StorageMechanism().Contains(item))
                 StorageMechanism().Add(item);
         }
@@ -107,7 +107,7 @@ namespace WebMinder.Core.Handlers
         {
             if (request == null)
             {
-                request=Activator.CreateInstance<T>();
+                request = Activator.CreateInstance<T>();
             }
             else
             {
@@ -115,9 +115,14 @@ namespace WebMinder.Core.Handlers
             }
 
             _ruleRequest = (T) request;
-
         }
 
         public bool UpdateRuleCollectionOnSuccess { get; set; }
+
+        protected void FailRule(string logmessage = null)
+        {
+            Logger("WARN", string.Format("FAILED RULE: {0} {1}", RuleSetName, logmessage));
+            InvalidAction();
+        }
     }
 }

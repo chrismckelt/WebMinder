@@ -7,11 +7,9 @@ using WebMinder.Core.Rules;
 namespace WebMinder.Core.Handlers
 {
     public class AggregateRuleSetHandler<T> : RuleSetHandlerBase<T>,
-        IAggregateRuleSetHandler<T>,
-        IRuleSetHandler<T>
+        IAggregateRuleSetHandler<T>
         where T : IRuleRequest, new()
     {
-
         public Expression<Func<IEnumerable<T>, T, IEnumerable<T>>> AggregateFilter { get; set; }
 
         public Expression<Func<IEnumerable<T>, bool>> AggregateRule { get; set; }
@@ -30,22 +28,13 @@ namespace WebMinder.Core.Handlers
                 return;
             }
 
-            IEnumerable<T> filtered;
-            if (AggregateFilter != null)
-            {
-                filtered = AggregateFilter.Compile().Invoke(StorageMechanism().Cast<T>(), _ruleRequest);
-            }
-            else
-            {
-                filtered = StorageMechanism().Cast<T>();
-            }
-  
+            var filtered = AggregateFilter != null
+                ? AggregateFilter.Compile().Invoke(StorageMechanism(), _ruleRequest)
+                : StorageMechanism();
+
             var invalid = AggregateRule.Compile().Invoke(filtered);
-            if (invalid)
-            {
-                Logger("WARN", string.Format("RULE FAILEDe for {0} ", RuleSetName));
-                InvalidAction();
-            }
+            if (!invalid) return;
+            FailRule();
         }
     }
 }

@@ -48,9 +48,9 @@
     <Compile Include="Handlers\AggregateRuleSetHandler.cs" />
     <Compile Include="Handlers\IAggregateRuleSetHandler.cs" />
     <Compile Include="Handlers\IMaximumCountRuleSetHandler.cs" />
-    <Compile Include="Handlers\ISimpleRuleSetHandler.cs" />
+    <Compile Include="Handlers\ISingleRuleSetHandler.cs" />
     <Compile Include="Handlers\MaximumCountRuleSetHandler.cs" />
-    <Compile Include="Handlers\SimpleRuleSetHandler.cs" />
+    <Compile Include="Handlers\SingleRuleSetHandler.cs" />
     <Compile Include="Handlers\RuleSetHandlerBase.cs" />
     <Compile Include="RuleSets\IpBlockerRuleSet.cs" />
     <Compile Include="RuleSets\RedirectToSecureUrlRuleSet.cs" />

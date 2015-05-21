@@ -57,7 +57,7 @@
     <Compile Include="Handlers\MaximumCountRuleSetHandlerFixture.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandlerFixture.cs" />
     <Compile Include="Handlers\HandlerFixtureBase.cs" />
-    <Compile Include="Handlers\SimpleRuleSetHandlerFixture.cs" />
+    <Compile Include="Handlers\SingleRuleSetHandlerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestUtilityFixture.cs" />
     <Compile Include="Builders\CreateFixture.cs" />

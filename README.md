@@ -10,18 +10,8 @@ Sample uses include:
 
 ##  Fluent interface to create all the rules for your site
 
-     var siteRules = RuleMinder.Create()
-            .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
-                new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
-            .AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(() =>
-                new IpBlockerRuleSet()) // predefined rule that blocks on ip rules (more than 500 requests in 1 minute should be blocked)
-            .AddRule<CreateRule<IpAddressBlockerRule, IpAddressRequest>, IpAddressBlockerRule, IpAddressRequest>(
-                () => rule1) // custom code built rule to block a specific IP.  
-            .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
-                CreateRule<UrlIsValidRule, UrlRequest> // on the fly
-                    .On<UrlRequest>()
-                    .With(x => x.Rule = request => request.Url == "http://www.example.com")
-                    .Build());
+![image](https://cloud.githubusercontent.com/assets/662868/7741123/ddd286c6-ffad-11e4-9a3a-0ad3d41ce3ee.png)
+
 
 ## Fluent interface for individual rules
 
@@ -58,7 +48,7 @@ Sample uses include:
 ## 3 rule set operators
 
     -- AggregateRuleSetHandler - using run time arguments, filter the collection & run a predicate to find invalid items
-    -- SimpleRuleSetHandler - run a predicate over the collection to determine if its valid
+    -- SingleRuleSetHandler - run a predicate over the collection to determine if its valid
     -- MaximumCountRuleSetHandler - once the rule set hits this number it will trigger
 
 ## Out of the box defaults
@@ -84,10 +74,10 @@ Sample uses include:
     RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
 
 
-## SimpleRuleSetHandler
+## SingleRuleSetHandler
 
     // ip ruleset - disallow a specific IP
-    var rule = new SimpleRuleSetHandler<IpAddress>()
+    var rule = new SingleRuleSetHandler<IpAddress>()
     {
       Rule = ip => ip.IpAddress == "Some IP we dont want (or could do a range query on it)",
     };

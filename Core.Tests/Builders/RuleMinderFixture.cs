@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using WebMinder.Core.Builders;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
@@ -21,7 +20,7 @@ namespace WebMinder.Core.Tests.Builders
                 .Build();
 
 
-            var siteRules = RuleMinder.Create()
+            var siteMinder = RuleMinder.Create()
                 .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
                     new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
                 .AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(() =>
@@ -35,9 +34,9 @@ namespace WebMinder.Core.Tests.Builders
                         .Build());
 
 
-            Assert.Equal(4, siteRules.MindedRules.Count);
+            Assert.Equal(4, siteMinder.MindedRules.Count);
 
-            siteRules.MindedRules.ToList().ForEach(ruleSet => ruleSet.VerifyRule());
+            siteMinder.VerifyAllRules();
         }
     }
 }
