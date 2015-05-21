@@ -7,8 +7,23 @@ Sample uses include:
 - Automatically block requests from a specific IP address when a count threshold has exceeded a time duration (DDOS)
 - Dynamically add IP requests to a black list & block future requests from that IP (URL vector attack)
 - Ensure request is over SSL
- 
-## Fluent interface to build rules
+
+##  Fluent interface to create all the rules for your site
+
+     var siteRules = RuleMinder.Create()
+            .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
+                new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
+            .AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(() =>
+                new IpBlockerRuleSet()) // predefined rule that blocks on ip rules (more than 500 requests in 1 minute should be blocked)
+            .AddRule<CreateRule<IpAddressBlockerRule, IpAddressRequest>, IpAddressBlockerRule, IpAddressRequest>(
+                () => rule1) // custom code built rule to block a specific IP.  
+            .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
+                CreateRule<UrlIsValidRule, UrlRequest> // on the fly
+                    .On<UrlRequest>()
+                    .With(x => x.Rule = request => request.Url == "http://www.example.com")
+                    .Build());
+
+## Fluent interface to individual rules
 
 
             var rule = Create<IpAddressBlockerRule, IpAddressRequest>
@@ -16,17 +31,17 @@ Sample uses include:
                 .With(y => y.RuleSetName = "NO SPAM")
                 .With(x => x.ErrorDescription = "DDOS rejected")
                 .Build();
-                
-                
+
+
 	    // add the rule to your IOC container & inject & invoke on demand
 	    // or use an attribute to verfiy the rule on a web api request
-	    // or run it per request via global.asax - Application_BeginRequest 
+	    // or run it per request via global.asax - Application_BeginRequest
 	    // or add the in built module to your web.config file
-	
-	
+
+
 ## In built rules (see wiki)
 
-    -- IpAddress blocker (sample)
+    -- IpAddress blocker (sample with non fluent creation )
 
 		var rule = new IpAddressBlockerRule<IpAddressRequest>()
 		{
@@ -36,9 +51,9 @@ Sample uses include:
 
 		Verify rule by a method attribute [IpAddressBlockerRuleVerification] or running the rule explicity
 
-    -- Redirect to secure urls
-	
-	-- Url is up (200)
+    -- Redirect to secure urls (site must be SSL)
+
+	  -- Url is valid  (checks given url gives a 200 or trips action)
 
 ## 3 rule set operators
 

@@ -6,5 +6,9 @@ namespace WebMinder.Core.RuleSets
 {
     public class RedirectToSecureUrlRuleSet : CreateRule<RedirectToSecureUrl, UrlRequest>
     {
+        public RedirectToSecureUrlRuleSet()
+        {
+            this.SetRule(CreateRule<RedirectToSecureUrl, UrlRequest>.On<UrlRequest>().Build().Rule);
+        }
     }
 }
