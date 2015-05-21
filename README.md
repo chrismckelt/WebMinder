@@ -23,7 +23,7 @@ Sample uses include:
                     .With(x => x.Rule = request => request.Url == "http://www.example.com")
                     .Build());
 
-## Fluent interface to individual rules
+## Fluent interface for individual rules
 
 
             var rule = Create<IpAddressBlockerRule, IpAddressRequest>
