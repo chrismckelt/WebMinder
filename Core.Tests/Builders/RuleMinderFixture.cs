@@ -19,7 +19,7 @@ namespace WebMinder.Core.Tests.Builders
                 .With(a => a.AggregateRule = (requests => requests.Any(ip => ip.IpAddress == "111.111.111.111")))
                 .Build();
 
-
+            // Fluent builder to add many custom or inbuilt rules in  global.asax application_onstart
             var siteMinder = RuleMinder.Create()
                 .AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(() =>
                     new RedirectToSecureUrlRuleSet()) // predefined rule redirect all http traffic to https
@@ -34,9 +34,11 @@ namespace WebMinder.Core.Tests.Builders
                         .Build());
 
 
+            siteMinder.VerifyAllRules();  // global.asax  run via Application_BeginRequest 
+
             Assert.Equal(4, siteMinder.MindedRules.Count);
 
-            siteMinder.VerifyAllRules();
+           
         }
     }
 }
