@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
@@ -27,10 +28,15 @@ namespace WebMinder.Core.Builders
             return ruleMinder;
         }
 
+        public static RuleMinder WithRules(this RuleMinder ruleMinder, RuleMinder existingRuleMinder)
+        {
+            ruleMinder.Rules.ToList().AddRange(existingRuleMinder.Rules);
+            return ruleMinder;
+        }
+
         public static RuleMinder WithSslEnabled(this RuleMinder ruleMinder)
         {
-            var ruleSet = CreateRule<RedirectToSecureUrl, UrlRequest>
-                .On<UrlRequest>()
+            var ruleSet = CreateRule<RedirectToSecureUrl, UrlRequest>.On<UrlRequest>()
                 .Build();
 
             return ruleMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(x => ruleSet); // predefined rule redirect all http traffic to https
@@ -39,8 +45,7 @@ namespace WebMinder.Core.Builders
         public static RuleMinder WithNoSpam(this RuleMinder ruleMinder, int? maxAttemptsWithinDuration = null,
             TimeSpan? withinDuration = null)
         {
-            var ruleSet = CreateRule<IpAddressBlockerRule, IpAddressRequest>
-                .On<IpAddressRequest>()
+            var ruleSet = CreateRule<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>()
                 .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
                 .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))
                 .Build();

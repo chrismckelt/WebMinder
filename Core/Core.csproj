@@ -54,6 +54,7 @@
     <Compile Include="Handlers\RuleSetHandlerBase.cs" />
     <Compile Include="RuleSets\IpBlockerRuleSet.cs" />
     <Compile Include="RuleSets\RedirectToSecureUrlRuleSet.cs" />
+    <Compile Include="RuleSets\UrlIsValidRuleSet.cs" />
     <Compile Include="Rules\IRuleRequest.cs" />
     <Compile Include="Rules\RedirectToSecureUrl\RedirectToSecureUrlRule.cs" />
     <Compile Include="Rules\RuleRequest.cs" />

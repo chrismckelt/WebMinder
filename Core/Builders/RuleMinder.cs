@@ -7,7 +7,6 @@ namespace WebMinder.Core.Builders
 {
     public sealed class RuleMinder : RuleSetRunner
     {
-
         public static RuleMinder Create(bool addToRuleSetRunner = true)
         {
             var minder = new RuleMinder{};
