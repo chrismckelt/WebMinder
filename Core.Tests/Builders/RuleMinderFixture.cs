@@ -48,7 +48,7 @@ namespace WebMinder.Core.Tests.Builders
 
             siteMinder.VerifyAllRules(); // global.asax  run via Application_BeginRequest 
 
-            siteMinder.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true)); // or verify individual request on demand  / via attribute
+            //siteMinder.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true)); // or verify individual request on demand  / via attribute
             Assert.Equal(2, siteMinder.Rules.Count);
         }
     }

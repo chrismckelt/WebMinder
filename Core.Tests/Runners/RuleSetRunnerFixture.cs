@@ -11,11 +11,14 @@ namespace WebMinder.Core.Tests.Runners
     public class RuleSetRunnerFixture
     {
         private AggregateRuleSetHandler<TestObject> _ruleSetHandler;
+        private IpAddressBlockerRule _ruleset;
         private const string RuleSet = "RuleSetRunnerFixture Test Rule";
         const string ErrorDescription = "RuleSetRunnerFixture Error exception for logging";
 
         public RuleSetRunnerFixture()
         {
+            _ruleset = new IpAddressBlockerRule(){UpdateRuleCollectionOnSuccess = false};
+            MemoryCache.Default.Remove(_ruleset.RuleSetName);
             _ruleSetHandler = new AggregateRuleSetHandler<TestObject>();
 
         }
@@ -23,7 +26,7 @@ namespace WebMinder.Core.Tests.Runners
         [Fact]
         public void ShouldGetRulesFromRuleSets()
         {
-            RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule(){UpdateRuleCollectionOnSuccess = false});
+            RuleSetRunner.Instance.AddRule<IpAddressRequest>(_ruleset);
 
             var rules = RuleSetRunner.Instance.GetRules<IpAddressRequest>();
             Assert.Equal(1, rules.Count());
@@ -66,6 +69,7 @@ namespace WebMinder.Core.Tests.Runners
         {
             
             var rule = new IpAddressBlockerRule();
+            rule.RuleSetName = Guid.NewGuid().ToString();
             MemoryCache.Default.Remove(rule.RuleSetName);
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
            
@@ -77,7 +81,7 @@ namespace WebMinder.Core.Tests.Runners
 
             rule.VerifyRule(new IpAddressRequest() { Id = Guid.NewGuid(), IpAddress = "127.0.01", CreatedUtcDateTime = DateTime.UtcNow, IsBadRequest = true });
             var rules = RuleSetRunner.Instance.GetRules<IpAddressRequest>();
-            Assert.Equal(3, rules.First().Items.Count());
+            Assert.Equal(3, rules.First().Items.AsEnumerable().Count());
 
         }
     }

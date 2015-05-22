@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Runners;
@@ -20,7 +21,7 @@ namespace WebMinder.Core.Builders
             var evaulated = setter().Rule as IRuleRunner;
             if (evaulated != null)
             {
-                Rules.Add(typeof(TRuleRequest2), evaulated);
+                Rules.Add(new KeyValuePair<Type, object>(typeof(TRuleRequest2), evaulated));
             }
             return this;
         }

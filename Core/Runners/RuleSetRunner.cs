@@ -11,18 +11,18 @@ namespace WebMinder.Core.Runners
     {
         protected static readonly Lazy<RuleSetRunner> Lazy = new Lazy<RuleSetRunner>(() => new RuleSetRunner());
         
-        public IDictionary<Type, object> Rules { get; private set; }
+        public List<KeyValuePair<Type, object>> Rules { get; private set; }
 
         public void AddRule<T>(object ruleSetObject)
         {
-            if (!Rules.ContainsKey(typeof(T)))
-                Rules.Add(typeof(T),ruleSetObject);
+            if (!Rules.Exists(a=>ruleSetObject.GetType().IsAssignableFrom(a.Key)))
+                Rules.Add(new KeyValuePair<Type, object>(typeof(T),ruleSetObject));
         }
 
         public void AddRule(Type ruleRequestType,object ruleSetObject)
         {
-            if (!Rules.ContainsKey(ruleRequestType))
-                Rules.Add(ruleRequestType, ruleSetObject);
+            if (!Rules.Exists(a=>a.Key == ruleRequestType))
+                Rules.Add(new KeyValuePair<Type, object>(ruleRequestType, ruleSetObject));
         }
 
         public IEnumerable<IRuleSetHandler<T>> GetRules<T>() where T : IRuleRequest,new()
@@ -37,7 +37,7 @@ namespace WebMinder.Core.Runners
 
         public RuleSetRunner()
         {
-            Rules = new ConcurrentDictionary<Type, object>();
+            Rules = new List<KeyValuePair<Type, object>>();
         }
 
         public void VerifyRule(IRuleRequest ruleRequest = null)
@@ -50,6 +50,7 @@ namespace WebMinder.Core.Runners
 
         protected IEnumerable<IRuleRunner> RulesInContainer(IRuleRequest ruleRequest)
         {
+            if (ruleRequest == null) return null;
             var  found = Rules.Where(x => x.Key == ruleRequest.GetType());
 
             var result = found
