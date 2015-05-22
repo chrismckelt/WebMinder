@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Runtime.Caching;
 using FizzWare.NBuilder;
 
@@ -8,18 +8,17 @@ namespace WebMinder.Core.Tests.Handlers
     {
         protected const string RuleSet = "Test Rule";
         protected const string ErrorDescription = "Error exception for logging";
-        protected bool AddRequestToItemsCollection = true;
-
+   
         protected HandlerFixtureBase()
         {
             MemoryCache.Default.Remove(typeof(TestObject).Name);
         }
 
-        protected IList<TestObject> AddTestObjects(int count)
+        protected IQueryable<TestObject> AddTestObjects(int count)
         {
             return Builder<TestObject>
                 .CreateListOfSize(count)
-                .Build();
+                .Build().AsQueryable();
         }
 
     }

@@ -10,7 +10,7 @@ namespace WebMinder.Core.Handlers
     public class RuleSetHandlerBase<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
     {
         protected T _ruleRequest;
-        protected Func<IList<T>> _storageMechanism;
+        protected Func<IQueryable<T>> _storageMechanism;
 
         protected Action<string, string> Logger;
         public string RuleSetName { get; set; }
@@ -33,7 +33,7 @@ namespace WebMinder.Core.Handlers
 
         public Action InvalidAction { get; set; }
 
-        public Func<IList<T>> StorageMechanism
+        public Func<IQueryable<T>> StorageMechanism
         {
             get
             {
@@ -71,11 +71,11 @@ namespace WebMinder.Core.Handlers
                 cacheName = RuleType.Name;
             }
 
-            var cache = MemoryCache.Default.Get(cacheName) as IList<T>;
+            var cache = MemoryCache.Default.Get(cacheName) as IQueryable<T>;
             if (cache == null)
             {
-                MemoryCache.Default.Add(cacheName, new List<T>(), null);
-                cache = MemoryCache.Default.Get(cacheName) as IList<T>;
+                MemoryCache.Default.Add(cacheName, new List<T>().AsQueryable(), null);
+                cache = MemoryCache.Default.Get(cacheName) as IQueryable<T>;
             }
             _storageMechanism = () => cache;
         }
@@ -86,7 +86,9 @@ namespace WebMinder.Core.Handlers
             if (existingItems != null && enumerable.Any())
             {
                 Logger("DEBUG", "AddExistingItems: " + enumerable.Count());
-                enumerable.ToList().ForEach(StorageMechanism().Add);
+                var storage = _storageMechanism().ToList();
+                enumerable.ToList().ForEach(storage.Add);
+                _storageMechanism = () => storage.AsQueryable();
             }
         }
 
@@ -97,10 +99,15 @@ namespace WebMinder.Core.Handlers
 
         protected void RecordRequest(IRuleRequest request)
         {
+            Logger("DEBUG", "RecordRequest: " + request.Id);
             if (!UpdateRuleCollectionOnSuccess) return;
             var item = (T) request;
-            if (!StorageMechanism().Contains(item))
-                StorageMechanism().Add(item);
+            var storage = StorageMechanism().ToList();
+            if (!storage.Contains(item))
+            {
+                storage.Add(item);
+            }
+            _storageMechanism = () => storage.AsQueryable();
         }
 
         public virtual void VerifyRule(IRuleRequest request = null)

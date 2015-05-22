@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using WebMinder.Core.Handlers;
 using Xunit;
@@ -8,7 +9,7 @@ namespace WebMinder.Core.Tests.Handlers
 {
     public class SingleRuleSetHandlerFixture : HandlerFixtureBase
     {
-        static IList<TestObject> _bucketOfTestObjects = new List<TestObject>(); 
+        static IQueryable<TestObject> _bucketOfTestObjects = new List<TestObject>().AsQueryable(); 
 
         [Fact]
         public void ShouldHandleCustomStorage()
@@ -31,7 +32,7 @@ namespace WebMinder.Core.Tests.Handlers
 
             ruleSetHandler.StorageMechanism = () => _bucketOfTestObjects;
             AddTestObjects(count);
-            Assert.Equal(10, _bucketOfTestObjects.Count);
+            Assert.Equal(10, _bucketOfTestObjects.Count());
             
         }
 
@@ -52,7 +53,7 @@ namespace WebMinder.Core.Tests.Handlers
             }
 
             const decimal bad = 2m;
-            stubs[0].DecimalProperty = bad;
+            stubs.First().DecimalProperty = bad;
             ruleSetHandler.Rule = testObject => testObject.DecimalProperty == bad;
 
             Assert.Throws<HttpException>(() => ruleSetHandler.VerifyRule());

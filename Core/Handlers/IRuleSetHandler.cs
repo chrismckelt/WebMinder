@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Runners;
 
@@ -17,7 +18,7 @@ namespace WebMinder.Core.Handlers
 
         T RuleRequest { get; }
 
-        Func<IList<T>> StorageMechanism { get; set; }
+        Func<IQueryable<T>> StorageMechanism { get; set; }
 
         Action InvalidAction { get; set; }
 
