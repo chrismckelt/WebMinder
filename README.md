@@ -10,7 +10,8 @@ Sample uses include:
 
 ##  Fluent interface to create all the rules for your site
 
-![image](https://cloud.githubusercontent.com/assets/662868/7747896/c9dcff54-fff1-11e4-86a3-dd9948bbbe28.png)
+![image](https://cloud.githubusercontent.com/assets/662868/7762569/6d431512-0069-11e5-9b06-3e74bcf84a6d.png)
+
 
 ## Fluent interface for individual rules
 
