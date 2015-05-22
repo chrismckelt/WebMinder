@@ -23,7 +23,7 @@ namespace WebMinder.Core.Builders
            
             if (createdRule == null) throw new EvaluateException("function to create a ruleset evaluated to null");
             Trace.WriteLine(createdRule.GetType().Name);
-            ruleMinder.AddRule(typeof(TRuleRequest), createdRule);
+            ruleMinder.AddRule(typeof(TRuleRequest), createdRule.Rule);
             return ruleMinder;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 using WebMinder.Core.Builders;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.UrlIsValid;
@@ -16,11 +17,13 @@ namespace WebMinder.Core.Tests.Builders
             var siteMinder = RuleMinder.Create()
                 .WithSslEnabled() // predefined rule redirect all http traffic to https
                 .WithNoSpam(maxAttemptsWithinDuration: 100, withinDuration: TimeSpan.FromHours(1))
-                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(x => x.Build());
+                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(x =>
+                    x.Using<UrlRequest>(request => request.Url = ("/SampleWebServiceEndPoint"))
+                    .Build());
 
-            siteMinder.VerifyAllRules();  // global.asax  run via Application_BeginRequest 
+            //siteMinder.VerifyAllRules();  // global.asax  run via Application_BeginRequest 
 
-            Assert.Equal(2, siteMinder.Rules.Count);
+            Assert.Equal(3, siteMinder.Rules.Count);
 
            
         }

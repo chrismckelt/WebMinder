@@ -18,10 +18,21 @@ namespace WebMinder.Core.Builders
 
         public static CreateRule<TRuleSetHandler, TRuleRequest> On<T>(Action<T> setter = null) where T : IRuleRequest, new()
         {
-            _rule = Activator.CreateInstance<TRuleSetHandler>();
-            _request = Activator.CreateInstance<T>();
-            if (setter != null) setter((T)_request);
+            EnsureCreated(setter);
             return AppendRule();
+        }
+
+        public CreateRule<TRuleSetHandler, TRuleRequest> Using<T>(Action<T> setter = null) where T : IRuleRequest, new()
+        {
+            EnsureCreated(setter);
+            return AppendRule();
+        }
+
+        private static void EnsureCreated<T>(Action<T> setter = null) where T : IRuleRequest, new()
+        {
+            if (_rule==null)_rule = Activator.CreateInstance<TRuleSetHandler>();
+            if (_request == null) _request = Activator.CreateInstance<T>();
+            if (setter != null) setter((T) _request);
         }
 
         internal void SetRule(TRuleSetHandler rule)
@@ -37,6 +48,7 @@ namespace WebMinder.Core.Builders
 
         public CreateRule<TRuleSetHandler, TRuleRequest> Build()
         {
+            EnsureCreated<TRuleRequest>();
             return AppendRule();
         }
 
