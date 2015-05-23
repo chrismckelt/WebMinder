@@ -29,7 +29,7 @@ namespace WebMinder.Core.Handlers
             }
 
             var filtered = AggregateFilter != null
-                ? AggregateFilter.Compile().Invoke(StorageMechanism(), _ruleRequest)
+                ? AggregateFilter.Compile().Invoke(StorageMechanism(), RuleRequest)
                 : StorageMechanism();
 
             var invalid = AggregateRule.Compile().Invoke(filtered);

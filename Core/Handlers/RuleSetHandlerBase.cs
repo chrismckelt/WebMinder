@@ -9,18 +9,13 @@ namespace WebMinder.Core.Handlers
 {
     public class RuleSetHandlerBase<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
     {
-        protected T _ruleRequest;
-        protected Func<IQueryable<T>> _storageMechanism;
-
         protected Action<string, string> Logger;
+        private Func<IQueryable<T>> _storageMechanism;
         public string RuleSetName { get; set; }
         public string ErrorDescription { get; set; }
 
-        public T RuleRequest
-        {
-            get { return _ruleRequest; }
-        }
-
+        public T RuleRequest { get; set; }
+ 
         public Type RuleType
         {
             get { return typeof (T); }
@@ -121,7 +116,7 @@ namespace WebMinder.Core.Handlers
                 RecordRequest(request);
             }
 
-            _ruleRequest = (T) request;
+            RuleRequest = (T) request;
         }
 
         public bool UpdateRuleCollectionOnSuccess { get; set; }
