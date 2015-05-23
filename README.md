@@ -111,7 +111,7 @@ Sample uses include:
 
 ## Switch out the storage mechanism
 
-	ruleSetHandler = new RuleSetHandler<TestObject>(ThreadData.Storage);  
+ StorageMechanism = () => new List<IpAddressRequest>().AsQueryable(), // queryable<T> datasource
 
 ## Encapsulate custom rules
 
