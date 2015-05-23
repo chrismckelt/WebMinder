@@ -17,21 +17,30 @@ namespace WebMinder.Core.Tests.Runners
 
         public RuleSetRunnerFixture()
         {
+            ClearCache();
             _ruleset = new IpAddressBlockerRule(){UpdateRuleCollectionOnSuccess = false, RuleSetName = Guid.NewGuid().ToString()};
             _ruleset.UseCacheStorage(Guid.NewGuid().ToString());
-            MemoryCache.Default.Remove(_ruleset.RuleSetName);
             _ruleSetHandler = new AggregateRuleSetHandler<TestObject>();
 
+        }
+
+        private static void ClearCache()
+        {
+            foreach (var element in MemoryCache.Default)
+            {
+                MemoryCache.Default.Remove(element.Key);
+            }
         }
 
         [Fact]
         public void ShouldGetRulesFromRuleSets()
         {
+            ClearCache();
+            _ruleset.UseCacheStorage(Guid.NewGuid().ToString());
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(_ruleset);
 
             var rules = RuleSetRunner.Instance.GetRules<IpAddressRequest>();
             Assert.Equal(1, rules.Count());
-            MemoryCache.Default.Remove(_ruleset.RuleSetName);
         }
 
         [Fact]
@@ -68,7 +77,7 @@ namespace WebMinder.Core.Tests.Runners
         [Fact]
         public void ShouldGetRulesCountFromRuleSets()
         {
-            
+            ClearCache();
             var rule = new IpAddressBlockerRule();
             rule.UseCacheStorage(Guid.NewGuid().ToString());
            
