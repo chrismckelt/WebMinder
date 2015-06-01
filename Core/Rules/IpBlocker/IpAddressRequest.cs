@@ -8,6 +8,10 @@ namespace WebMinder.Core.Rules.IpBlocker
         public string IpAddress { get; set; }
         public bool IsBadRequest { get; set; }
 
+        public IpAddressRequest()
+        {
+        }
+
         public static IpAddressRequest GetCurrentIpAddress(bool? recordBadIp = null)
         {
             if (HttpContext.Current == null) return null;
@@ -20,4 +24,6 @@ namespace WebMinder.Core.Rules.IpBlocker
             };
         }
     }
+
+ 
 }
