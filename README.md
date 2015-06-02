@@ -1,68 +1,59 @@
 #  WebMinder
 
-Define a custom rule set to record HTTP requests and invoke a LINQ rule to determine whether the request is valid.
+A simple software firewall to ensure incoming HTTP requests conform to a predefined set of rules which may be managed on the fly.
 
-Sample uses include:
+usuages:
 
-- Automatically block requests from a specific IP address when a count threshold has exceeded a time duration (DDOS)
+- Block requests from a specific IP address when a threshold exceeds  (DDOS)
 - Dynamically add IP requests to a black list & block future requests from that IP (URL vector attack)
-- Ensure request is over SSL
+- Ensure request is over SSL (redirect to SSL if otherwise)
+
 
 ##  Fluent interface to create all the rules for your site
 
 ![image](https://cloud.githubusercontent.com/assets/662868/7762569/6d431512-0069-11e5-9b06-3e74bcf84a6d.png)
 
+## Site wide rule manage
+
+  -   SiteMinder
+    -  RuleMinders
+        - RuleSets (actionable LINQ queries over a custom type rule request)
+          - Rules
 
 ## Fluent interface for individual rules
 
+    // ensure an external service is up before continuing an action
+    var urlValid = CreateRule<UrlIsValidRule, UrlRequest>
+        .On<UrlRequest>(url => url.Url = "http://www.externalservice.com/monitoring/api")
+        .Build();
 
-            var rule = Create<IpAddressBlockerRule, IpAddressRequest>
-                .On<IpAddressRequest>(request => request.IpAddress ="127.0.0.1")
-                .With(y => y.RuleSetName = "NO SPAM")
-                .With(x => x.ErrorDescription = "DDOS rejected")
-                .Build();
-
-
-	    // add the rule to your IOC container & inject & invoke on demand
-	    // or use an attribute to verfiy the rule on a web api request
-	    // or run it per request via global.asax - Application_BeginRequest
-	    // or add the in built module to your web.config file
+        SiteMinder = RuleMinder.Create()
+            .WithSslEnabled()
+            .WithNoSpam(5, TimeSpan.FromHours(1))
+            .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
+                urlValid);
 
 
 ## In built rules (see wiki)
 
-    -- IpAddress blocker (sample with non fluent creation )
+    - IpAddress blocker (sample with non fluent creation )
+    - Redirect to secure urls (site must be SSL)
+	  - Url is valid  (checks given url gives a 200 or trips action)
 
-		var rule = new IpAddressBlockerRule<IpAddressRequest>()
-		{
-			Duration = Duration = TimeSpan.FromDays(-1),
-			MaxAttemptsWithinDuration = 5
-		};
+## Built in RuleSets
 
-		Verify rule by a method attribute [IpAddressBlockerRuleVerification] or running the rule explicity
-
-    -- Redirect to secure urls (site must be SSL)
-
-	  -- Url is valid  (checks given url gives a 200 or trips action)
-
-## 3 rule set operators
-
-    -- AggregateRuleSetHandler - using run time arguments, filter the collection & run a predicate to find invalid items
-    -- SingleRuleSetHandler - run a predicate over the collection to determine if its valid
-    -- MaximumCountRuleSetHandler - once the rule set hits this number it will trigger
+    - AggregateRuleSetHandler - using run time arguments, filter the collection & run a predicate to find invalid items
+    - SingleRuleSetHandler - run a predicate over the collection to determine if its valid
+    - MaximumCountRuleSetHandler - once the rule set hits this number it will trigger
 
 ## Out of the box defaults
 
     -- Storage uses the runtime memory cache (or optionally write to an xml file)
     -- HttpException 403 thrown by default with RuleSet Error Description
 
-## Optionally add items to the collection
 
-    RuleSetRunner.Instance.AddRule<IpAddressRequest>(new IpAddressBlockerRule(){UpdateRuleCollectionOnSuccess = false});
-
-    UpdateRuleCollectionOnSuccess when true will add each given request to the request collection (default true)
-
-## AggregateRuleSetHandler
+## Query over data
+#### AggregateRuleSetHandler
     // ip ruleset - disallow more than 20 requests per day from a logged 'failed'  request
     var rule = new RuleSetHandler<IpAddressRequest>()
     {
@@ -73,8 +64,7 @@ Sample uses include:
 
     RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
 
-
-## SingleRuleSetHandler
+#### SingleRuleSetHandler
 
     // ip ruleset - disallow a specific IP
     var rule = new SingleRuleSetHandler<IpAddress>()
@@ -84,8 +74,7 @@ Sample uses include:
 
     RuleSetRunner.Instance.AddRule(rule);
 
-
-## MaximumCountRuleSetHandler (Total Count)
+#### MaximumCountRuleSetHandler (Total Count)
 
     // add items to this rule - once over 50 it will start rejecting requests
     var rule = new MaximumCountRuleSetHandler<IpAddress>();
@@ -93,17 +82,9 @@ Sample uses include:
 
     RuleSetRunner.Instance.AddRule(rule);
 
-## Run the rule
+## Verify a rule
 
-    // Run passing the request
-    RuleSetRunner.Instance.VerifyRule(new IpAddressBlockerRule()
-    {
-      IpAddress = "127.0.0.1",
-      CreatedUtcDateTime = DateTime.UtcNow
-    });
-
-    // or just run it - if currently is violation of rule custom invalid action will trigger
-    RuleSetRunner.Instance.VerifyRule();  
+  SiteMinder.VerifyRule(spamIpAddressCheck);
 
 ## Decide what action to take when a rule is broken
 
@@ -111,7 +92,7 @@ Sample uses include:
 
 ## Choose your storage (memory cache or xml file)
 
-IStorageProvider<T> implementations
+IStorageProvider<T> implementations (defaults to memory)
 
 - MemoryCacheStorageProvider
 - XmlFileStorageProvider
@@ -145,6 +126,4 @@ IStorageProvider<T> implementations
           }
     }
 
-####  Tests in RuleSetRunnerFixture.cs have more examples
-
-more inbuilt rules to come... (PRs welcome)
+####  see tests for example usuage
