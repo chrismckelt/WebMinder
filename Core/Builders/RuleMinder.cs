@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Runners;
@@ -25,5 +26,6 @@ namespace WebMinder.Core.Builders
             }
             return this;
         }
+
     }
 }

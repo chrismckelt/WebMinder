@@ -2,11 +2,13 @@
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.RedirectToSecureUrl;
 using WebMinder.Core.RuleSets;
+using WebMinder.Core.StorageProviders;
 
 namespace WebMinder.Core.Builders
 {
@@ -44,9 +46,13 @@ namespace WebMinder.Core.Builders
         public static RuleMinder WithNoSpam(this RuleMinder ruleMinder, int? maxAttemptsWithinDuration = null,
             TimeSpan? withinDuration = null)
         {
+
+            var fileStorage = new XmlFileStorageProvider<IpAddressRequest>();
+            fileStorage.Initialise(new[] { @"C:\dev\WebMinder\TestWebSite\" });
             var ruleSet = CreateRule<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>()
                 .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
                 .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))
+                .With(a=>a.StorageMechanism = fileStorage)
                 .Build();
 
             return ruleMinder.AddRule<IpBlockerRuleSet, IpAddressBlockerRule, IpAddressRequest>(x => ruleSet);

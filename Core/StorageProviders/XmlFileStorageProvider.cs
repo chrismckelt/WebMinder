@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace WebMinder.Core.StorageProviders
 {
-    public class XmlFileStorage<T> : IStorageProvider<T>
+    public class XmlFileStorageProvider<T> : IStorageProvider<T>
     {
         private const string RootXml = "WebMinder";
 
@@ -32,20 +32,20 @@ namespace WebMinder.Core.StorageProviders
             var posts = from lv1 in _dataFile.Descendants(RootXml)
                 select lv1;
 
-            if (Storage == null) Storage = new EnumerableQuery<T>(new List<T>());
+            if (Items == null) Items = new EnumerableQuery<T>(new List<T>());
             var items = new List<T>();
             posts.Where(x => x.HasElements)
                 .ToList()
                 .ForEach(x => items.Add(Deserialize(x.Element(typeof (T).Name).Value)));
-            Storage = items.AsQueryable();
+            Items = items.AsQueryable();
         }
 
-        public IQueryable<T> Storage { get; set; }
+        public IQueryable<T> Items { get; set; }
 
         public void SaveStorage()
         {
             //_dataFile.Element(RootXml).Add(els);
-            foreach (var sss in Storage)
+            foreach (var sss in Items)
             {
                 _dataFile.Element(RootXml).Add(new XElement(typeof(T).Name, Serialize(sss)));
             }

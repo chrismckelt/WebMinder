@@ -20,7 +20,7 @@ namespace WebMinder.Core.Tests.Handlers
                 MaximumResultCount = 5,
                 InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); },
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
             var stubs = AddTestObjects(count);
             foreach (var st in stubs.Skip(1))
             {
@@ -62,7 +62,7 @@ namespace WebMinder.Core.Tests.Handlers
                 UpdateRuleCollectionOnSuccess = false
             };
 
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
             var stubs = AddTestObjects(count);
             foreach (var st in stubs)
             {
@@ -82,7 +82,7 @@ namespace WebMinder.Core.Tests.Handlers
                 ErrorDescription = ErrorDescription,
                 MaximumResultCount = 3
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
             const int count = 3;
             var stubs = AddTestObjects(count);
             foreach (var st in stubs.Skip(1))

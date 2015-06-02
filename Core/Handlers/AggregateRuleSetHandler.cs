@@ -17,7 +17,7 @@ namespace WebMinder.Core.Handlers
         public override void VerifyRule(IRuleRequest request = null)
         {
             base.VerifyRule(request);
-            if (!StorageMechanism().Any())
+            if (!StorageMechanism.Items.Any())
             {
                 Logger("INFO", string.Format("Cache empty for {0}", RuleSetName));
                 return;
@@ -29,8 +29,8 @@ namespace WebMinder.Core.Handlers
             }
 
             var filtered = AggregateFilter != null
-                ? AggregateFilter.Compile().Invoke(StorageMechanism(), RuleRequest)
-                : StorageMechanism();
+                ? AggregateFilter.Compile().Invoke(StorageMechanism.Items, RuleRequest)
+                : StorageMechanism.Items;
 
             var invalid = AggregateRule.Compile().Invoke(filtered);
             if (!invalid) return;

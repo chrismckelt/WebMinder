@@ -62,7 +62,7 @@
     <Compile Include="RequestUtilityFixture.cs" />
     <Compile Include="Builders\CreateFixture.cs" />
     <Compile Include="Runners\RuleSetRunnerFixture.cs" />
-    <Compile Include="StorageProviders\XmlFileStorageFixture.cs" />
+    <Compile Include="StorageProviders\XmlFileStorageProviderFixture.cs" />
     <Compile Include="TestObject.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebMinder.Core.Handlers;
+using WebMinder.Core.StorageProviders;
 using Xunit;
 
 namespace WebMinder.Core.Tests.Handlers
@@ -23,14 +24,14 @@ namespace WebMinder.Core.Tests.Handlers
                 ErrorDescription = ErrorDescription,
                 Rule = testObject => testObject.IntegerProperty==444,
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
 
             foreach (var st in _bucketOfTestObjects)
             {
                 ruleSetHandler.VerifyRule(st);
             }
 
-            ruleSetHandler.StorageMechanism = () => _bucketOfTestObjects;
+            ruleSetHandler.StorageMechanism = new MemoryCacheStorageProvider<TestObject>();
             AddTestObjects(count);
             Assert.Equal(10, _bucketOfTestObjects.Count());
             
@@ -45,7 +46,7 @@ namespace WebMinder.Core.Tests.Handlers
                 RuleSetName = RuleSet,
                 ErrorDescription = ErrorDescription
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
             var stubs = AddTestObjects(count);
             foreach (var st in stubs)
             {

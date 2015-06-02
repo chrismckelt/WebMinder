@@ -4,15 +4,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using WebGrease.Css.Extensions;
 using WebMinder.Core;
 using WebMinder.Core.Builders;
-using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.UrlIsValid;
-using WebMinder.Core.RuleSets;
-using WebMinder.Core.Runners;
+using WebMinder.Core.StorageProviders;
 
 namespace TestWebSite
 {
@@ -27,23 +24,20 @@ namespace TestWebSite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var urlValid = CreateRule<UrlIsValidRule, UrlRequest>
-            .On<UrlRequest>(url => url.Url = "http://www.google.com")
-            .Build();
-
+            var urlStorage = new XmlFileStorageProvider<UrlRequest>();
+            var mapPath = Server.MapPath("~/");
+            urlStorage.Initialise(new[] {mapPath});
+          
             SiteMinder = RuleMinder.Create()
-                .WithSslEnabled()
+           //     .WithSslEnabled()
                 .WithNoSpam(5, TimeSpan.FromHours(1))
-                .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(x =>
-                    urlValid);
-           
+            ;
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
             SiteMinder.VerifyAllRules();
-          
+
             var ipaddress = GetIpAddress();
 
             var spamIpAddressCheck = new IpAddressRequest
@@ -61,11 +55,15 @@ namespace TestWebSite
             }
             else
             {
-                
                 SiteMinder.VerifyRule(spamIpAddressCheck);
             }
+           
+            SiteMinder.GetRules<IpAddressRequest>().ToList()
+                .ForEach(x=>x.StorageMechanism.SaveStorage());
+
             var msg = GetMessage(ipaddress);
             Response.Write(msg);
+
         }
 
         private static string GetIpAddress()

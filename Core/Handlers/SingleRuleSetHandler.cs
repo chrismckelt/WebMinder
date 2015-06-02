@@ -16,11 +16,11 @@ namespace WebMinder.Core.Handlers
         public override void VerifyRule(IRuleRequest request = null)
         {
             base.VerifyRule(request);
-            if (!StorageMechanism().Any()) return;
+            if (!StorageMechanism.Items.Any()) return;
              
             if (Rule != null)
             {
-                var invalid = StorageMechanism()
+                var invalid = StorageMechanism.Items
                     .AsQueryable()
                     .Cast<T>()
                     .Where(Rule);

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Web;
 using WebMinder.Core.Rules;
+using WebMinder.Core.StorageProviders;
 
 namespace WebMinder.Core.Handlers
 {
     public class RuleSetHandlerBase<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
     {
         protected Action<string, string> Logger;
-        private Func<IQueryable<T>> _storageMechanism;
+        private IStorageProvider<T> _storageMechanism;
         public string RuleSetName { get; set; }
         public string ErrorDescription { get; set; }
 
@@ -23,19 +23,19 @@ namespace WebMinder.Core.Handlers
 
         public IEnumerable<T> Items
         {
-            get { return StorageMechanism().AsEnumerable(); }
+            get { return StorageMechanism.Items.AsEnumerable(); }
         }
 
         public Action InvalidAction { get; set; }
 
-        public Func<IQueryable<T>> StorageMechanism
+        public IStorageProvider<T> StorageMechanism
         {
             get
             {
                 if (_storageMechanism == null)
                 {
                     Logger("WARNING", "No storage mechanism specified. Default to Cache storage");
-                    UseCacheStorage();
+                    UseMemoryCacheStorage();
                 }
                 return _storageMechanism;
             }
@@ -59,20 +59,15 @@ namespace WebMinder.Core.Handlers
             UpdateRuleCollectionOnSuccess = true;
         }
 
-        public void UseCacheStorage(string cacheName = null)
+        public void UseMemoryCacheStorage(string cacheName = null)
         {
             if (string.IsNullOrEmpty(cacheName))
             {
                 cacheName = RuleType.Name;
             }
 
-            var cache = MemoryCache.Default.Get(cacheName) as IQueryable<T>;
-            if (cache == null)
-            {
-                MemoryCache.Default.Add(cacheName, new List<T>().AsQueryable(), null);
-                cache = MemoryCache.Default.Get(cacheName) as IQueryable<T>;
-            }
-            _storageMechanism = () => cache;
+            _storageMechanism = new MemoryCacheStorageProvider<T>();
+            _storageMechanism.Initialise(new[] { cacheName });
         }
 
         public void AddExistingItems(IEnumerable<T> existingItems)
@@ -81,9 +76,9 @@ namespace WebMinder.Core.Handlers
             if (existingItems != null && enumerable.Any())
             {
                 Logger("DEBUG", "AddExistingItems: " + enumerable.Count());
-                var storage = _storageMechanism().ToList();
+                var storage = _storageMechanism.Items.ToList();
                 enumerable.ToList().ForEach(storage.Add);
-                _storageMechanism = () => storage.AsQueryable();
+                _storageMechanism.Items = storage.AsQueryable();
             }
         }
 
@@ -97,12 +92,12 @@ namespace WebMinder.Core.Handlers
             Logger("DEBUG", "RecordRequest: " + request.Id);
             if (!UpdateRuleCollectionOnSuccess) return;
             var item = (T) request;
-            var storage = StorageMechanism().ToList();
+            var storage = StorageMechanism.Items.ToList();
             if (!storage.Contains(item))
             {
                 storage.Add(item);
             }
-            _storageMechanism = () => storage.AsQueryable();
+            _storageMechanism.Items = storage.AsQueryable();
         }
 
         public virtual void VerifyRule(IRuleRequest request = null)

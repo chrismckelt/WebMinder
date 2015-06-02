@@ -4,6 +4,7 @@ using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Runners;
+using WebMinder.Core.StorageProviders;
 using Xunit;
 
 namespace WebMinder.Core.Tests.Runners
@@ -21,10 +22,10 @@ namespace WebMinder.Core.Tests.Runners
             _ruleset = new IpAddressBlockerRule()
             {
                 UpdateRuleCollectionOnSuccess = false,
-                StorageMechanism = () => new List<IpAddressRequest>().AsQueryable(),
+                StorageMechanism = new MemoryCacheStorageProvider<IpAddressRequest>(),
                 RuleSetName = Guid.NewGuid().ToString()
             };
-            _ruleset.UseCacheStorage(Guid.NewGuid().ToString());
+            _ruleset.UseMemoryCacheStorage(Guid.NewGuid().ToString());
         }
 
         [Fact(Skip = "")]
@@ -66,8 +67,8 @@ namespace WebMinder.Core.Tests.Runners
         [Fact]
         public void ShouldGetRulesCountFromRuleSets()
         {
-            var rule = new IpAddressBlockerRule(){StorageMechanism = ()=> new List<IpAddressRequest>().AsQueryable()};
-            rule.UseCacheStorage(Guid.NewGuid().ToString());
+            var rule = new IpAddressBlockerRule(){StorageMechanism = new MemoryCacheStorageProvider<IpAddressRequest>()};
+            rule.UseMemoryCacheStorage(Guid.NewGuid().ToString());
            
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);
            

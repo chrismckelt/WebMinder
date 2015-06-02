@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Runners;
+using WebMinder.Core.StorageProviders;
 
 namespace WebMinder.Core.Handlers
 {
@@ -18,11 +19,11 @@ namespace WebMinder.Core.Handlers
 
         T RuleRequest { get; }
 
-        Func<IQueryable<T>> StorageMechanism { get; set; }
+        IStorageProvider<T> StorageMechanism { get; set; }
 
         Action InvalidAction { get; set; }
 
-        void UseCacheStorage(string cacheName = null);
+        void UseMemoryCacheStorage(string cacheName = null);
 
         void AddExistingItems(IEnumerable<T> existingItems);
 

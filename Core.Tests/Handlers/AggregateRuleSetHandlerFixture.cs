@@ -18,7 +18,7 @@ namespace WebMinder.Core.Tests.Handlers
                 ErrorDescription = ErrorDescription,
                 AggregateRule = testObject => testObject.Any()
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
             var stubs = AddTestObjects(count);
             var max = stubs.Max(a => a.IntegerProperty);
             ruleSetHandler.AggregateFilter = (data, item) => data.Where(a => a.IntegerProperty <= max); //runtime filter
@@ -39,7 +39,7 @@ namespace WebMinder.Core.Tests.Handlers
                 ErrorDescription = ErrorDescription,
                 AggregateRule = testObject => testObject.Count() > 5
             };
-            ruleSetHandler.UseCacheStorage(Guid.NewGuid().ToString());
+            ruleSetHandler.UseMemoryCacheStorage(Guid.NewGuid().ToString());
             var stubs = AddTestObjects(count);
             foreach (var st in stubs)
             {
