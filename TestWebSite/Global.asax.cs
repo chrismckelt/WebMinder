@@ -24,10 +24,6 @@ namespace TestWebSite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var urlStorage = new XmlFileStorageProvider<UrlRequest>();
-            var mapPath = Server.MapPath("~/");
-            urlStorage.Initialise(new[] {mapPath});
-          
             SiteMinder = RuleMinder.Create()
            //     .WithSslEnabled()
                 .WithNoSpam(5, TimeSpan.FromHours(1))
