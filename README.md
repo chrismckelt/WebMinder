@@ -53,7 +53,7 @@ Sample uses include:
 
 ## Out of the box defaults
 
-    -- StorageMechanism is a concurrent dictionary stored in the runtime memory cache (can back onto SQL/Cache/File)
+    -- Storage uses the runtime memory cache (or optionally write to an xml file)
     -- HttpException 403 thrown by default with RuleSet Error Description
 
 ## Optionally add items to the collection
@@ -109,9 +109,12 @@ Sample uses include:
 
 	ruleSetHandler.InvalidAction = () => { throw new DivideByZeroException(ErrorDescription); };
 
-## Switch out the storage mechanism
+## Choose your storage (memory cache or xml file)
 
- StorageMechanism = () => new List<IpAddressRequest>().AsQueryable(), // queryable<T> datasource
+IStorageProvider<T> implementations
+
+- MemoryCacheStorageProvider
+- XmlFileStorageProvider
 
 ## Encapsulate custom rules
 
