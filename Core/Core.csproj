@@ -75,6 +75,7 @@
     <Compile Include="Rules\UrlIsValid\UrlIsValidRule.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRule.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressRequest.cs" />
+    <Compile Include="SiteMinderModule.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
     <Compile Include="StorageProviders\MemoryCacheStorageProvider.cs" />
     <Compile Include="StorageProviders\XmlFileStorageProvider.cs" />
