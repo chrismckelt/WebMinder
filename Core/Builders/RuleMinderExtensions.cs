@@ -46,9 +46,8 @@ namespace WebMinder.Core.Builders
         public static RuleMinder WithNoSpam(this RuleMinder ruleMinder, int? maxAttemptsWithinDuration = null,
             TimeSpan? withinDuration = null)
         {
-
             var fileStorage = new XmlFileStorageProvider<IpAddressRequest>();
-            fileStorage.Initialise(new[] { @"C:\dev\WebMinder\TestWebSite\" });
+            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.BaseDirectory});
             var ruleSet = CreateRule<IpAddressBlockerRule, IpAddressRequest>.On<IpAddressRequest>()
                 .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
                 .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))

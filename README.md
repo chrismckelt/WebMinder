@@ -11,7 +11,7 @@ usuages:
 
 ##  Fluent interface to create all the rules for your site
 
-![image](https://cloud.githubusercontent.com/assets/662868/8024203/e9ce0dde-0d5d-11e5-986f-fb020e39daea.png)
+![image](https://cloud.githubusercontent.com/assets/662868/8024240/5bff538a-0d5f-11e5-930e-0a212baea906.png)
 
 ## Site wide rule manage
 
