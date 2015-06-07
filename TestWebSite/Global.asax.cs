@@ -25,7 +25,7 @@ namespace TestWebSite
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             SiteMinder = RuleMinder.Create()
-                .WithSslEnabled()
+               // .WithSslEnabled()
                 .WithNoSpam(5, TimeSpan.FromHours(1))
             ;
 
