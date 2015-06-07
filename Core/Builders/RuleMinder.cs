@@ -27,5 +27,10 @@ namespace WebMinder.Core.Builders
             return this;
         }
 
+
+        public void Initialise()
+        {
+           Instance.Rules.AddRange(this.Rules);
+        }
     }
 }

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebMinder>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;8310ca99-09c5-4dc0-8d94-cbca58a15b3b&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:39.6748706Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;8310ca99-09c5-4dc0-8d94-cbca58a15b3b&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:39.6748706Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;171370d9-cd04-4306-9b77-09b8c6232663&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:48.0333487Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;8310ca99-09c5-4dc0-8d94-cbca58a15b3b&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:39.6748706Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;171370d9-cd04-4306-9b77-09b8c6232663&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:48.0333487Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;e806e4db-f2c7-4ab4-84bf-771ab22b4e76&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:53:46.0176652Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;8310ca99-09c5-4dc0-8d94-cbca58a15b3b&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:39.6748706Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;171370d9-cd04-4306-9b77-09b8c6232663&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:48.0333487Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;e806e4db-f2c7-4ab4-84bf-771ab22b4e76&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:53:46.0176652Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;c9326e39-2266-41d8-a588-68524990affa&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:53:49.9938926Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;true&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;8310ca99-09c5-4dc0-8d94-cbca58a15b3b&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:39.6748706Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;171370d9-cd04-4306-9b77-09b8c6232663&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:52:48.0333487Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;e806e4db-f2c7-4ab4-84bf-771ab22b4e76&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:53:46.0176652Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;false&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;c9326e39-2266-41d8-a588-68524990affa&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:53:49.9938926Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;true&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+  <IpAddressRequest>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;IpAddressRequest&gt;
+  &lt;Id&gt;9a78322b-9646-4375-abdd-7c2ec6b750c9&lt;/Id&gt;
+  &lt;CreatedUtcDateTime&gt;2015-06-07T12:54:02.5106085Z&lt;/CreatedUtcDateTime&gt;
+  &lt;IpAddress&gt;::1&lt;/IpAddress&gt;
+  &lt;IsBadRequest&gt;true&lt;/IsBadRequest&gt;
+&lt;/IpAddressRequest&gt;</IpAddressRequest>
+</WebMinder>

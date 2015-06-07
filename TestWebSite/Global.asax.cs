@@ -25,14 +25,18 @@ namespace TestWebSite
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             SiteMinder = RuleMinder.Create()
-           //     .WithSslEnabled()
+                .WithSslEnabled()
                 .WithNoSpam(5, TimeSpan.FromHours(1))
             ;
+
+            SiteMinder.Initialise();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             SiteMinder.VerifyAllRules();
+
+            SiteMinder.VerifyRule(new UrlRequest(){Url = GetUrl()});
 
             var ipaddress = GetIpAddress();
 
@@ -60,6 +64,11 @@ namespace TestWebSite
             var msg = GetMessage(ipaddress);
             Response.Write(msg);
 
+        }
+
+        private string GetUrl()
+        {
+            return Request.Url.AbsoluteUri;
         }
 
         private static string GetIpAddress()
