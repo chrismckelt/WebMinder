@@ -29,7 +29,7 @@ usuages:
 
         SiteMinder = RuleMinder.Create()
             .WithSslEnabled()
-            .WithNoSpam(5, TimeSpan.FromHours(1))
+            .WithNoSpam(500, TimeSpan.FromHours(1)) // max 500 requests per hour from the same IP address
             .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
                 urlValid);
 
