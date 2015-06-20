@@ -49,8 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\RuleMinder.cs" />
-    <Compile Include="Builders\RuleMinderExtensions.cs" />
+    <Compile Include="Builders\SiteMinder.cs" />
+    <Compile Include="Builders\SiteMinderExtensions.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandler.cs" />
     <Compile Include="Handlers\IAggregateRuleSetHandler.cs" />
     <Compile Include="Handlers\IMaximumCountRuleSetHandler.cs" />

@@ -1,19 +1,18 @@
 ﻿using System;
 using WebMinder.Core.Builders;
 using WebMinder.Core.Rules;
-using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.UrlIsValid;
 using WebMinder.Core.RuleSets;
 using Xunit;
 
 namespace WebMinder.Core.Tests.Builders
 {
-    public class RuleMinderFixture
+    public class SiteMinderFixture
     {
         [Fact]
         public void RuleMinderAddsExistingRuleMinder()
         {
-            var existingRuleMinder = RuleMinder.Create().AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(x =>
+            var existingRuleMinder = SiteMinder.Create().AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(x =>
                 x.Using<UrlRequest>(request => request.Url = ("/SampleWebServiceEndPoint"))
                     .Build());
 
@@ -28,7 +27,7 @@ namespace WebMinder.Core.Tests.Builders
                     .Build();
 
             var rm =
-                RuleMinder.Create()
+                SiteMinder.Create()
                     .AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(webServiceUpRuleSet => ruleSet);
 
             Assert.Equal(1, rm.Rules.Count);
@@ -39,7 +38,7 @@ namespace WebMinder.Core.Tests.Builders
         public void RuleMinderCanChainRules()
         {
             // Fluent builder to add many custom or inbuilt rules in  global.asax application_onstart
-            var siteMinder = RuleMinder.Create()
+            var siteMinder = SiteMinder.Create()
                 .WithSslEnabled() // predefined rule redirect all http traffic to https
                 .WithNoSpam(maxAttemptsWithinDuration: 100, withinDuration: TimeSpan.FromHours(1))
                 .AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(webServiceUpRuleSet =>

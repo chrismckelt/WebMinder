@@ -15,7 +15,7 @@ namespace TestWebSite
 {
     public class MvcApplication : HttpApplication
     {
-        public static RuleMinder SiteMinder;
+        public static SiteMinder SiteMinder;
 
         protected void Application_Start()
         {
@@ -24,7 +24,7 @@ namespace TestWebSite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            SiteMinder = RuleMinder.Create()
+            SiteMinder = SiteMinder.Create()
                // .WithSslEnabled()
                 .WithNoSpam(5, TimeSpan.FromHours(1))
             ;
@@ -34,59 +34,21 @@ namespace TestWebSite
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            SiteMinder.VerifyAllRules();
 
-            SiteMinder.VerifyRule(new UrlRequest(){Url = GetUrl()});
+            var total = SiteMinder.GetRules<IpAddressRequest>().SelectMany(x => x.Items).Count(y => y.IsBadRequest);
 
-            var ipaddress = GetIpAddress();
+            var msg = string.Format("<h1>Website hit a total {0} </h1>", total);
 
-            var spamIpAddressCheck = new IpAddressRequest
+            if (total < 5)
             {
-                IpAddress = ipaddress,
-                CreatedUtcDateTime = DateTime.UtcNow,
-            };
-
-            var total = SiteMinder.GetRules<IpAddressRequest>().Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
-
-            if (total > 2) // just for this demo start logging bad ips after 2 refreshes
-            {
-                spamIpAddressCheck.IsBadRequest = true;
-                SiteMinder.VerifyRule(spamIpAddressCheck);
+                SiteMinder.VerifyRule(IpAddressRequest.GetCurrentIpAddress(true));
             }
-            else
-            {
-                SiteMinder.VerifyRule(spamIpAddressCheck);
-            }
-           
-            SiteMinder.GetRules<IpAddressRequest>().ToList()
-                .ForEach(x=>x.StorageMechanism.SaveStorage());
 
-            var msg = GetMessage(ipaddress);
             Response.Write(msg);
+            Response.End();
 
         }
 
-        private string GetUrl()
-        {
-            return Request.Url.AbsoluteUri;
-        }
-
-        private static string GetIpAddress()
-        {
-            var wrapper = new HttpRequestWrapper(HttpContext.Current.Request);
-            var ipaddress = RequestUtility.GetClientIpAddress(wrapper);
-            return ipaddress;
-        }
-
-        private static string GetMessage(string ipaddress)
-        {
-            var total =
-                SiteMinder.GetRules<IpAddressRequest>()
-                    .Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
-
-            var msg = string.Format("<h1>Website hit by IP {0} a total of {1} </h1>", ipaddress, total);
-            return msg;
-        }
 
         protected void Application_Error(object sender, EventArgs e)
         {
@@ -98,9 +60,6 @@ namespace TestWebSite
             {
                 Response.Write(httpEx.Message);
                 Response.Write("<br/>");
-                var ipaddress = GetIpAddress();
-                var msg = GetMessage(ipaddress);
-                Response.Write(msg);
             }
             else if (httpEx != null && httpEx.GetHttpCode() == 404)
             {
