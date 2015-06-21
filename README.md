@@ -33,6 +33,11 @@ usuages:
             .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
                 urlValid);
 
+## HTTP Module to check current IP request is valid
+
+    <modules>
+        <add name="SiteMinderModule" type="WebMinder.Core.SiteMinderModule, WebMinder.Core" />
+    </modules>
 
 ## In built rules (see wiki)
 
