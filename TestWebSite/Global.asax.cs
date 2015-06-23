@@ -15,33 +15,23 @@ namespace TestWebSite
 {
     public class MvcApplication : HttpApplication
     {
-        public static SiteMinder SiteMinder;
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            SiteMinder = SiteMinder.Create()
-               // .WithSslEnabled()
-                .WithNoSpam(5, TimeSpan.FromHours(1))
-            ;
-
-            SiteMinder.Initialise();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
-            var total = SiteMinder.GetRules<IpAddressRequest>().SelectMany(x => x.Items).Count(y => y.IsBadRequest);
+            var total = SiteMinder.RuleFor<IpAddressRequest>().Items.Count(y => y.IsBadRequest);
 
             var msg = string.Format("<h1>Website hit a total {0} </h1>", total);
 
             if (total < 5)
             {
-                SiteMinder.VerifyRule(IpAddressRequest.GetCurrentIpAddress(true));
+                SiteMinder.RecordBadIpRequest();
             }
 
             Response.Write(msg);

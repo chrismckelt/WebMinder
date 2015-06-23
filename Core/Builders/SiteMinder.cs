@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
+using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Runners;
 
 namespace WebMinder.Core.Builders
@@ -30,9 +31,10 @@ namespace WebMinder.Core.Builders
         }
 
 
-        public void Initialise()
+        public SiteMinder Initialise()
         {
            Instance.Rules.AddRange(this.Rules);
+            return this;
         }
 
         public bool AllRulesValid()
@@ -52,6 +54,16 @@ namespace WebMinder.Core.Builders
             }
 
             return !Failures.Any();
+        }
+
+        public static void RecordBadIpRequest()
+        {
+            Instance.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true));
+        }
+
+        public static IRuleSetHandler<T> RuleFor<T>() where T : IRuleRequest,new()
+        {
+            return Instance.GetRules<T>().First();
         }
     }
 }

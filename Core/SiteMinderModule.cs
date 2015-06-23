@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using WebMinder.Core.Builders;
 using WebMinder.Core.Rules.IpBlocker;
@@ -18,13 +15,9 @@ namespace WebMinder.Core
         public void Init(HttpApplication app)
         {
             app.BeginRequest += AppBeginRequest;
-            app.PostMapRequestHandler += AppPostMapRequestHandler;
-            app.EndRequest += AppEndRequest;
-
             SiteMinder = SiteMinder.Create()
-               // .WithSslEnabled()
-               .WithNoSpam(5, TimeSpan.FromHours(1))
-           ;
+             //  .WithSslEnabled()
+               .WithNoSpam(5, TimeSpan.FromHours(1));
 
             SiteMinder.Initialise();
         }
@@ -36,16 +29,6 @@ namespace WebMinder.Core
             if (SiteMinder.AllRulesValid()) return;
             var args = new SiteMinderFailuresEventArgs {Failures = SiteMinder.Failures};
             OnRuleRequestReported(args);
-        }
-
-        void AppPostMapRequestHandler(object sender, EventArgs e)
-        {
-
-        }
-
-        void AppEndRequest(object sender, EventArgs e)
-        {
-
         }
 
         protected virtual void OnRuleRequestReported(SiteMinderFailuresEventArgs e)

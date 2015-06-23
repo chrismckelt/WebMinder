@@ -9,16 +9,20 @@ usuages:
 - Ensure request is over SSL (redirect to SSL if otherwise)
 
 
-##  Fluent interface to create all the rules for your site
+## Out of the box HTTP Module for IP Blocking
 
-![image](https://cloud.githubusercontent.com/assets/662868/8024240/5bff538a-0d5f-11e5-930e-0a212baea906.png)
+    <modules>
+       <add name="SiteMinderModule" type="WebMinder.Core.SiteMinderModule, WebMinder.Core" />
+     </modules>
 
-## Site wide rule manage
 
-  -   SiteMinder
-    -  RuleMinders
-        - RuleSets (actionable LINQ queries over a custom type rule request)
-          - Rules
+![image](https://cloud.githubusercontent.com/assets/662868/8300402/1a6a9e34-19b7-11e5-9a5c-b740f06e2354.png)
+
+###    Dont like the current HTTP Request?  
+
+SiteMinder.RecordBadIpRequest();
+
+(default rule below is for 5 bad request per IP per hour)
 
 ## Fluent interface for individual rules
 
@@ -29,15 +33,10 @@ usuages:
 
         SiteMinder = RuleMinder.Create()
             .WithSslEnabled()
-            .WithNoSpam(500, TimeSpan.FromHours(1)) // max 500 requests per hour from the same IP address
+            .WithNoSpam(5, TimeSpan.FromHours(1))
             .AddRule<CreateRule<UrlIsValidRule, UrlRequest>, UrlIsValidRule, UrlRequest>(() =>
                 urlValid);
 
-## HTTP Module to check current IP request is valid
-
-    <modules>
-        <add name="SiteMinderModule" type="WebMinder.Core.SiteMinderModule, WebMinder.Core" />
-    </modules>
 
 ## In built rules (see wiki)
 
@@ -131,8 +130,20 @@ IStorageProvider<T> implementations (defaults to memory)
           }
     }
 
-####  see tests for example usuage
+####  see tests for example usage
 
-## To Do
+## Structure of components
 
-- HTTP Module
+  -   SiteMinder
+    -  RuleMinders
+        - RuleSets (actionable LINQ queries over a custom type rule request)
+          - Rules
+
+
+### Demo site below sample to throw a 403 if the same IP address attempts more than 5 requests
+
+![image](https://cloud.githubusercontent.com/assets/662868/8301367/e1b3ad98-19bf-11e5-808b-cf874c871ef3.png)
+
+## Some sample code (not using HTTP Module) in Global.asax
+
+![image](https://cloud.githubusercontent.com/assets/662868/7762569/6d431512-0069-11e5-9b06-3e74bcf84a6d.png)
