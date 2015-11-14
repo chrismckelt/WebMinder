@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
+using WebMinder.Core.Rules.ApiKey;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.RedirectToSecureUrl;
 using WebMinder.Core.RuleSets;
@@ -36,10 +37,10 @@ namespace WebMinder.Core.Builders
 
         public static SiteMinder WithSslEnabled(this SiteMinder ruleMinder)
         {
-            var ruleSet = CreateRule<RedirectToSecureUrl, UrlRequest>.On<UrlRequest>()
+            var ruleSet = CreateRule<RedirectToSecureUrlRuleSetHandler, UrlRequest>.On<UrlRequest>()
                 .Build();
 
-            return ruleMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrl, UrlRequest>(x => ruleSet); // predefined rule redirect all http traffic to https
+            return ruleMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrlRuleSetHandler, UrlRequest>(x => ruleSet); // predefined rule redirect all http traffic to https
         }
 
         public static SiteMinder WithNoSpam(this SiteMinder ruleMinder, int? maxAttemptsWithinDuration = null,

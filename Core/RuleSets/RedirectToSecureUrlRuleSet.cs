@@ -4,11 +4,11 @@ using WebMinder.Core.Rules.RedirectToSecureUrl;
 
 namespace WebMinder.Core.RuleSets
 {
-    public class RedirectToSecureUrlRuleSet : CreateRule<RedirectToSecureUrl, UrlRequest>
+    public class RedirectToSecureUrlRuleSet : CreateRule<RedirectToSecureUrlRuleSetHandler, UrlRequest>
     {
         public RedirectToSecureUrlRuleSet()
         {
-            this.SetRule(CreateRule<RedirectToSecureUrl, UrlRequest>.On<UrlRequest>().Build().Rule);
+            this.SetRule(CreateRule<RedirectToSecureUrlRuleSetHandler, UrlRequest>.On<UrlRequest>().Build().Rule);
         }
     }
 }

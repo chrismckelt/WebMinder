@@ -4,11 +4,11 @@ using WebMinder.Core.Rules.UrlIsValid;
 
 namespace WebMinder.Core.RuleSets
 {
-    public class UrlIsValidRuleSet : CreateRule<UrlIsValidRule, UrlRequest>
+    public class UrlIsValidRuleSet : CreateRule<UrlIsValidRuleHandler, UrlRequest>
     {
         public UrlIsValidRuleSet()
         {
-            this.SetRule(CreateRule<UrlIsValidRule, UrlRequest>.On<UrlRequest>().Build().Rule);
+            this.SetRule(CreateRule<UrlIsValidRuleHandler, UrlRequest>.On<UrlRequest>().Build().Rule);
         }
     }
 }

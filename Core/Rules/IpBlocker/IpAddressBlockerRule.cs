@@ -36,7 +36,7 @@ namespace WebMinder.Core.Rules.IpBlocker
 
             InvalidAction = () =>
             {
-                var ex = new HttpException(403, string.Format("{0}  Bad IP Address: {1}", RuleSetName, RuleRequest.IpAddress));
+                var ex = new HttpException(403, $"{RuleSetName}  Bad IP Address: {RuleRequest.IpAddress}");
                 throw ex;
             };
 

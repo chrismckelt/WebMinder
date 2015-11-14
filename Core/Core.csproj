@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RuleSets\ApiKeyRuleSet.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRuleRequest.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyAttribute.cs" />
     <Compile Include="Builders\SiteMinder.cs" />
     <Compile Include="Builders\SiteMinderExtensions.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandler.cs" />
@@ -61,8 +64,10 @@
     <Compile Include="RuleSets\IpBlockerRuleSet.cs" />
     <Compile Include="RuleSets\RedirectToSecureUrlRuleSet.cs" />
     <Compile Include="RuleSets\UrlIsValidRuleSet.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRequiredInHeaderRule.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRuleSetHandler.cs" />
     <Compile Include="Rules\IRuleRequest.cs" />
-    <Compile Include="Rules\RedirectToSecureUrl\RedirectToSecureUrlRule.cs" />
+    <Compile Include="Rules\RedirectToSecureUrl\RedirectToSecureUrlRuleSetHandler.cs" />
     <Compile Include="Rules\RuleRequest.cs" />
     <Compile Include="Rules\UrlRequest.cs" />
     <Compile Include="Runners\IRuleRunner.cs" />
@@ -72,7 +77,7 @@
     <Compile Include="Builders\CreateRule.cs" />
     <Compile Include="Runners\RuleSetRunner.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRuleVerificationAttribute.cs" />
-    <Compile Include="Rules\UrlIsValid\UrlIsValidRule.cs" />
+    <Compile Include="Rules\UrlIsValid\UrlIsValidRuleHandler.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRule.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressRequest.cs" />
     <Compile Include="SiteMinderModule.cs" />

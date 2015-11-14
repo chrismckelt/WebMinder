@@ -25,17 +25,18 @@ namespace TestWebSite
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+
             var total = SiteMinder.RuleFor<IpAddressRequest>().Items.Count(y => y.IsBadRequest);
 
-            var msg = string.Format("<h1>Website hit a total {0} </h1>", total);
+            //var msg = string.Format("<h1>Website hit a total {0} </h1>", total);
 
-            if (total < 5)
-            {
-                SiteMinder.RecordBadIpRequest();
-            }
+            //if (total < 5)
+            //{
+            //    SiteMinder.RecordBadIpRequest();
+            //}
 
-            Response.Write(msg);
-            Response.End();
+            //Response.Write(msg);
+           // Response.End();
 
         }
 

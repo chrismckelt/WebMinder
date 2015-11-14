@@ -17,6 +17,7 @@ namespace WebMinder.Core
             app.BeginRequest += AppBeginRequest;
             SiteMinder = SiteMinder.Create()
              //  .WithSslEnabled()
+               
                .WithNoSpam(5, TimeSpan.FromHours(1));
 
             SiteMinder.Initialise();
@@ -33,10 +34,7 @@ namespace WebMinder.Core
 
         protected virtual void OnRuleRequestReported(SiteMinderFailuresEventArgs e)
         {
-            if (RuleRequestReported != null)
-            {
-                RuleRequestReported(this, e);
-            }
+            RuleRequestReported?.Invoke(this, e);
         }
 
         public void Dispose()
