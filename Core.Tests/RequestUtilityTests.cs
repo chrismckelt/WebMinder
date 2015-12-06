@@ -7,7 +7,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests
 {
-    public class RequestUtilityFixture
+    public class RequestUtilityTests
     {
         HttpRequestBase _httpRequest;
 
@@ -22,7 +22,7 @@ namespace WebMinder.Core.Tests
         private const string PrivateLinkLocal = "169.254.0.0";
 
 
-        public RequestUtilityFixture()
+        public RequestUtilityTests()
         {
             var routeData = new RouteData();
             _httpRequest = Substitute.For<HttpRequestBase>();
@@ -150,6 +150,20 @@ namespace WebMinder.Core.Tests
 
             // Assert
             Assert.Equal(ip, MicrosoftIpAddress);
+        }
+
+        [Fact]
+        public void IsInRangeDetectsCorrectIp()
+        {
+            bool isInRange = RequestUtility.IsInRange("10.0.0.2", "10.0.2.0", "10.0.1.0");
+            Assert.True(isInRange);
+        }
+
+        [Fact]
+        public void IsInRangeDetectsInvalidIp()
+        {
+            bool isInRange = RequestUtility.IsInRange("10.0.0.2", "10.0.2.0", "10.2.1.0");
+            Assert.False(isInRange);
         }
     }
 }

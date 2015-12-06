@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
 using WebMinder.Core.Rules.ApiKey;
 using WebMinder.Core.Rules.IpBlocker;
+using WebMinder.Core.Rules.IpWhitelist;
 using WebMinder.Core.Rules.RedirectToSecureUrl;
 using WebMinder.Core.RuleSets;
 using WebMinder.Core.StorageProviders;
@@ -75,6 +77,45 @@ namespace WebMinder.Core.Builders
                 .Build();
 
             return ruleMinder.AddRule<ApiKeyRequiredRuleSet, ApiKeyRequiredRuleSetHandler, ApiKeyRequiredRule>(x => ruleSet);
+        }
+
+        public static SiteMinder WithIpWhitelist(this SiteMinder ruleMinder)
+        {
+            string validIpRanges = ConfigurationManager.AppSettings["WebMinder.IpWhitelist.ValidIpRanges"];
+         
+            Guard.AgainstNull(validIpRanges, "WebMinder.IpWhitelist.ValidIpRanges value null or empty in the configuration file");
+
+            var ipRanges = new Dictionary<string, string>();
+
+            var ranges = validIpRanges.Split(Convert.ToChar(","));
+            try
+            {
+                if (ranges == null || !ranges.Any())
+                {
+                    var singleRange = validIpRanges.Split(Convert.ToChar(";"));
+                    ipRanges.Add(singleRange[0], singleRange[1]);
+                }
+                else
+                {
+                    foreach (var range in ranges)
+                    {
+                        var singleRange = range.Split(Convert.ToChar(";"));
+                        ipRanges.Add(singleRange[0], singleRange[1]);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use a ,  eg   127.0.0.1;127.0.0.1,10.1.1.1;10.2.2.2");
+            }
+
+            var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
+            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.BaseDirectory });
+            var ruleSet = CreateRule<IpWhitelistRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
+                .With(x=>x.ValidIpRanges= ipRanges)
+                .Build();
+
+            return ruleMinder.AddRule<IpWhitelistRuleSet, IpWhitelistRuleSetHandler, IpAddressRequest>(x => ruleSet);
         }
     }
 }

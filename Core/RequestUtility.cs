@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -9,6 +10,11 @@ namespace WebMinder.Core
 {
     public static class RequestUtility
     {
+        public static string GetCurrentIpAddress()
+        {
+            return GetClientIpAddress(GetRequest());
+        }
+
         public static string GetClientIpAddress(HttpRequestBase request)
         {
             try
@@ -87,6 +93,24 @@ namespace WebMinder.Core
             if (HttpContext.Current == null) return null;
             var request = new HttpRequestWrapper(HttpContext.Current.Request);
             return request;
+        }
+
+        /// <summary>
+        /// http://stackoverflow.com/questions/2138706/how-to-check-a-input-ip-fall-in-a-specific-ip-range
+        /// </summary>
+        /// <param name="startIpAddr"></param>
+        /// <param name="endIpAddr"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public static bool IsInRange(string startIpAddr, string endIpAddr, string address)
+        {
+            long ipStart = BitConverter.ToInt32(IPAddress.Parse(startIpAddr).GetAddressBytes().Reverse().ToArray(), 0);
+
+            long ipEnd = BitConverter.ToInt32(IPAddress.Parse(endIpAddr).GetAddressBytes().Reverse().ToArray(), 0);
+
+            long ip = BitConverter.ToInt32(IPAddress.Parse(address).GetAddressBytes().Reverse().ToArray(), 0);
+
+            return ip >= ipStart && ip <= ipEnd; //edited
         }
     }
 }

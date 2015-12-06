@@ -19,8 +19,9 @@ namespace WebMinder.Core
 
             app.BeginRequest += AppBeginRequest;
             SiteMinder = SiteMinder.Create()
-             //  .WithSslEnabled()
+               .WithSslEnabled()
                .WithApiKeyValidation()
+               .WithIpWhitelist()
                .WithNoSpam(5, TimeSpan.FromHours(1));
 
             SiteMinder.Initialise();
@@ -28,8 +29,8 @@ namespace WebMinder.Core
 
         void AppBeginRequest(object sender, EventArgs eventArgs)
         {
-            SiteMinder.VerifyRule(new ApiKeyRequiredRule());
-
+          //  SiteMinder.ValidateApiKey(); uncomment to valid request contains api key
+            SiteMinder.ValidateWhiteList();
             if (SiteMinder.AllRulesValid()) return;
             var args = new SiteMinderFailuresEventArgs {Failures = SiteMinder.Failures};
             OnRuleRequestReported(args);

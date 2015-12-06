@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RuleSets\ApiKeyRequiredRuleSet.cs" />
+    <Compile Include="RuleSets\IpWhitelistRuleSet.cs" />
     <Compile Include="Rules\ApiKey\ApiKeyRequiredRule.cs" />
     <Compile Include="Builders\SiteMinder.cs" />
     <Compile Include="Builders\SiteMinderExtensions.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="RuleSets\UrlIsValidRuleSet.cs" />
     <Compile Include="Rules\ApiKey\ApiKeyRequiredRuleHandler.cs" />
     <Compile Include="Rules\ApiKey\ApiKeyRequiredRuleSetHandler.cs" />
+    <Compile Include="Rules\IpWhitelist\IpWhitelistRuleSetHandler.cs" />
     <Compile Include="Rules\ValidatableRule.cs" />
     <Compile Include="Rules\IValidatableRule.cs" />
     <Compile Include="Rules\IRuleRequest.cs" />
