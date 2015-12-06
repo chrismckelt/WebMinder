@@ -14,8 +14,7 @@ namespace WebMinder.Core.Rules.IpBlocker
 
         public static IpAddressRequest GetCurrentIpAddress(bool? recordBadIp = null)
         {
-            if (HttpContext.Current == null) return null;
-            var request = new HttpRequestWrapper(HttpContext.Current.Request);
+            var request = RequestUtility.GetRequest();
             return new IpAddressRequest()
             {
                 IpAddress = RequestUtility.GetClientIpAddress(request),

@@ -81,5 +81,12 @@ namespace WebMinder.Core
                 return false;
             }
         }
+
+        public static HttpRequestWrapper GetRequest()
+        {
+            if (HttpContext.Current == null) return null;
+            var request = new HttpRequestWrapper(HttpContext.Current.Request);
+            return request;
+        }
     }
 }

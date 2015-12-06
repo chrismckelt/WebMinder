@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Web.Configuration;
 using WebMinder.Core.Builders;
+using WebMinder.Core.Rules.ApiKey;
 using WebMinder.Core.Rules.IpBlocker;
 
 namespace WebMinder.Core
@@ -14,9 +16,11 @@ namespace WebMinder.Core
 
         public void Init(HttpApplication app)
         {
+
             app.BeginRequest += AppBeginRequest;
             SiteMinder = SiteMinder.Create()
              //  .WithSslEnabled()
+               .WithApiKeyValidation()
                .WithNoSpam(5, TimeSpan.FromHours(1));
 
             SiteMinder.Initialise();
@@ -24,8 +28,8 @@ namespace WebMinder.Core
 
         void AppBeginRequest(object sender, EventArgs eventArgs)
         {
-            SiteMinder.VerifyRule(IpAddressRequest.GetCurrentIpAddress());
-           
+            SiteMinder.VerifyRule(new ApiKeyRequiredRule());
+
             if (SiteMinder.AllRulesValid()) return;
             var args = new SiteMinderFailuresEventArgs {Failures = SiteMinder.Failures};
             OnRuleRequestReported(args);
@@ -33,10 +37,7 @@ namespace WebMinder.Core
 
         protected virtual void OnRuleRequestReported(SiteMinderFailuresEventArgs e)
         {
-            if (RuleRequestReported != null)
-            {
-                RuleRequestReported(this, e);
-            }
+            RuleRequestReported?.Invoke(this, e);
         }
 
         public void Dispose()

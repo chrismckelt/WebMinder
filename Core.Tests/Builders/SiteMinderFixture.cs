@@ -12,7 +12,7 @@ namespace WebMinder.Core.Tests.Builders
         [Fact]
         public void RuleMinderAddsExistingRuleMinder()
         {
-            var existingRuleMinder = SiteMinder.Create().AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(x =>
+            var existingRuleMinder = SiteMinder.Create().AddRule<UrlIsValidRuleSet, UrlIsValidRuleHandler, UrlRequest>(x =>
                 x.Using<UrlRequest>(request => request.Url = ("/SampleWebServiceEndPoint"))
                     .Build());
 
@@ -23,12 +23,12 @@ namespace WebMinder.Core.Tests.Builders
         public void RuleMinderAddsExistingRule()
         {
             var ruleSet =
-                CreateRule<UrlIsValidRule, UrlRequest>.On<UrlRequest>(request => request.Url = "/SomeWebService")
+                CreateRule<UrlIsValidRuleHandler, UrlRequest>.On<UrlRequest>(request => request.Url = "/SomeWebService")
                     .Build();
 
             var rm =
                 SiteMinder.Create()
-                    .AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(webServiceUpRuleSet => ruleSet);
+                    .AddRule<UrlIsValidRuleSet, UrlIsValidRuleHandler, UrlRequest>(webServiceUpRuleSet => ruleSet);
 
             Assert.Equal(1, rm.Rules.Count);
         }
@@ -41,7 +41,7 @@ namespace WebMinder.Core.Tests.Builders
             var siteMinder = SiteMinder.Create()
                 .WithSslEnabled() // predefined rule redirect all http traffic to https
                 .WithNoSpam(maxAttemptsWithinDuration: 100, withinDuration: TimeSpan.FromHours(1))
-                .AddRule<UrlIsValidRuleSet, UrlIsValidRule, UrlRequest>(webServiceUpRuleSet =>
+                .AddRule<UrlIsValidRuleSet, UrlIsValidRuleHandler, UrlRequest>(webServiceUpRuleSet =>
                     webServiceUpRuleSet.Using<UrlRequest>(request => request.Url = "/SomeWebService").Build()) // build a custom rule
                 ;
 
