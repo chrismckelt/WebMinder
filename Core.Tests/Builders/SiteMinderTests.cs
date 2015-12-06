@@ -7,7 +7,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Builders
 {
-    public class SiteMinderFixture
+    public class SiteMinderTests
     {
         [Fact]
         public void RuleMinderAddsExistingRuleMinder()

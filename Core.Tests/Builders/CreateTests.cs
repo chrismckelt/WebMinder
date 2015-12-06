@@ -4,7 +4,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Builders
 {
-    public class CreateFixture
+    public class CreateTests
     {
         [Fact]
         public void CreatesRuleSaysWhatItDoes()

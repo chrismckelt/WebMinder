@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
+using WebMinder.Core.Rules.ApiKey;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Runners;
 
@@ -64,6 +65,16 @@ namespace WebMinder.Core.Builders
         public static IRuleSetHandler<T> RuleFor<T>() where T : IRuleRequest,new()
         {
             return Instance.GetRules<T>().First();
+        }
+
+        public void ValidateApiKey()
+        {
+            Instance.VerifyRule(new ApiKeyRequiredRule());
+        }
+
+        public void ValidateWhiteList()
+        {
+            Instance.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true));
         }
     }
 }
