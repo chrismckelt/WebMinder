@@ -10,6 +10,8 @@ namespace WebMinder.Core.Handlers
     public class RuleSetHandlerBase<T> : IRuleSetHandler<T> where T : IRuleRequest, new()
     {
         protected Action<string, string> Logger;
+       
+
         private IStorageProvider<T> _storageMechanism;
         public string RuleSetName { get; set; }
         public string ErrorDescription { get; set; }
@@ -118,8 +120,18 @@ namespace WebMinder.Core.Handlers
 
         protected void FailRule(string logmessage = null)
         {
-            Logger("WARN", string.Format("FAILED RULE: {0} {1}", RuleSetName, logmessage));
+            Logger("WARN", $"FAILED RULE: {RuleSetName} {logmessage}");
             InvalidAction();
+        }
+
+        protected void LogInfo(string informationMessage)
+        {
+            Logger("INFO", informationMessage);
+        }
+
+        protected void LogWarn(string warnMessage)
+        {
+            Logger("WARN", warnMessage);
         }
     }
 }

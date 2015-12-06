@@ -7,6 +7,7 @@ using System.Web.Routing;
 using WebMinder.Core;
 using WebMinder.Core.Builders;
 using WebMinder.Core.Rules;
+using WebMinder.Core.Rules.ApiKey;
 using WebMinder.Core.Rules.IpBlocker;
 using WebMinder.Core.Rules.UrlIsValid;
 using WebMinder.Core.StorageProviders;
@@ -26,8 +27,6 @@ namespace TestWebSite
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
 
-            var total = SiteMinder.RuleFor<IpAddressRequest>().Items.Count(y => y.IsBadRequest);
-
             //var msg = string.Format("<h1>Website hit a total {0} </h1>", total);
 
             //if (total < 5)
@@ -36,7 +35,7 @@ namespace TestWebSite
             //}
 
             //Response.Write(msg);
-           // Response.End();
+            // Response.End();
 
         }
 

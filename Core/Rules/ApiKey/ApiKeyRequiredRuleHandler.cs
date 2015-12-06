@@ -2,7 +2,7 @@
 
 namespace WebMinder.Core.Rules.ApiKey
 {
-    public class ApiKeyRequiredInHeaderRule : SingleRuleSetHandler<UrlRequest>
+    public class ApiKeyRequiredRuleHandler : SingleRuleSetHandler<UrlRequest>
     {
     }
 }

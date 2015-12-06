@@ -37,6 +37,7 @@
       <HintPath>..\packages\ExtensionMinder.1.0.3.0\lib\ExtensionMinder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
@@ -49,9 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RuleSets\ApiKeyRuleSet.cs" />
-    <Compile Include="Rules\ApiKey\ApiKeyRuleRequest.cs" />
-    <Compile Include="Rules\ApiKey\ApiKeyAttribute.cs" />
+    <Compile Include="RuleSets\ApiKeyRequiredRuleSet.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRequiredRule.cs" />
     <Compile Include="Builders\SiteMinder.cs" />
     <Compile Include="Builders\SiteMinderExtensions.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandler.cs" />
@@ -64,8 +64,10 @@
     <Compile Include="RuleSets\IpBlockerRuleSet.cs" />
     <Compile Include="RuleSets\RedirectToSecureUrlRuleSet.cs" />
     <Compile Include="RuleSets\UrlIsValidRuleSet.cs" />
-    <Compile Include="Rules\ApiKey\ApiKeyRequiredInHeaderRule.cs" />
-    <Compile Include="Rules\ApiKey\ApiKeyRuleSetHandler.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRequiredRuleHandler.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRequiredRuleSetHandler.cs" />
+    <Compile Include="Rules\ValidatableRule.cs" />
+    <Compile Include="Rules\IValidatableRule.cs" />
     <Compile Include="Rules\IRuleRequest.cs" />
     <Compile Include="Rules\RedirectToSecureUrl\RedirectToSecureUrlRuleSetHandler.cs" />
     <Compile Include="Rules\RuleRequest.cs" />
@@ -78,12 +80,13 @@
     <Compile Include="Runners\RuleSetRunner.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressBlockerRuleVerificationAttribute.cs" />
     <Compile Include="Rules\UrlIsValid\UrlIsValidRuleHandler.cs" />
-    <Compile Include="Rules\IpBlocker\IpAddressBlockerRule.cs" />
+    <Compile Include="Rules\IpBlocker\IpAddressBlockerRuleSetHandler.cs" />
     <Compile Include="Rules\IpBlocker\IpAddressRequest.cs" />
     <Compile Include="SiteMinderModule.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
     <Compile Include="StorageProviders\MemoryCacheStorageProvider.cs" />
     <Compile Include="StorageProviders\XmlFileStorageProvider.cs" />
+    <Compile Include="Utilities\Guard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

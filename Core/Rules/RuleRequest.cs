@@ -2,6 +2,7 @@
 
 namespace WebMinder.Core.Rules
 {
+    [Obsolete("Use ValidatableRule - better naming")]
     public class RuleRequest : IRuleRequest
     {
         public RuleRequest()

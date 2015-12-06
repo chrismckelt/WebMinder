@@ -5,12 +5,13 @@ namespace TestWebSite.Controllers
 {
     public class HomeController : Controller
     {
+       // [ApiKeyRequired(HeaderKeyName = "About", HeaderApiToken = "123")]
         public ActionResult Index()
         {
             return View();
         }
 
-        [ApiKey(HeaderApiKeyName = "About", HeaderApiToken = "123")]
+      //  [ApiKeyRequired(HeaderKeyName = "About", HeaderApiToken = "123")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -18,7 +19,7 @@ namespace TestWebSite.Controllers
             return View();
         }
 
-        [ApiKey(HeaderApiKeyName = "Contact", HeaderApiToken = "123")]
+     //   [ApiKeyRequired(HeaderKeyName = "Contact", HeaderApiToken = "123")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
