@@ -87,26 +87,41 @@ namespace WebMinder.Core.Builders
 
             var ipRanges = new Dictionary<string, string>();
 
-            var ranges = validIpRanges.Split(Convert.ToChar(","));
-            try
+            if (validIpRanges.Contains(Convert.ToChar(";")))
             {
-                if (ranges == null || !ranges.Any())
+                var ranges = validIpRanges.Split(Convert.ToChar(";"));
+                try
                 {
-                    var singleRange = validIpRanges.Split(Convert.ToChar(";"));
-                    ipRanges.Add(singleRange[0], singleRange[1]);
-                }
-                else
-                {
-                    foreach (var range in ranges)
+                    if (ranges.Count()==1)
                     {
-                        var singleRange = range.Split(Convert.ToChar(";"));
+                        var singleRange = validIpRanges.Split(Convert.ToChar("|"));
                         ipRanges.Add(singleRange[0], singleRange[1]);
                     }
+                    else
+                    {
+                        foreach (var range in ranges)
+                        {
+                            if (!range.Contains(Convert.ToChar("|")))
+                            {
+                                ipRanges.Add(range,range);
+                            }
+                            else
+                            {
+                                var singleRange = range.Split(Convert.ToChar("|"));
+                                ipRanges.Add(singleRange[0], singleRange[1]);
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    //<add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149"/>
+                    throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use |  - 127.0.0.1;191.239.187.149|191.239.187.149");
                 }
             }
-            catch (Exception)
+            else
             {
-                throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use a ,  eg   127.0.0.1;127.0.0.1,10.1.1.1;10.2.2.2");
+                ipRanges.Add(validIpRanges, validIpRanges);
             }
 
             var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
