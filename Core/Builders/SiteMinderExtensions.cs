@@ -51,7 +51,7 @@ namespace WebMinder.Core.Builders
             TimeSpan? withinDuration = null)
         {
             var fileStorage = new XmlFileStorageProvider<IpAddressRequest>();
-            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.BaseDirectory});
+            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.GetData("DataDirectory").ToString()});
             var ruleSet = CreateRule<IpAddressBlockerRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
                 .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
                 .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))
@@ -70,7 +70,7 @@ namespace WebMinder.Core.Builders
             Guard.AgainstNull(headerApiKeyValue, "WebMinder.ApiKeyValue value null or empty in the configuration file");
 
             var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
-            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.BaseDirectory });
+            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.GetData("DataDirectory").ToString() });
             var ruleSet = CreateRule<ApiKeyRequiredRuleSetHandler, ApiKeyRequiredRule>.On<ApiKeyRequiredRule>()
                 .With(a => a.HeaderKeyName = headerApiKeyName)
                 .With(a=>a.HeaderKeyValue = headerApiKeyValue)
@@ -130,7 +130,7 @@ namespace WebMinder.Core.Builders
             }
 
             var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
-            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.BaseDirectory });
+            fileStorage.Initialise(new[] { AppDomain.CurrentDomain.GetData("DataDirectory").ToString() });
             var ruleSet = CreateRule<IpWhitelistRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
                 .With(x=>x.ValidIpRanges= ipRanges)
                 .Build();

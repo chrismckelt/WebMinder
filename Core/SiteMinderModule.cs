@@ -19,20 +19,21 @@ namespace WebMinder.Core
 
             app.BeginRequest += AppBeginRequest;
             SiteMinder = SiteMinder.Create()
-               .WithSslEnabled()
+              // .WithSslEnabled()
                .WithApiKeyValidation()
                .WithIpWhitelist()
-               .WithNoSpam(5, TimeSpan.FromHours(1));
+               //.WithNoSpam(5, TimeSpan.FromHours(1))
+               ;
 
             SiteMinder.Initialise();
         }
 
         void AppBeginRequest(object sender, EventArgs eventArgs)
         {
-          //  SiteMinder.ValidateApiKey(); uncomment to valid request contains api key
+            if (HttpContext.Current.Response.StatusCode != 200) return;
             SiteMinder.ValidateWhiteList();
             if (SiteMinder.AllRulesValid()) return;
-            var args = new SiteMinderFailuresEventArgs {Failures = SiteMinder.Failures};
+            var args = new SiteMinderFailuresEventArgs { Failures = SiteMinder.Failures };
             OnRuleRequestReported(args);
         }
 
