@@ -4,12 +4,18 @@ A simple software firewall to ensure incoming HTTP requests conform to a predefi
 
 usuages:
 
+- IP Whitelist **  
+    <add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149"/>  <!-- * will allow all -->
+- API Header Key Token Authorisation  - SiteMinder.ValidateApiKey() - checks http header key/token match values from config file
 - Block requests from a specific IP address when a threshold exceeds  (DDOS)
 - Dynamically add IP requests to a black list & block future requests from that IP (URL vector attack)
 - Ensure request is over SSL (redirect to SSL if otherwise)
 
 
-## Out of the box HTTP Module for IP Blocking
+** requires SiteMinderModule
+
+
+## HTTP Module to inspect all requests and apply rules
 
     <modules>
        <add name="SiteMinderModule" type="WebMinder.Core.SiteMinderModule, WebMinder.Core" />
@@ -17,6 +23,14 @@ usuages:
 
 
 ![image](https://cloud.githubusercontent.com/assets/662868/8300402/1a6a9e34-19b7-11e5-9a5c-b740f06e2354.png)
+
+### API Header Key Token Authorisation  -   
+  
+    call SiteMinder.ValidateApiKey() from global.asax begin request to check the http headers for the matching config values below:
+    
+    <add key="WebMinder.ApiKeyName" value="ExampleHeaderKeyName"/>
+    <add key="WebMinder.ApiKeyValue" value="ExampleHeaderKeyValue"/>
+
 
 ###    Dont like the current HTTP Request?  
 
