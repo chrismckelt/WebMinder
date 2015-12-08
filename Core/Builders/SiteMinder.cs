@@ -74,7 +74,12 @@ namespace WebMinder.Core.Builders
 
         public void ValidateWhiteList()
         {
-            Instance.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: false));
+            Instance.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true));
+        }
+
+        public void EnforceSsl()
+        {
+            Instance.VerifyRule(UrlRequest.GetCurrentUrl());
         }
     }
 }

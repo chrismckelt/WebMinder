@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using WebMinder.Core.Rules;
@@ -127,11 +128,13 @@ namespace WebMinder.Core.Handlers
         protected void LogInfo(string informationMessage)
         {
             Logger("INFO", informationMessage);
+            Trace.Write(informationMessage);
         }
 
         protected void LogWarn(string warnMessage)
         {
             Logger("WARN", warnMessage);
+            Trace.TraceWarning(warnMessage);
         }
     }
 }
