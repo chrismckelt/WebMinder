@@ -52,7 +52,7 @@ namespace WebMinder.Core.Rules.IpBlocker
         private void SetDefaults()
         {
             if (!Duration.HasValue) Duration = TimeSpan.FromDays(-1);
-            if (!MaxAttemptsWithinDuration.HasValue) MaxAttemptsWithinDuration = 5;
+            if (!MaxAttemptsWithinDuration.HasValue) MaxAttemptsWithinDuration = 50;
         }
     }
 }
