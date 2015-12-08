@@ -21,8 +21,10 @@ namespace WebMinder.Core.Rules.IpWhitelist
             Rule = (request) => InvalidIp();
 
            InvalidAction = () =>
-            {
-                var ex = new HttpException(403, $"{RuleSetName}  Bad IP Address: {RuleRequest.IpAddress}");
+           {
+               string message = $"{RuleSetName}  Bad IP Address: {RuleRequest.IpAddress}";
+                LogWarn(message);
+                var ex = new HttpException(403, message);
                 throw ex;
             };
         }
