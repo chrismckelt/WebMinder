@@ -29,7 +29,8 @@ namespace WebMinder.Core
 
         void AppBeginRequest(object sender, EventArgs eventArgs)
         {
-          //  SiteMinder.ValidateApiKey(); uncomment to valid request contains api key
+          //  SiteMinder.ValidateApiKey(); call this from anywhere in the site to valid request contains api key
+
             SiteMinder.ValidateWhiteList();
             if (SiteMinder.AllRulesValid()) return;
             var args = new SiteMinderFailuresEventArgs {Failures = SiteMinder.Failures};
