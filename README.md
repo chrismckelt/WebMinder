@@ -5,7 +5,7 @@ A simple software firewall to ensure incoming HTTP requests conform to a predefi
 usuages:
 
 - IP Whitelist **  
-    <add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149"/>  <!-- * will allow all -->
+      < add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149" >  <!-- * will allow all -->
 - API Header Key Token Authorisation  - SiteMinder.ValidateApiKey() - checks http header key/token match values from config file
 - Block requests from a specific IP address when a threshold exceeds  (DDOS)
 - Dynamically add IP requests to a black list & block future requests from that IP (URL vector attack)
@@ -15,21 +15,24 @@ usuages:
 ** requires SiteMinderModule
 
 
+##  SiteMinderModule
+
+![image](https://cloud.githubusercontent.com/assets/662868/11645428/6d63109c-9d8f-11e5-85bf-a0ade19bb635.png)
+
+
+
 ## HTTP Module to inspect all requests and apply rules
 
     <modules>
        <add name="SiteMinderModule" type="WebMinder.Core.SiteMinderModule, WebMinder.Core" />
      </modules>
 
-
-![image](https://cloud.githubusercontent.com/assets/662868/8300402/1a6a9e34-19b7-11e5-9a5c-b740f06e2354.png)
-
 ### API Header Key Token Authorisation  -   
   
     call SiteMinder.ValidateApiKey() from global.asax begin request to check the http headers for the matching config values below:
     
-    <add key="WebMinder.ApiKeyName" value="ExampleHeaderKeyName"/>
-    <add key="WebMinder.ApiKeyValue" value="ExampleHeaderKeyValue"/>
+      < add key="WebMinder.ApiKeyName" value="ExampleHeaderKeyName"/ >
+      < add key="WebMinder.ApiKeyValue" value="ExampleHeaderKeyValue"/ >
 
 
 ###    Dont like the current HTTP Request?  
@@ -161,3 +164,6 @@ IStorageProvider<T> implementations (defaults to memory)
 ## Some sample code (not using HTTP Module) in Global.asax
 
 ![image](https://cloud.githubusercontent.com/assets/662868/7762569/6d431512-0069-11e5-9b06-3e74bcf84a6d.png)
+
+
+![image](https://cloud.githubusercontent.com/assets/662868/8300402/1a6a9e34-19b7-11e5-9a5c-b740f06e2354.png)
