@@ -13,16 +13,18 @@ namespace WebMinder.Core.Rules.IpWhitelist
         {
 
             RuleSetName =
-                $"IP Addresses from white list only";
+                $"IP not whitelisted";
 
             ErrorDescription =
-                "IP address not allowed";
+                "IP not list of allowed IP addresses";
 
-            Rule = (request) => InvalidIp();
-
+           Rule = (request) => InvalidIp();
+          
            InvalidAction = () =>
-            {
-                var ex = new HttpException(403, $"{RuleSetName}  Bad IP Address: {RuleRequest.IpAddress}");
+           {
+               string message = $"{RuleSetName}  Bad IP Address: {RuleRequest.IpAddress}";
+                LogWarn(message);
+                var ex = new HttpException(403, message);
                 throw ex;
             };
         }

@@ -76,5 +76,10 @@ namespace WebMinder.Core.Builders
         {
             Instance.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true));
         }
+
+        public void EnforceSsl()
+        {
+            Instance.VerifyRule(UrlRequest.GetCurrentUrl());
+        }
     }
 }
