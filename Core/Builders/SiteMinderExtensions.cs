@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using WebMinder.Core.Handlers;
 using WebMinder.Core.Rules;
@@ -118,10 +119,10 @@ namespace WebMinder.Core.Builders
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     //<add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149"/>
-                    throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use |  - 127.0.0.1;191.239.187.149|191.239.187.149    - or use * for all");
+                    throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use |  - 127.0.0.1;191.239.187.149|191.239.187.149    - or use * for all",ex);
                 }
             }
             else
@@ -142,7 +143,12 @@ namespace WebMinder.Core.Builders
         {
             try
             {
-                return AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+                string dir = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                return dir;
             }
             catch (Exception)
             {
