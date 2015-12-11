@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="RuleSets\ApiKeyRequiredRuleSet.cs" />
     <Compile Include="RuleSets\IpWhitelistRuleSet.cs" />
+    <Compile Include="Rules\ApiKey\ApiKeyRequiredAttribute.cs" />
     <Compile Include="Rules\ApiKey\ApiKeyRequiredRule.cs" />
     <Compile Include="Builders\SiteMinder.cs" />
     <Compile Include="Builders\SiteMinderExtensions.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="StorageProviders\MemoryCacheStorageProvider.cs" />
     <Compile Include="StorageProviders\XmlFileStorageProvider.cs" />
     <Compile Include="Utilities\Guard.cs" />
+    <Compile Include="Utilities\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

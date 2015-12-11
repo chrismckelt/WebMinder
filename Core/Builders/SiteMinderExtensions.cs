@@ -19,6 +19,7 @@ namespace WebMinder.Core.Builders
 {
     public static class SiteMinderExtensions
     {
+        private static object _keylock = new object();
         public static SiteMinder AddRule<TCreate, TRuleSetHandler, TRuleRequest>(this SiteMinder ruleMinder,
             Func<CreateRule<TRuleSetHandler, TRuleRequest>, CreateRule<TRuleSetHandler, TRuleRequest>> setter = null)
             where TCreate : CreateRule<TRuleSetHandler, TRuleRequest>, new()
@@ -42,101 +43,111 @@ namespace WebMinder.Core.Builders
 
         public static SiteMinder WithSslEnabled(this SiteMinder siteMinder)
         {
-            var ruleSet = CreateRule<RedirectToSecureUrlRuleSetHandler, UrlRequest>.On<UrlRequest>()
-                .Build();
-
-            return siteMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrlRuleSetHandler, UrlRequest>(x => ruleSet); // predefined rule redirect all http traffic to https
+            lock (siteMinder)
+            {
+                var ruleSet = CreateRule<RedirectToSecureUrlRuleSetHandler, UrlRequest>.On<UrlRequest>().Build();
+                return siteMinder.AddRule<RedirectToSecureUrlRuleSet, RedirectToSecureUrlRuleSetHandler, UrlRequest>(x => ruleSet); // predefined rule redirect all http traffic to https   
+            }
         }
 
         public static SiteMinder WithNoSpam(this SiteMinder siteMinder, int? maxAttemptsWithinDuration = null,
             TimeSpan? withinDuration = null)
         {
-            var fileStorage = new XmlFileStorageProvider<IpAddressRequest>();
-            fileStorage.Initialise(new[] { GetXmlFolder()});
-            var ruleSet = CreateRule<IpAddressBlockerRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
-                .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
-                .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))
-                .With(a=>a.StorageMechanism = fileStorage)
-                .Build();
+            lock (_keylock)
+            {
+                var fileStorage = new XmlFileStorageProvider<IpAddressRequest>();
+                fileStorage.Initialise(new[] { GetXmlFolder() });
+                var ruleSet = CreateRule<IpAddressBlockerRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
+                    .With(a => a.MaxAttemptsWithinDuration = maxAttemptsWithinDuration.GetValueOrDefault(100))
+                    .With(a => a.Duration = withinDuration.GetValueOrDefault(TimeSpan.FromDays(-1)))
+                    .With(a => a.StorageMechanism = fileStorage)
+                    .Build();
 
-            return siteMinder.AddRule<IpBlockerRuleSet, IpAddressBlockerRuleSetHandler, IpAddressRequest>(x => ruleSet);
+                return siteMinder.AddRule<IpBlockerRuleSet, IpAddressBlockerRuleSetHandler, IpAddressRequest>(x => ruleSet);
+            }
         }
 
         public static SiteMinder WithApiKeyValidation(this SiteMinder siteMinder)
         {
-            string headerApiKeyName =   ConfigurationManager.AppSettings["WebMinder.ApiKeyName"];
-            string headerApiKeyValue = ConfigurationManager.AppSettings["WebMinder.ApiKeyValue"];
+            lock (_keylock)
+            {
+                string headerApiKeyName = ConfigurationManager.AppSettings["WebMinder.ApiKeyName"];
+                string headerApiKeyValue = ConfigurationManager.AppSettings["WebMinder.ApiKeyValue"];
 
-            Guard.AgainstNull(headerApiKeyName, "WebMinder.ApiKeyName value null or empty in the configuration file");
-            Guard.AgainstNull(headerApiKeyValue, "WebMinder.ApiKeyValue value null or empty in the configuration file");
+                Guard.AgainstNull(headerApiKeyName, "WebMinder.ApiKeyName value null or empty in the configuration file");
+                Guard.AgainstNull(headerApiKeyValue, "WebMinder.ApiKeyValue value null or empty in the configuration file");
 
-            var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
-            fileStorage.Initialise(new[] { GetXmlFolder() });
-            var ruleSet = CreateRule<ApiKeyRequiredRuleSetHandler, ApiKeyRequiredRule>.On<ApiKeyRequiredRule>()
-                .With(a => a.HeaderKeyName = headerApiKeyName)
-                .With(a=>a.HeaderKeyValue = headerApiKeyValue)
-                .Build();
+                var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
+                fileStorage.Initialise(new[] { GetXmlFolder() });
+                var ruleSet = CreateRule<ApiKeyRequiredRuleSetHandler, ApiKeyRequiredRule>.On<ApiKeyRequiredRule>()
+                    .With(a => a.HeaderKeyName = headerApiKeyName)
+                    .With(a => a.HeaderKeyValue = headerApiKeyValue)
+                    .Build();
 
-            return siteMinder.AddRule<ApiKeyRequiredRuleSet, ApiKeyRequiredRuleSetHandler, ApiKeyRequiredRule>(x => ruleSet);
+                return siteMinder.AddRule<ApiKeyRequiredRuleSet, ApiKeyRequiredRuleSetHandler, ApiKeyRequiredRule>(x => ruleSet);
+            }
         }
 
         public static SiteMinder WithIpWhitelist(this SiteMinder siteMinder)
         {
-            string validIpRanges = ConfigurationManager.AppSettings["WebMinder.IpWhitelist.ValidIpRanges"];
-
-            if (string.IsNullOrEmpty(validIpRanges) || validIpRanges.Contains("*"))
+            lock (_keylock)
             {
-                return siteMinder;
-            }
+                string validIpRanges = ConfigurationManager.AppSettings["WebMinder.IpWhitelist.ValidIpRanges"];
 
-            Guard.AgainstNull(validIpRanges, "WebMinder.IpWhitelist.ValidIpRanges value null or empty in the configuration file");
-
-            var ipRanges = new Dictionary<string, string>();
-
-            if (validIpRanges.Contains(Convert.ToChar(";")))
-            {
-                var ranges = validIpRanges.Split(Convert.ToChar(";"));
-                try
+                if (string.IsNullOrEmpty(validIpRanges) || validIpRanges.Contains("*"))
                 {
-                    if (ranges.Count()==1)
+                    return siteMinder;
+                }
+
+                Guard.AgainstNull(validIpRanges, "WebMinder.IpWhitelist.ValidIpRanges value null or empty in the configuration file");
+
+                var ipRanges = new Dictionary<string, string>();
+
+                if (validIpRanges.Contains(Convert.ToChar(";")))
+                {
+                    var ranges = validIpRanges.Split(Convert.ToChar(";"));
+                    try
                     {
-                        var singleRange = validIpRanges.Split(Convert.ToChar("|"));
-                        ipRanges.Add(singleRange[0], singleRange[1]);
-                    }
-                    else
-                    {
-                        foreach (var range in ranges)
+                        if (ranges.Count() == 1)
                         {
-                            if (!range.Contains(Convert.ToChar("|")))
+                            var singleRange = validIpRanges.Split(Convert.ToChar("|"));
+                            ipRanges.Add(singleRange[0], singleRange[1]);
+                        }
+                        else
+                        {
+                            foreach (var range in ranges)
                             {
-                                ipRanges.Add(range,range);
-                            }
-                            else
-                            {
-                                var singleRange = range.Split(Convert.ToChar("|"));
-                                ipRanges.Add(singleRange[0], singleRange[1]);
+                                if (!range.Contains(Convert.ToChar("|")))
+                                {
+                                    ipRanges.Add(range, range);
+                                }
+                                else
+                                {
+                                    var singleRange = range.Split(Convert.ToChar("|"));
+                                    ipRanges.Add(singleRange[0], singleRange[1]);
+                                }
                             }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        //<add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149"/>
+                        throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use |  - 127.0.0.1;191.239.187.149|191.239.187.149    - or use * for all", ex);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    //<add key="WebMinder.IpWhitelist.ValidIpRanges" value="127.0.0.1;191.239.187.149|191.239.187.149"/>
-                    throw new FormatException("WebMinder.IpWhitelist.ValidIpRanges config value must contain ; to split the IP range.  To add more use |  - 127.0.0.1;191.239.187.149|191.239.187.149    - or use * for all",ex);
+                    ipRanges.Add(validIpRanges, validIpRanges);
                 }
-            }
-            else
-            {
-                ipRanges.Add(validIpRanges, validIpRanges);
-            }
 
-            var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
-            fileStorage.Initialise(new[] { GetXmlFolder() });
-            var ruleSet = CreateRule<IpWhitelistRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
-                .With(x=>x.ValidIpRanges= ipRanges)
-                .Build();
+                var fileStorage = new MemoryCacheStorageProvider<ApiKeyRequiredRule>();
+                fileStorage.Initialise(new[] { GetXmlFolder() });
+                var ruleSet = CreateRule<IpWhitelistRuleSetHandler, IpAddressRequest>.On<IpAddressRequest>()
+                    .With(x => x.ValidIpRanges = ipRanges)
+                    .Build();
 
-            return siteMinder.AddRule<IpWhitelistRuleSet, IpWhitelistRuleSetHandler, IpAddressRequest>(x => ruleSet);
+                return siteMinder.AddRule<IpWhitelistRuleSet, IpWhitelistRuleSetHandler, IpAddressRequest>(x => ruleSet);
+            }
         }
 
         private static string GetXmlFolder()

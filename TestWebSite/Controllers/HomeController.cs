@@ -1,17 +1,18 @@
 ﻿using System.Web.Mvc;
+using WebMinder.Core.Builders;
 using WebMinder.Core.Rules.ApiKey;
 
 namespace TestWebSite.Controllers
 {
     public class HomeController : Controller
     {
-       // [ApiKeyRequired(HeaderKeyName = "About", HeaderApiToken = "123")]
+       [ApiKeyRequired]
         public ActionResult Index()
         {
             return View();
         }
 
-      //  [ApiKeyRequired(HeaderKeyName = "About", HeaderApiToken = "123")]
+        [ApiKeyRequired]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -19,9 +20,10 @@ namespace TestWebSite.Controllers
             return View();
         }
 
-     //   [ApiKeyRequired(HeaderKeyName = "Contact", HeaderApiToken = "123")]
+        [ApiKeyRequired]
         public ActionResult Contact()
         {
+            SiteMinder.ValidateApiKey();
             ViewBag.Message = "Your contact page.";
 
             return View();

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Web;
 using WebMinder.Core.Builders;
 
@@ -17,10 +19,10 @@ namespace WebMinder.Core
 
             app.BeginRequest += AppBeginRequest;
             SiteMinder = SiteMinder.Create()
-               //.WithSslEnabled()
+              // .WithSslEnabled()
                .WithApiKeyValidation()
                .WithIpWhitelist()
-               .WithNoSpam(50, TimeSpan.FromHours(1))
+               .WithNoSpam(500, TimeSpan.FromHours(1))
                ;
 
             SiteMinder.Initialise();
@@ -33,6 +35,14 @@ namespace WebMinder.Core
                 Trace.Write("SiteMinder rules not running due to HTTP Status code: " + HttpContext.Current.Response.StatusCode);
                 return;
             }
+
+            // ignore files such as jpegs
+            string ext = Path.GetExtension(HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath);
+
+            if (!string.IsNullOrWhiteSpace(ext) || Utilities.Util.GetFileExtensions().Any(a => a == ext.ToLowerInvariant()))
+            {
+                return;
+            }
             SiteMinder.ValidateWhiteList();
             SiteMinder.EnforceSsl();
             if (SiteMinder.AllRulesValid()) return;
@@ -42,6 +52,7 @@ namespace WebMinder.Core
 
         protected virtual void OnRuleRequestReported(SiteMinderFailuresEventArgs e)
         {
+            Trace.Write(e);
             RuleRequestReported?.Invoke(this, e);
         }
 

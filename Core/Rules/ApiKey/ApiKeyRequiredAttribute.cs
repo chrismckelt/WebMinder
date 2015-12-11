@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using WebMinder.Core.Runners;
 
 namespace WebMinder.Core.Rules.ApiKey
@@ -14,12 +11,7 @@ namespace WebMinder.Core.Rules.ApiKey
 
         public ApiKeyRequiredAttribute( )
         {
-            Debugger.Launch();
-            var api = new ApiKeyRequiredRule()
-            {
-                HeaderApiKeyName = HeaderApiKeyName,
-                HeaderToken = HeaderApiToken
-            };
+            var api = new ApiKeyRequiredRule();
             RuleSetRunner.Instance.VerifyRule(api);
         }
     }

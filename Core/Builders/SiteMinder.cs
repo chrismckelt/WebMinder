@@ -67,12 +67,12 @@ namespace WebMinder.Core.Builders
             return Instance.GetRules<T>().First();
         }
 
-        public void ValidateApiKey()
+        public static void ValidateApiKey()
         {
             Instance.VerifyRule(new ApiKeyRequiredRule());
         }
 
-        public void ValidateWhiteList()
+        public static void ValidateWhiteList()
         {
             Instance.VerifyRule(IpAddressRequest.GetCurrentIpAddress(recordBadIp: true));
         }
