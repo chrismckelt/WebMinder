@@ -17,7 +17,7 @@ namespace WebMinder.Core
 
             app.BeginRequest += AppBeginRequest;
             SiteMinder = SiteMinder.Create()
-               //.WithSslEnabled()
+               .WithSslEnabled()
                .WithApiKeyValidation()
                .WithIpWhitelist()
                .WithNoSpam(50, TimeSpan.FromHours(1))
