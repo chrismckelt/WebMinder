@@ -53,6 +53,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\RuleMinderFixture.cs" />
+    <Compile Include="Handlers\MaximumCountRuleSetHandlerFixture.cs" />
+    <Compile Include="Handlers\AggregateRuleSetHandlerFixture.cs" />
+    <Compile Include="Builders\RuleMinderTests.cs" />
     <Compile Include="Builders\SiteMinderTests.cs" />
     <Compile Include="Handlers\MaximumCountRuleSetHandlerTests.cs" />
     <Compile Include="Handlers\AggregateRuleSetHandlerTests.cs" />
