@@ -19,34 +19,25 @@ namespace TestWebSite
 
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-
             SiteMinder = RuleMinder.Create()
                // .WithSslEnabled()
-                .WithNoSpam(5, TimeSpan.FromHours(1))
-            ;
+                .WithNoSpam(5, TimeSpan.FromHours(1));
 
             SiteMinder.Initialise();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+            // verify all rules that can apply to this request
             SiteMinder.VerifyAllRules();
 
+            // verify single rule: specifiy a single rule to run and pass in the request
             SiteMinder.VerifyRule(new UrlRequest(){Url = GetUrl()});
 
-            var ipaddress = GetIpAddress();
+            // verify single rule: IP address is not a SPAM bot
+            var spamIpAddressCheck = IpAddressRequest.GetCurrentIpAddress();
 
-            var spamIpAddressCheck = new IpAddressRequest
-            {
-                IpAddress = ipaddress,
-                CreatedUtcDateTime = DateTime.UtcNow,
-            };
-
-            var total = SiteMinder.GetRules<IpAddressRequest>().Sum(a => a.Items.Count(b => b.IpAddress == ipaddress));
+            var total = SiteMinder.GetRules<IpAddressRequest>().Sum(a => a.Items.Count(b => b.IpAddress == spamIpAddressCheck.IpAddress));
 
             if (total > 2) // just for this demo start logging bad ips after 2 refreshes
             {
@@ -61,7 +52,7 @@ namespace TestWebSite
             SiteMinder.GetRules<IpAddressRequest>().ToList()
                 .ForEach(x=>x.StorageMechanism.SaveStorage());
 
-            var msg = GetMessage(ipaddress);
+            var msg = GetMessage(spamIpAddressCheck.IpAddress);
             Response.Write(msg);
 
         }

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Handlers
 {
-    public class SingleRuleSetHandlerFixture : HandlerFixtureBase
+    public class SingleRuleSetHandlerTests : HandlerFixtureBase
     {
         static IQueryable<TestObject> _bucketOfTestObjects = new List<TestObject>().AsQueryable(); 
 

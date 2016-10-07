@@ -7,7 +7,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests
 {
-    public class RequestUtilityFixture
+    public class RequestUtilityTests
     {
         HttpRequestBase _httpRequest;
 
@@ -22,7 +22,7 @@ namespace WebMinder.Core.Tests
         private const string PrivateLinkLocal = "169.254.0.0";
 
 
-        public RequestUtilityFixture()
+        public RequestUtilityTests()
         {
             var routeData = new RouteData();
             _httpRequest = Substitute.For<HttpRequestBase>();

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Runners
 {
-    public class RuleSetRunnerFixture
+    public class RuleSetRunnerTests
     {
        
         private AggregateRuleSetHandler<TestObject> _ruleSetHandler;
@@ -17,7 +17,7 @@ namespace WebMinder.Core.Tests.Runners
         private const string RuleSet = "RuleSetRunnerFixture Test Rule";
         const string ErrorDescription = "RuleSetRunnerFixture Error exception for logging";
 
-        public RuleSetRunnerFixture()
+        public RuleSetRunnerTests()
         {
             _ruleset = new IpAddressBlockerRule()
             {

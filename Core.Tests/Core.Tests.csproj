@@ -53,16 +53,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\RuleMinderFixture.cs" />
-    <Compile Include="Handlers\MaximumCountRuleSetHandlerFixture.cs" />
-    <Compile Include="Handlers\AggregateRuleSetHandlerFixture.cs" />
+    <Compile Include="Builders\RuleMinderTests.cs" />
+    <Compile Include="Handlers\MaximumCountRuleSetHandlerTests.cs" />
+    <Compile Include="Handlers\AggregateRuleSetHandlerTests.cs" />
     <Compile Include="Handlers\HandlerFixtureBase.cs" />
-    <Compile Include="Handlers\SingleRuleSetHandlerFixture.cs" />
+    <Compile Include="Handlers\SingleRuleSetHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestUtilityFixture.cs" />
-    <Compile Include="Builders\CreateFixture.cs" />
-    <Compile Include="Runners\RuleSetRunnerFixture.cs" />
-    <Compile Include="StorageProviders\XmlFileStorageProviderFixture.cs" />
+    <Compile Include="RequestUtilityTests.cs" />
+    <Compile Include="Builders\CreateTests.cs" />
+    <Compile Include="Runners\RuleSetRunnerTests.cs" />
+    <Compile Include="StorageProviders\XmlFileStorageProviderTests.cs" />
     <Compile Include="TestObject.cs" />
   </ItemGroup>
   <ItemGroup>

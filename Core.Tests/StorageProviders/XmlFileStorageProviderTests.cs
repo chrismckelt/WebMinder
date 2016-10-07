@@ -8,12 +8,12 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.StorageProviders
 {
-    public class XmlFileStorageProviderFixture
+    public class XmlFileStorageProviderTests
     {
         private static string _temp = System.IO.Path.GetTempPath();
         private XmlFileStorageProvider<IpAddressRequest> _storageProvider;
 
-        public XmlFileStorageProviderFixture()
+        public XmlFileStorageProviderTests()
         {
             _storageProvider = new XmlFileStorageProvider<IpAddressRequest>();
             _storageProvider.Initialise(new[] { _temp });
