@@ -5,16 +5,17 @@ using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core.Rules.IpBlocker
 {
-    public class IpAddressBlockerRule : AggregateRuleSetHandler<IpAddressRequest>
+    public class IpAddressBlockerRuleSetHandler : AggregateRuleSetHandler<IpAddressRequest>
     {
         public TimeSpan? Duration { get; set; }
         public int? MaxAttemptsWithinDuration { get; set; }
 
-        public IpAddressBlockerRule()
+        public IpAddressBlockerRuleSetHandler()
         {
             SetDefaults();
 
-            RuleSetName = string.Format("Block IP Addresses with more than {0} unsuccessful tries over a {1} hour period", MaxAttemptsWithinDuration, Duration.GetValueOrDefault());
+            RuleSetName =
+                $"Block IP Addresses with more than {MaxAttemptsWithinDuration} unsuccessful tries over a {Duration.GetValueOrDefault()} hour period";
 
             ErrorDescription =
                 "If an IP Address has been used in an unsuccessful search more than 5 times in a 24 hour period, then return an unsuccessful search result (even if the search result should be a success).";
@@ -36,11 +37,9 @@ namespace WebMinder.Core.Rules.IpBlocker
 
             InvalidAction = () =>
             {
-                var ex = new HttpException(403, string.Format("{0}  Bad IP Address: {1}", RuleSetName, RuleRequest.IpAddress));
+                var ex = new HttpException(403, $"{RuleSetName}  Bad IP Address: {RuleRequest.IpAddress}");
                 throw ex;
             };
-
-            
         }
 
         private long GetTicks()
@@ -53,7 +52,7 @@ namespace WebMinder.Core.Rules.IpBlocker
         private void SetDefaults()
         {
             if (!Duration.HasValue) Duration = TimeSpan.FromDays(-1);
-            if (!MaxAttemptsWithinDuration.HasValue) MaxAttemptsWithinDuration = 5;
+            if (!MaxAttemptsWithinDuration.HasValue) MaxAttemptsWithinDuration = 50;
         }
     }
 }

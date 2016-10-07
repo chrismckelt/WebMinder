@@ -19,12 +19,12 @@ namespace WebMinder.Core.Handlers
             base.VerifyRule(request);
             if (!StorageMechanism.Items.Any())
             {
-                Logger("INFO", string.Format("Cache empty for {0}", RuleSetName));
+                Logger("INFO", $"Cache empty for {RuleSetName}");
                 return;
             }
             if (AggregateRule == null)
             {
-                Logger("ERROR", string.Format("Aggregate rule for {0} is empty", RuleSetName));
+                Logger("ERROR", $"Aggregate rule for {RuleSetName} is empty");
                 return;
             }
 

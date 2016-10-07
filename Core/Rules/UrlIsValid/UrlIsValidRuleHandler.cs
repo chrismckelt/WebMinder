@@ -4,9 +4,9 @@ using WebMinder.Core.Handlers;
 
 namespace WebMinder.Core.Rules.UrlIsValid
 {
-    public class UrlIsValidRule : SingleRuleSetHandler<UrlRequest>
+    public class UrlIsValidRuleHandler : SingleRuleSetHandler<UrlRequest>
     {
-        public UrlIsValidRule()
+        public UrlIsValidRuleHandler()
         {
             RuleSetName = "URL is valid";
 
@@ -16,14 +16,14 @@ namespace WebMinder.Core.Rules.UrlIsValid
 
             InvalidAction = () =>
             {
-                var ex = new HttpException(403, string.Format("{0}  Url unavailable: {1}", RuleSetName, RuleRequest.Url));
+                var ex = new HttpException(403, $"{RuleSetName}  Url unavailable: {RuleRequest.Url}");
                 throw ex;
             };
         }
 
         private async Task<bool> CheckUrl()
         {
-            return await RequestUtility.UrlIsValid(RuleRequest.Url, this.Logger); ;//TOOD async all the way through the request
+            return await RequestUtility.UrlIsValid(RuleRequest.Url, this.Logger); 
         }
     }
 }
