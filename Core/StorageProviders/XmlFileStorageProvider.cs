@@ -20,7 +20,7 @@ namespace WebMinder.Core.StorageProviders
         public void Initialise(string[] args)
         {
             var folder = args.First();
-            FileName = Path.Combine(folder, RootXml + ".xml");
+            FileName = Path.Combine(folder, RootXml + ".resource");
             if (!File.Exists(FileName))
             {
                 _dataFile = XDocument.Parse("<WebMinder></WebMinder>");

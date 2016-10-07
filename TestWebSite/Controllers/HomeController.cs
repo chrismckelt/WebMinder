@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using WebMinder.Core.Builders;
+using WebMinder.Core.Rules.ApiKey;
 
 namespace TestWebSite.Controllers
 {
     public class HomeController : Controller
     {
+       [ApiKeyRequired]
         public ActionResult Index()
         {
             return View();
         }
 
+        [ApiKeyRequired]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -20,8 +20,10 @@ namespace TestWebSite.Controllers
             return View();
         }
 
+        [ApiKeyRequired]
         public ActionResult Contact()
         {
+            SiteMinder.ValidateApiKey();
             ViewBag.Message = "Your contact page.";
 
             return View();

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Handlers
 {
-    public class MaximumCountRuleSetHandlerFixture : HandlerFixtureBase
+    public class MaximumCountRuleSetHandlerTests : HandlerFixtureBase
     {
 
         [Fact]

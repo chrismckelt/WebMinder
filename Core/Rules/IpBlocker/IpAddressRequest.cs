@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 
 namespace WebMinder.Core.Rules.IpBlocker
 {
@@ -8,14 +7,9 @@ namespace WebMinder.Core.Rules.IpBlocker
         public string IpAddress { get; set; }
         public bool IsBadRequest { get; set; }
 
-        public IpAddressRequest()
-        {
-        }
-
         public static IpAddressRequest GetCurrentIpAddress(bool? recordBadIp = null)
         {
-            if (HttpContext.Current == null) return null;
-            var request = new HttpRequestWrapper(HttpContext.Current.Request);
+            var request = RequestUtility.GetRequest();
             return new IpAddressRequest()
             {
                 IpAddress = RequestUtility.GetClientIpAddress(request),

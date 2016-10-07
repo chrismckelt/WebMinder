@@ -9,17 +9,17 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Runners
 {
-    public class RuleSetRunnerFixture
+    public class RuleSetRunnerTests
     {
        
         private AggregateRuleSetHandler<TestObject> _ruleSetHandler;
-        private IpAddressBlockerRule _ruleset;
+        private IpAddressBlockerRuleSetHandler _ruleset;
         private const string RuleSet = "RuleSetRunnerFixture Test Rule";
         const string ErrorDescription = "RuleSetRunnerFixture Error exception for logging";
 
-        public RuleSetRunnerFixture()
+        public RuleSetRunnerTests()
         {
-            _ruleset = new IpAddressBlockerRule()
+            _ruleset = new IpAddressBlockerRuleSetHandler()
             {
                 UpdateRuleCollectionOnSuccess = false,
                 StorageMechanism = new MemoryCacheStorageProvider<IpAddressRequest>(),
@@ -67,7 +67,7 @@ namespace WebMinder.Core.Tests.Runners
         [Fact]
         public void ShouldGetRulesCountFromRuleSets()
         {
-            var rule = new IpAddressBlockerRule(){StorageMechanism = new MemoryCacheStorageProvider<IpAddressRequest>()};
+            var rule = new IpAddressBlockerRuleSetHandler(){StorageMechanism = new MemoryCacheStorageProvider<IpAddressRequest>()};
             rule.UseMemoryCacheStorage(Guid.NewGuid().ToString());
            
             RuleSetRunner.Instance.AddRule<IpAddressRequest>(rule);

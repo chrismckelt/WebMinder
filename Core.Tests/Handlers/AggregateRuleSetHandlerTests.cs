@@ -6,7 +6,7 @@ using Xunit;
 
 namespace WebMinder.Core.Tests.Handlers
 {
-    public class AggregateRuleSetHandlerFixture : HandlerFixtureBase
+    public class AggregateRuleSetHandlerTests : HandlerFixtureBase
     {
         [Fact]
         public void ShouldThrowIfWhenAggregateRuleFails()
